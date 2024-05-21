@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JewelleryShop.API", "Jewell
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JewelleryShop.DataAccess", "JewelleryShop.DataAccess\JewelleryShop.DataAccess.csproj", "{7D99AB3F-C61B-43B6-95D9-D0F29D348278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JewelleryShop.Business", "JewelleryShop.Entities\JewelleryShop.Business.csproj", "{62D92920-1878-420E-93DC-6D2641FA0EC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JewelleryShop.Business", "JewelleryShop.Business\JewelleryShop.Business.csproj", "{62D92920-1878-420E-93DC-6D2641FA0EC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
