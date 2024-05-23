@@ -1,3 +1,4 @@
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.Controllers
@@ -19,15 +20,19 @@ namespace JewelleryShop.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            }).ToArray();
+
+            var response = APIResponse<IEnumerable<WeatherForecast>>
+                .SuccessResponse(forecasts, "Weather forecast data retrieved successfully.");
+
+            return Ok(response);
         }
     }
 }

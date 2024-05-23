@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JewelleryShop.API.Models
+namespace JewelleryShop.DataAccess.Models
 {
     public partial class Item
     {

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JewelleryShop.API.Models
+namespace JewelleryShop.DataAccess.Models
 {
     public partial class Role
     {
         public Role()
         {
-            staff = new HashSet<Staff>();
+            Employees = new HashSet<Employee>();
         }
 
         public int RoleId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
 
-        public virtual ICollection<Staff> staff { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }
