@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JewelleryShop.DataAccess.Repository
+namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    internal class Class1
+    public interface IRoleRepository
     {
+
     }
 }

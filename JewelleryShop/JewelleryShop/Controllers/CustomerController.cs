@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using JewelleryShop.API.Models;
+using JewelleryShop.DataAccess.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -10,9 +10,9 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly grumbly_PWSContext _context;
+        private readonly JewelleryDBContext _context;
 
-        public CustomerController(grumbly_PWSContext context)
+        public CustomerController(JewelleryDBContext context)
         {
             _context = context;
         }
