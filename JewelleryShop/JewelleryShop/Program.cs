@@ -1,3 +1,6 @@
+using JewelleryShop.API.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace JewelleryShop
 {
     public class Program
@@ -5,7 +8,10 @@ namespace JewelleryShop
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            // Connect db
 
+            var connectionString = builder.Configuration.GetConnectionString("MyDatabase");
+            builder.Services.AddDbContext<grumbly_PWSContext>(options => options.UseSqlServer(connectionString));
             // Add services to the container.
 
             builder.Services.AddControllers();
