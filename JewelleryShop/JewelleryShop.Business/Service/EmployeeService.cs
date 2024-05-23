@@ -22,7 +22,7 @@ namespace JewelleryShop.Business.Service
         public async Task<string> LoginAsync(EmployeeLoginDTO employee)
         {
             var user = await _unitOfWork.EmployeeRepository.CheckLoginCredentials(employee.UsernameOrEmail, employee.Password);
-            if (user == null)
+            if (user != null)
             {
                 return user.GenerateJsonWebToken(_configuration.GetValue<string>("Jwt:SecretKey"), DateTime.UtcNow);
             }

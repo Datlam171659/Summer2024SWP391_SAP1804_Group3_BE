@@ -36,7 +36,7 @@ namespace JewelleryShop
             );
 
             builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-            
+
             builder.Services.AddDbContext<JewelleryDBContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DB"))
@@ -55,6 +55,7 @@ namespace JewelleryShop
 
             app.UseCors();
             app.UseHttpsRedirection();
+
             app.UseAuthorization();
 
 
