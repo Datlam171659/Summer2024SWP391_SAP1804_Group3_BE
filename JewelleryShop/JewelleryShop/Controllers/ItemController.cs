@@ -17,12 +17,14 @@ namespace JewelleryShop.API.Controllers
             _context = context;
         }
 
+        // GET: api/item
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
             return await _context.Items.ToListAsync();
         }
 
+        // GET: api/item/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(string id)
         {
