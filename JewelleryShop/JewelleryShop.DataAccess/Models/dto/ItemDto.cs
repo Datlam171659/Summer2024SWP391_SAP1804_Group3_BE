@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace JewelleryShop.DataAccess.Models
+namespace JewelleryShop.DataAccess.Models.dto
 {
-    public partial class Item
-    {
+    public class ItemDto
+    {   
         public string ItemId { get; set; } = null!;
         public string? ItemImagesId { get; set; }
         public string? BrandId { get; set; }
@@ -18,7 +21,5 @@ namespace JewelleryShop.DataAccess.Models
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? Status { get; set; }
-
-        public virtual Image? ItemImages { get; set; }
     }
 }

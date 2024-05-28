@@ -24,7 +24,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomersById(int id)
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomersById(string id)
         {
             var CustomerById = await _context.Customers.FindAsync(id);
             if (CustomerById == null)
@@ -49,9 +49,9 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomerById(int id, [FromBody] Customer newCustomerData)
+        public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] Customer newCustomerData)
         {
-            if (newCustomerData == null || newCustomerData.Id != id)
+            if (newCustomerData == null || !newCustomerData.Id.Equals(id))
                 return BadRequest();
 
             var existingCustomer = await _context.Customers.FindAsync(id);
