@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using AutoMapper;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
@@ -11,16 +14,18 @@ namespace JewelleryShop.API.Controllers
     public class SalesController : ControllerBase 
     {
         private readonly JewelleryDBContext _context;
+        private readonly IMapper _mapper;
 
-        public SalesController(JewelleryDBContext context)
+        public SalesController(JewelleryDBContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
         // Invoice APIs
         [HttpGet("Invoices")]
-        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoice()
+        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoice()
         {
-            return await _context.Invoices.ToListAsync();
+            return _mapper.Map<List<InvoiceCommonDTO>>(await _context.Invoices.ToListAsync());
         }
 
         [HttpGet("{id}")]
@@ -34,12 +39,12 @@ namespace JewelleryShop.API.Controllers
             return Ok(InvoiceById);
         }
         [HttpGet("Warranty")]
-        public async Task<ActionResult<IEnumerable<Warranty>>> GetWarranty()
+        public async Task<ActionResult<IEnumerable<WarrantyCommonDTO>>> GetWarranty()
         {
-            return await _context.Warranties.ToListAsync();
+            return _mapper.Map<List<WarrantyCommonDTO>>(await _context.Warranties.ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Warranty/{id}")]
         public async Task<ActionResult<IEnumerable<Invoice>>> GetWarrantyById(string id)
         {
             var WarrantyById = await _context.Warranties.FindAsync(id);
