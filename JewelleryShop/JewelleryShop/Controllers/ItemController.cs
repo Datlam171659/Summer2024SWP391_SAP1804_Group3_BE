@@ -17,14 +17,12 @@ namespace JewelleryShop.API.Controllers
             _context = context;
         }
 
-        // GET: api/item
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
             return await _context.Items.ToListAsync();
         }
 
-        // GET: api/item/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(string id)
         {
@@ -60,6 +58,51 @@ namespace JewelleryShop.API.Controllers
             _context.Items.Add(item);
             _context.SaveChanges();
             return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateItem(string id, ItemDto request)
+        {
+            var item = await _context.Items.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            item.ItemImagesId = request.ItemImagesId;
+            item.ItemName = request.ItemName;
+            item.BrandId = request.BrandId;
+            item.AccessoryType = request.AccessoryType;
+            item.CreatedDate = request.CreatedDate;
+            item.Description = request.Description;
+            item.Price = request.Price;
+            item.Size = request.Size;
+            item.Sku = request.Sku;
+            item.UpdatedDate = request.UpdatedDate;
+            item.Status = request.Status;
+            item.Weight = request.Weight;
+
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(string id)
+        {
+            var item = await _context.Items.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            _context.Items.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
