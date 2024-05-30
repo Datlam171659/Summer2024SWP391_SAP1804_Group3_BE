@@ -3,6 +3,9 @@ using JewelleryShop.DataAccess.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using AutoMapper;
+using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 
 namespace JewelleryShop.API.Controllers
 {
@@ -11,16 +14,30 @@ namespace JewelleryShop.API.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly JewelleryDBContext _context;
+        private readonly IMapper _mapper;
 
-        public CustomerController(JewelleryDBContext context)
+        public CustomerController(JewelleryDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<IActionResult> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            try
+            {
+                var data = _mapper.Map<List<CustomerCommonDTO>>(await _context.Customers.ToListAsync());
+
+                return Ok(
+                    APIResponse<List<CustomerCommonDTO>>
+                    .SuccessResponse(data, "Login successully.")
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
+            }
         }
 
         [HttpGet("{id}")]

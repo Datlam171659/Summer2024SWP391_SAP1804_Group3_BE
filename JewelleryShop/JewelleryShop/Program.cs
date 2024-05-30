@@ -16,7 +16,6 @@ namespace JewelleryShop
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddWebAPIService();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(
                 options =>
@@ -36,6 +35,7 @@ namespace JewelleryShop
             );
 
             builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            builder.Services.AddWebAPIService();
 
             builder.Services.AddDbContext<JewelleryDBContext>(options =>
             {
