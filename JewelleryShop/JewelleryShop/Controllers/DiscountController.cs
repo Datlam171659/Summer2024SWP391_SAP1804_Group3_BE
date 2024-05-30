@@ -18,14 +18,12 @@ namespace JewelleryShop.API.Controllers
             _context = context;
         }
 
-        // GET: api/discount
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Discount>>> GetDiscounts()
         {
             return await _context.Discounts.ToListAsync();
         }
 
-        // GET: api/discount/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Discount>> GetDiscount(int id)
         {
@@ -39,7 +37,6 @@ namespace JewelleryShop.API.Controllers
             return discount;
         }
 
-        // POST: api/discount
         [HttpPost]
         public async Task<ActionResult<Discount>> CreateDiscount(DiscountDto request)
         {
@@ -58,7 +55,6 @@ namespace JewelleryShop.API.Controllers
             return CreatedAtAction(nameof(GetDiscount), new { id = discount.DiscountId }, discount);
         }
 
-        // PUT: api/discount/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDiscount(int id, DiscountDto request)
         {
@@ -81,7 +77,6 @@ namespace JewelleryShop.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/discount/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiscount(int id)
         {

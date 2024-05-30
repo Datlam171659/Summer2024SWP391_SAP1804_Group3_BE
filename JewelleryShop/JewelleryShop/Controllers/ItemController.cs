@@ -69,7 +69,6 @@ namespace JewelleryShop.API.Controllers
             {
                 return NotFound();
             }
-
             item.ItemImagesId = request.ItemImagesId;
             item.ItemName = request.ItemName;
             item.BrandId = request.BrandId;
