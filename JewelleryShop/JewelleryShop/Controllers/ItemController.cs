@@ -18,13 +18,13 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> ListItems()
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
             return await _context.Items.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> SearchItem(string id)
+        public async Task<ActionResult<Item>> GetItem(string id)
         {
             var itemId = await _context.Items.FindAsync(id);
 
