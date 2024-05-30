@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using JewelleryShop.DataAccess.Models.dto;
+using AutoMapper;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
@@ -12,10 +13,12 @@ namespace JewelleryShop.API.Controllers
     public class SalesController : ControllerBase 
     {
         private readonly JewelleryDBContext _context;
+        private readonly IMapper _mapper;
 
-        public SalesController(JewelleryDBContext context)
+        public SalesController(JewelleryDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         // Invoice APIs
         [HttpGet("Invoices")]
@@ -55,9 +58,9 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPost("Invoices")]
-        public async Task<ActionResult<InvoiceDTO>> PostInvoice([FromBody] Invoice invoice)
+        public async Task<ActionResult<InvoiceDTO>> PostInvoice([FromBody] InvoiceDTO invoice)
         {
-            _context.Invoices.Add(invoice);
+            _context.Invoices.Add(_mapper.Map<Invoice>(invoice));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetInvoice), new { id = invoice.Id }, invoice);

@@ -19,6 +19,7 @@ namespace JewelleryShop.API
             services.AddAutoMapper(typeof(Program));
 
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHttpContextAccessor();
             return services;
         }

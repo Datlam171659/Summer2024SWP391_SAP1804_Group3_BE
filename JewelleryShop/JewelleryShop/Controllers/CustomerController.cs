@@ -3,6 +3,10 @@ using JewelleryShop.DataAccess.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using JewelleryShop.DataAccess.Models.dto;
+using AutoMapper;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using Newtonsoft.Json.Linq;
 
 namespace JewelleryShop.API.Controllers
 {
@@ -11,16 +15,24 @@ namespace JewelleryShop.API.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly JewelleryDBContext _context;
+        private readonly IMapper _mapper;
 
-        public CustomerController(JewelleryDBContext context)
+        public CustomerController(JewelleryDBContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            return Ok(
+                    APIResponse<List<CustomerDTO>>
+                    .SuccessResponse(
+                        _mapper.Map<List<CustomerDTO>>(await _context.Customers.ToListAsync()), 
+                        "Get successully.")
+                );
+             
         }
 
         [HttpGet("{id}")]
@@ -36,16 +48,26 @@ namespace JewelleryShop.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<CustomerDTO>> PostCustomer(CustomerDTO customer)
         {
-            try { 
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Customers.Add(
+                    _mapper.Map<Customer>(customer)
+                    );
+                await _context.SaveChangesAsync();
+                return Ok(
+                    APIResponse<string>
+                    .SuccessResponse(
+                        "success",
+                        "Get successully.")
+                );
 
-            return CreatedAtAction("GetCustomers", new { id = customer.Id }, customer);
             } catch (Exception ex) {
                 return BadRequest(ex.Message);
             }
+
+            
         }
 
         [HttpPut("{id}")]
