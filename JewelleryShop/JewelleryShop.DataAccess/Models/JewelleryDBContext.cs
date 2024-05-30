@@ -26,8 +26,17 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<StaffStation> StaffStations { get; set; } = null!;
         public virtual DbSet<Station> Stations { get; set; } = null!;
+
+        public DbSet<Discount> Discounts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Discount>().ToTable("Discount");
+        }
+
         public virtual DbSet<Warranty> Warranties { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
