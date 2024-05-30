@@ -27,12 +27,9 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<StaffStation> StaffStations { get; set; } = null!;
         public virtual DbSet<Station> Stations { get; set; } = null!;
 
-        public DbSet<Discount> Discounts { get; set; }
+        public virtual DbSet<Discount> Discounts { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Discount>().ToTable("Discount");
-        }
+
 
         public virtual DbSet<Warranty> Warranties { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
@@ -57,6 +54,7 @@ namespace JewelleryShop.DataAccess.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Discount>().ToTable("Discount");
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.ToTable("Customer");
