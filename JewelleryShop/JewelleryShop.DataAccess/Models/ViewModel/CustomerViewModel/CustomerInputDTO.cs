@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel
 {
-
-    public class CustomerCommonDTO
+    public class CustomerInputDTO
     {
-        public string Id { get; set; } = null!;
         public string? CustomerName { get; set; }
         public string? Address { get; set; }
         public string? Gender { get; set; }

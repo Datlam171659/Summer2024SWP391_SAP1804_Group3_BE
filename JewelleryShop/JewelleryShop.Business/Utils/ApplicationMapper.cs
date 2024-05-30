@@ -19,6 +19,7 @@ namespace JewelleryShop.DataAccess.Utils
             CreateMap<Invoice, InvoiceCommonDTO>().ReverseMap();
             CreateMap<Warranty, WarrantyCommonDTO>().ReverseMap();
             CreateMap<Customer, CustomerCommonDTO>().ReverseMap();
+            CreateMap<Customer, CustomerInputDTO>().ReverseMap();
         }
     }
 }
