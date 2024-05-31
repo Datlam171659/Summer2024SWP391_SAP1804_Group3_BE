@@ -12,14 +12,21 @@ namespace JewelleryShop.DataAccess
     {
         private readonly JewelleryDBContext _dbContext;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICustomerRepository _customerRepository;
 
-        public UnitOfWork(JewelleryDBContext dbContext, IEmployeeRepository employeeRepository)
+        public UnitOfWork(
+            JewelleryDBContext dbContext,
+            IEmployeeRepository employeeRepository,
+            ICustomerRepository customerRepository
+        )
         {
             _dbContext = dbContext;
             _employeeRepository = employeeRepository;
+            _customerRepository = customerRepository;
         }
 
         public IEmployeeRepository EmployeeRepository => _employeeRepository;
+        public ICustomerRepository CustomerRepository => _customerRepository;
 
         public async Task<int> SaveChangeAsync()
         {

@@ -10,6 +10,7 @@ namespace JewelleryShop.DataAccess
     public interface IUnitOfWork
     {
         public IEmployeeRepository EmployeeRepository { get; }
+        public ICustomerRepository CustomerRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

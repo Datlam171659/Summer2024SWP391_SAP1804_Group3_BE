@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess;
+using JewelleryShop.Business.Service.Interface;
 
 namespace JewelleryShop.API.Controllers
 {
@@ -15,11 +17,13 @@ namespace JewelleryShop.API.Controllers
     {
         private readonly JewelleryDBContext _context;
         private readonly IMapper _mapper;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(JewelleryDBContext context, IMapper mapper)
+        public CustomerController(JewelleryDBContext context, IMapper mapper, ICustomerService customerService)
         {
             _context = context;
             _mapper = mapper;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -27,7 +31,7 @@ namespace JewelleryShop.API.Controllers
         {
             try
             {
-                var data = _mapper.Map<List<CustomerCommonDTO>>(await _context.Customers.ToListAsync());
+                var data = await _customerService.GetAllAsync();
 
                 return Ok(
                     APIResponse<List<CustomerCommonDTO>>

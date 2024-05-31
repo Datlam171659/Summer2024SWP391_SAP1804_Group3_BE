@@ -34,6 +34,7 @@ namespace JewelleryShop
                 }
             );
 
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
             builder.Services.AddWebAPIService();
 
