@@ -9,6 +9,9 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface ICustomerRepository
     {
-        public Task<List<Customer>> GetAllAsync();
+        Task<List<Customer>> GetAllAsync();
+        Task<Customer> GetByIDAsync(string id);
+        void Add(Customer customerEntity);
+        void Update(Customer existingCustomer);
     }
 }

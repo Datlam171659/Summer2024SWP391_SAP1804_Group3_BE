@@ -47,41 +47,34 @@ namespace JewelleryShop.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomersById(string id)
         {
-            var CustomerById = await _context.Customers.FindAsync(id);
-            if (CustomerById == null)
+            try
             {
-                return NotFound();
-            }
-            return Ok(CustomerById);
-        }
+                var customerById = await _customerService.GetByIDAsync(id);
 
-        private string GenerateCustomerId(string name, DateTime creationDate)
-        {
-            var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
-            var formattedDate = creationDate.ToString("ddMMyyHHmmss");
-            return $"{initials}{formattedDate}";
+                if (customerById == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(customerById);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> PostCustomer(CustomerInputDTO customerDto)
         {
-            var customer = _mapper.Map<Customer>(customerDto);
-            customer.Id = GenerateCustomerId(customerDto.CustomerName, DateTime.Now);
-            customer.Status = "active";
-            _context.Customers.Add(customer);
-
-            try
+            var customer = await _customerService.CreateCustomerAsync(customerDto);
+            if (customer == null)
             {
-                await _context.SaveChangesAsync();
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string>(), "An error occurred while creating the customer."));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while saving the customer."));
-            }
-
-            var savedCustomerDto = _mapper.Map<CustomerCommonDTO>(customer);
-            return CreatedAtAction("GetCustomersById", new { id = savedCustomerDto.Id }, APIResponse<CustomerCommonDTO>.SuccessResponse(savedCustomerDto, "Customer created successfully."));
+            return CreatedAtAction("GetCustomersById", new { id = customer.Id }, customer);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDTO newCustomerData)
