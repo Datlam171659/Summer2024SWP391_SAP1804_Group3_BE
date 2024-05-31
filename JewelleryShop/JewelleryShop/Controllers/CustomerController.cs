@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using AutoMapper;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess;
+using JewelleryShop.Business.Service.Interface;
 
 
 namespace JewelleryShop.API.Controllers
@@ -22,12 +24,14 @@ namespace JewelleryShop.API.Controllers
     {
         private readonly JewelleryDBContext _context;
         private readonly IMapper _mapper;
+        private readonly ICustomerService _customerService;
 
-        public CustomerController(JewelleryDBContext context, IMapper mapper)
+        public CustomerController(JewelleryDBContext context, IMapper mapper, ICustomerService customerService)
         {
             _mapper = mapper;
             _context = context;
             _mapper = mapper;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -46,7 +50,7 @@ namespace JewelleryShop.API.Controllers
         {
             try
             {
-                var data = _mapper.Map<List<CustomerCommonDTO>>(await _context.Customers.ToListAsync());
+                var data = await _customerService.GetAllAsync();
 
                 return Ok(
                     APIResponse<List<CustomerCommonDTO>>
@@ -61,16 +65,24 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomersById(string id)
+        public async Task<IActionResult> GetCustomersById(string id)
         {
-            var CustomerById = await _context.Customers.FindAsync(id);
-            if (CustomerById == null)
+            try
             {
-                return NotFound();
-            }
-            return Ok(CustomerById);
-        }
+                var customerById = await _customerService.GetByIDAsync(id);
 
+                if (customerById == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(customerById);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult<CustomerDTO>> PostCustomer(CustomerDTO customer)
@@ -93,35 +105,28 @@ namespace JewelleryShop.API.Controllers
             }
 
             
+        public async Task<IActionResult> PostCustomer(CustomerInputDTO customerDto)
+        {
+            var customer = await _customerService.CreateCustomerAsync(customerDto);
+            if (customer == null)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string>(), "An error occurred while creating the customer."));
+            }
+            return CreatedAtAction("GetCustomersById", new { id = customer.Id }, customer);
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] Customer newCustomerData)
+        public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDTO newCustomerData)
         {
-            if (newCustomerData == null || !newCustomerData.Id.Equals(id))
-                return BadRequest();
+            var updatedCustomerDto = await _customerService.UpdateCustomerAsync(id, newCustomerData);
 
-            var existingCustomer = await _context.Customers.FindAsync(id);
-            
-            if (existingCustomer == null)
-                return NotFound();
-
-            existingCustomer.CustomerName = newCustomerData.CustomerName;
-            existingCustomer.Address = newCustomerData.Address;
-            existingCustomer.Gender = newCustomerData.Gender;
-            existingCustomer.PhoneNumber = newCustomerData.PhoneNumber;
-            existingCustomer.Email = newCustomerData.Email;
-            existingCustomer.Status = newCustomerData.Status;
-
-            _context.Customers.Update(existingCustomer);
-            try { 
-            await _context.SaveChangesAsync();
-            } catch (DbUpdateConcurrencyException ex)
+            if (updatedCustomerDto == null)
             {
-                Console.WriteLine("A concurrency error occurred while saving changes: " + ex.Message);
+                return NotFound();
             }
 
-            return NoContent(); // Success
+            return Ok(updatedCustomerDto); // Success
         }
     }
 }
