@@ -79,24 +79,14 @@ namespace JewelleryShop.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDTO newCustomerData)
         {
-            var existingCustomer = await _context.Customers.FindAsync(id);
+            var updatedCustomerDto = await _customerService.UpdateCustomerAsync(id, newCustomerData);
 
-            if (existingCustomer == null)
+            if (updatedCustomerDto == null)
+            {
                 return NotFound();
-
-            _mapper.Map(newCustomerData, existingCustomer);
-
-            _context.Customers.Update(existingCustomer);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                Console.WriteLine("A concurrency error occurred while saving changes: " + ex.Message);
             }
 
-            return NoContent(); // Success
+            return Ok(updatedCustomerDto); // Success
         }
     }
 }
