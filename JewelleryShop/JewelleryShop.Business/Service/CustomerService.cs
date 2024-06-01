@@ -36,7 +36,19 @@ namespace JewelleryShop.Business.Service
                 return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
             }
 
-            private string GenerateCustomerId(string name, DateTime creationDate)
+            public async Task<CustomerCommonDTO> GetByEmailAsync(string email)
+            {
+                var entity = await _unitOfWork.CustomerRepository.GetByEmailAsync(email);
+                return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
+            }
+
+            public async Task<CustomerCommonDTO> GetByPhoneNumberAsync(string phoneNumber)
+            {
+                var entity = await _unitOfWork.CustomerRepository.GetByPhoneNumberAsync(phoneNumber);
+                return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
+            }
+
+        private string GenerateCustomerId(string name, DateTime creationDate)
             {
                 var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
                 var formattedDate = creationDate.ToString("ddMMyyHHmmss");

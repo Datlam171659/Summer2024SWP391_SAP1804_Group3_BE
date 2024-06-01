@@ -31,5 +31,15 @@ namespace JewelleryShop.DataAccess.Repository
         {
             return await _dbContext.Customers.FindAsync(id);
         }
+
+        public async Task<Customer> GetByEmailAsync(string email)
+        {
+            return await _dbContext.Customers.FirstOrDefaultAsync(c => c.Email == email);
+        }
+
+        public async Task<Customer> GetByPhoneNumberAsync(string phoneNumber)
+        {
+            return await _dbContext.Customers.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+        }
     }
 }
