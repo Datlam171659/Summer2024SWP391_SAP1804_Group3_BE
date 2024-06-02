@@ -13,14 +13,17 @@ namespace JewelleryShop.API
     {
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddAutoMapper(typeof(Program));
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
+            services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHttpContextAccessor();
+
             return services;
         }
     }

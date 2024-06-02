@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Models.ViewModel.Commons
 {
-    public class APIResponse<T>
+    public class APIResponse<T> where T : class
     {
         public bool Success { get; set; }
         public T Data { get; set; }

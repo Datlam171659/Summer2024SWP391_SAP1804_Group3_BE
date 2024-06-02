@@ -17,12 +17,14 @@ namespace JewelleryShop.API.Controllers
             _context = context;
         }
 
+        // GET: api/item
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> ListItems()
         {
             return await _context.Items.ToListAsync();
         }
 
+        // GET: api/item/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> SearchItem(string id)
         {
@@ -99,6 +101,23 @@ namespace JewelleryShop.API.Controllers
             }
 
             _context.Items.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("softdelete/{id}")]
+        public async Task<IActionResult> SoftDeleteItem(string id)
+        {
+            var item = await _context.Items.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            item.Status = "out stock";
+            _context.Items.Update(item);
             await _context.SaveChangesAsync();
 
             return NoContent();
