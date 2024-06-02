@@ -3,11 +3,18 @@ using JewelleryShop.DataAccess.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+
+using JewelleryShop.DataAccess.Models.dto;
+using AutoMapper;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using Newtonsoft.Json.Linq;
+
 using AutoMapper;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess;
 using JewelleryShop.Business.Service.Interface;
+
 
 namespace JewelleryShop.API.Controllers
 {
@@ -21,6 +28,7 @@ namespace JewelleryShop.API.Controllers
 
         public CustomerController(JewelleryDBContext context, IMapper mapper, ICustomerService customerService)
         {
+            _mapper = mapper;
             _context = context;
             _mapper = mapper;
             _customerService = customerService;
@@ -42,6 +50,7 @@ namespace JewelleryShop.API.Controllers
             {
                 return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
             }
+
         }
 
         [HttpGet("{id}")]
