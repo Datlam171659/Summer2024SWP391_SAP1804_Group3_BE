@@ -48,14 +48,14 @@ namespace JewelleryShop.Business.Service
                 return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
             }
 
-        private string GenerateCustomerId(string name, DateTime creationDate)
+            private string GenerateCustomerId(string name, DateTime creationDate)
             {
-                var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
-                var formattedDate = creationDate.ToString("ddMMyyHHmmss");
-                return $"{initials}{formattedDate}";
+                    var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
+                    var formattedDate = creationDate.ToString("ddMMyyHHmmss");
+                    return $"{initials}{formattedDate}";
             }
             public async Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData)
-                {
+            {
                     // Map the DTO to your entity
                     var customerEntity = _mapper.Map<Customer>(customerData);
                     customerEntity.Id = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
@@ -66,7 +66,7 @@ namespace JewelleryShop.Business.Service
 
                     // Map the entity back to DTO
                     return _mapper.Map<CustomerCommonDTO>(customerEntity);
-                }
+            }
 
             public async Task<CustomerInputDTO> UpdateCustomerAsync(string id, CustomerInputDTO newCustomerData)
             {
