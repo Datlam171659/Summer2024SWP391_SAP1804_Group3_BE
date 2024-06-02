@@ -73,6 +73,42 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetCustomersByEmail(string email)
+        {
+            try
+            {
+                var customerByEmail = await _customerService.GetByEmailAsync(email);
+                if (customerByEmail == null)
+                {
+                    return NotFound();
+                }
+                return Ok(customerByEmail);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
+        }
+
+        [HttpGet("phone/{phone}")]
+        public async Task<IActionResult> GetCustomersByPhoneNumber(string phone)
+        {
+            try
+            {
+                var customerByPhone = await _customerService.GetByPhoneNumberAsync(phone);
+                if (customerByPhone == null)
+                {
+                    return NotFound();
+                }
+                return Ok(customerByPhone);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostCustomer(CustomerInputDTO customerDto)
         {
