@@ -44,9 +44,8 @@ namespace JewelleryShop.API.Controllers
             {
                 DiscountCode = request.DiscountCode,
                 DiscountPercentage = request.DiscountPercentage,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                Description = request.Description
+                Description = request.Description,
+                Status = "Pending"  // Set initial status to "Pending"
             };
 
             _context.Discounts.Add(discount);
@@ -67,8 +66,6 @@ namespace JewelleryShop.API.Controllers
 
             discount.DiscountCode = request.DiscountCode;
             discount.DiscountPercentage = request.DiscountPercentage;
-            discount.StartDate = request.StartDate;
-            discount.EndDate = request.EndDate;
             discount.Description = request.Description;
 
             _context.Discounts.Update(discount);
@@ -88,6 +85,44 @@ namespace JewelleryShop.API.Controllers
             }
 
             _context.Discounts.Remove(discount);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+     
+        [HttpPut("approve/{id}")]
+        public async Task<IActionResult> ApproveDiscount(int id)
+        {
+            var discount = await _context.Discounts.FindAsync(id);
+
+            if (discount == null)
+            {
+                return NotFound();
+            }
+
+            discount.Status = "Approved"; // Update status to "Approved"
+
+            _context.Discounts.Update(discount);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+  
+        [HttpPut("request/{id}")]
+        public async Task<IActionResult> RequestDiscount(int id)
+        {
+            var discount = await _context.Discounts.FindAsync(id);
+
+            if (discount == null)
+            {
+                return NotFound();
+            }
+
+            discount.Status = "Pending"; // Update status to "Pending"
+
+            _context.Discounts.Update(discount);
             await _context.SaveChangesAsync();
 
             return NoContent();

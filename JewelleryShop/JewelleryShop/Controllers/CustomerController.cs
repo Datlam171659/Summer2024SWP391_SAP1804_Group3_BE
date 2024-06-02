@@ -35,17 +35,6 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet]
-
-        public async Task<ActionResult<List<CustomerDTO>>> GetCustomers()
-        {
-            return Ok(
-                    APIResponse<List<CustomerDTO>>
-                    .SuccessResponse(
-                        _mapper.Map<List<CustomerDTO>>(await _context.Customers.ToListAsync()), 
-                        "Get successully.")
-                );
-             
-
         public async Task<IActionResult> GetCustomers()
         {
             try
@@ -85,26 +74,6 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerDTO>> PostCustomer(CustomerDTO customer)
-        {
-            try
-            {
-                _context.Customers.Add(
-                    _mapper.Map<Customer>(customer)
-                    );
-                await _context.SaveChangesAsync();
-                return Ok(
-                    APIResponse<string>
-                    .SuccessResponse(
-                        "success",
-                        "Get successully.")
-                );
-
-            } catch (Exception ex) {
-                return BadRequest(ex.Message);
-            }
-
-            
         public async Task<IActionResult> PostCustomer(CustomerInputDTO customerDto)
         {
             var customer = await _customerService.CreateCustomerAsync(customerDto);
