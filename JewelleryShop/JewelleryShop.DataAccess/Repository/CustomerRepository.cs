@@ -17,6 +17,10 @@ namespace JewelleryShop.DataAccess.Repository
         {
             _dbContext = dbcontext;
         }
+        public async Task<List<Customer>> GetAllAsync()
+        {
+            return await _dbContext.Customers.ToListAsync();
+        }
         public void Add(Customer customerEntity)
         {
             _dbContext.Customers.Add(customerEntity);

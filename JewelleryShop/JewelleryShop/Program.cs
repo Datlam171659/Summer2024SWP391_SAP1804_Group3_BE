@@ -1,5 +1,9 @@
 using JewelleryShop.API;
+using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.Business.Service;
 using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Repository.Interface;
+using JewelleryShop.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -37,7 +41,6 @@ namespace JewelleryShop
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
             builder.Services.AddWebAPIService();
-
             builder.Services.AddDbContext<JewelleryDBContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DB"))
