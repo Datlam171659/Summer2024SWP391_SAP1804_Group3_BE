@@ -11,5 +11,11 @@ namespace JewelleryShop.Business.Service.Interface
     public interface ICustomerService
     {
         public Task<List<CustomerCommonDTO>> GetAllAsync();
+
+        public Task<CustomerCommonDTO> GetByIDAsync(string id);
+        public Task<CustomerCommonDTO> GetByEmailAsync(string email);
+        public Task<CustomerCommonDTO> GetByPhoneNumberAsync(string phoneNumber);
+        public Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData);
+        public Task<CustomerInputDTO> UpdateCustomerAsync(string id, CustomerInputDTO newCustomerData);
     }
 }

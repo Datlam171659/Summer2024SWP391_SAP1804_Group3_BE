@@ -51,63 +51,82 @@ namespace JewelleryShop.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomersById(string id)
         {
-            var CustomerById = await _context.Customers.FindAsync(id);
-            if (CustomerById == null)
+            try
             {
-                return NotFound();
+                var customerById = await _customerService.GetByIDAsync(id);
+
+                if (customerById == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(customerById);
             }
-            return Ok(CustomerById);
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
         }
 
-        private string GenerateCustomerId(string name, DateTime creationDate)
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> GetCustomersByEmail(string email)
         {
-            var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
-            var formattedDate = creationDate.ToString("ddMMyyHHmmss");
-            return $"{initials}{formattedDate}";
+            try
+            {
+                var customerByEmail = await _customerService.GetByEmailAsync(email);
+                if (customerByEmail == null)
+                {
+                    return NotFound();
+                }
+                return Ok(customerByEmail);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
+        }
+
+        [HttpGet("phone/{phone}")]
+        public async Task<IActionResult> GetCustomersByPhoneNumber(string phone)
+        {
+            try
+            {
+                var customerByPhone = await _customerService.GetByPhoneNumberAsync(phone);
+                if (customerByPhone == null)
+                {
+                    return NotFound();
+                }
+                return Ok(customerByPhone);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while retrieving the customer."));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> PostCustomer(CustomerInputDTO customerDto)
         {
-            var customer = _mapper.Map<Customer>(customerDto);
-            customer.Id = GenerateCustomerId(customerDto.CustomerName, DateTime.Now);
-            customer.Status = "active";
-            _context.Customers.Add(customer);
-
-            try
+            var customer = await _customerService.CreateCustomerAsync(customerDto);
+            if (customer == null)
             {
-                await _context.SaveChangesAsync();
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string>(), "An error occurred while creating the customer."));
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while saving the customer."));
-            }
-
-            var savedCustomerDto = _mapper.Map<CustomerCommonDTO>(customer);
-            return CreatedAtAction("GetCustomersById", new { id = savedCustomerDto.Id }, APIResponse<CustomerCommonDTO>.SuccessResponse(savedCustomerDto, "Customer created successfully."));
+            return CreatedAtAction("GetCustomersById", new { id = customer.Id }, customer);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDTO newCustomerData)
         {
-            var existingCustomer = await _context.Customers.FindAsync(id);
+            var updatedCustomerDto = await _customerService.UpdateCustomerAsync(id, newCustomerData);
 
-            if (existingCustomer == null)
+            if (updatedCustomerDto == null)
+            {
                 return NotFound();
-
-            _mapper.Map(newCustomerData, existingCustomer);
-
-            _context.Customers.Update(existingCustomer);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                Console.WriteLine("A concurrency error occurred while saving changes: " + ex.Message);
             }
 
-            return NoContent(); // Success
+            return Ok(updatedCustomerDto); // Success
         }
     }
 }

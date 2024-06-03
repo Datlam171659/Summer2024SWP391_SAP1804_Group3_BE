@@ -5,72 +5,78 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using JewelleryShop.DataAccess.Models.dto;
+using AutoMapper;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
+using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.Business.Service;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class SalesController : ControllerBase 
     {
-        private readonly JewelleryDBContext _context;
+        private readonly IMapper _mapper;
+        private readonly IInvoiceService _invoiceService;
+        private readonly IWarrantyService _warrantyService; 
 
-        public SalesController(JewelleryDBContext context)
+
+        public SalesController(JewelleryDBContext context, IMapper mapper, IInvoiceService invoiceService, IWarrantyService warrantyService)
         {
-            _context = context;
+            _mapper = mapper;
+            _invoiceService = invoiceService;
+            _warrantyService = warrantyService;
         }
         // Invoice APIs
         [HttpGet("Invoices")]
-        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoice()
+        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoice()
         {
-            return await _context.Invoices.ToListAsync();
+            var invoices = await _invoiceService.GetAllInvoices();
+            return Ok(invoices);
         }
 
         [HttpGet("Invoice/{id}")]
-        public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoiceById(string id)
+        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoiceById(string id)
         {
-            var InvoiceById = await _context.Invoices.FindAsync(id);
-            if (InvoiceById == null)
+            var invoiceDTO = await _invoiceService.GetInvoiceById(id);
+            if (invoiceDTO == null)
             {
                 return NotFound();
             }
-            return Ok(InvoiceById);
+            return Ok(invoiceDTO);
         }
 
 
-        //WarrantyAPI
         [HttpGet("Warranty")]
-        public async Task<ActionResult<IEnumerable<Warranty>>> GetWarranty()
+        public async Task<ActionResult<IEnumerable<WarrantyCommonDTO>>> GetWarranty()
         {
-            return await _context.Warranties.ToListAsync();
+            var warranties = await _warrantyService.GetAllWarranty(); 
+            return Ok(warranties);
         }
 
         [HttpGet("Warranty/{id}")]
-        public async Task<ActionResult<IEnumerable<Invoice>>> GetWarrantyById(string id)
+        public async Task<ActionResult<IEnumerable<WarrantyCommonDTO>>> GetWarrantyById(string id)
         {
-            var WarrantyById = await _context.Warranties.FindAsync(id);
-            if (WarrantyById == null)
+            var warranty = await _warrantyService.GetWarrantyById(id);
+            if (warranty == null)
             {
                 return NotFound();
             }
-            return Ok(WarrantyById);
+            return Ok(warranty);
         }
 
         [HttpPost("Invoices")]
-        public async Task<ActionResult<InvoiceDTO>> PostInvoice([FromBody] Invoice invoice)
+        public async Task<ActionResult<InvoiceCommonDTO>> PostInvoice([FromBody] InvoiceInputDTO invoiceDTO)
         {
-            _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetInvoice), new { id = invoice.Id }, invoice);
+            var createdInvoiceDTO = await _invoiceService.AddInvoice(invoiceDTO);
+            return CreatedAtAction(nameof(GetInvoice), new { id = createdInvoiceDTO.Id }, createdInvoiceDTO);
         }
 
         [HttpPost("Warranties")]
-        public async Task<ActionResult<Warranty>> PostWarranty([FromBody] Warranty warranty)
+        public async Task<ActionResult<WarrantyCommonDTO>> PostWarranty([FromBody] WarrantyInputDTO warrantyDTO)
         {
-            _context.Warranties.Add(warranty);
-            await _context.SaveChangesAsync();
-
-            
-            return CreatedAtAction(nameof(GetWarranty), new { id = warranty.WarrantyId }, warranty);
+            var createdWarrantyDTO = await _warrantyService.AddWarranty(warrantyDTO);
+            return CreatedAtAction(nameof(GetWarrantyById), new { id = createdWarrantyDTO.WarrantyId }, createdWarrantyDTO);
         }
     }
 }
