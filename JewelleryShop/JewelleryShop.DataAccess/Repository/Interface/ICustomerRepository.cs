@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IGenericRepository<Customer>
     {
-        public Task<List<Customer>> GetAllAsync();
     }
 }
