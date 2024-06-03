@@ -1,4 +1,5 @@
 ﻿using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Repository;
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -13,20 +14,28 @@ namespace JewelleryShop.DataAccess
         private readonly JewelleryDBContext _dbContext;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
+        private readonly IWarrantyRepository _warrantyRepository;
 
         public UnitOfWork(
             JewelleryDBContext dbContext,
             IEmployeeRepository employeeRepository,
-            ICustomerRepository customerRepository
+            ICustomerRepository customerRepository,
+            IInvoiceRepository invoiceRepository,
+            IWarrantyRepository warrantyRepository
         )
         {
             _dbContext = dbContext;
             _employeeRepository = employeeRepository;
             _customerRepository = customerRepository;
+            _invoiceRepository = invoiceRepository;
+            _warrantyRepository = warrantyRepository;
         }
 
         public IEmployeeRepository EmployeeRepository => _employeeRepository;
         public ICustomerRepository CustomerRepository => _customerRepository;
+        public IInvoiceRepository InvoiceRepository => _invoiceRepository;
+        public IWarrantyRepository WarrantyRepository => _warrantyRepository;
 
         public async Task<int> SaveChangeAsync()
         {

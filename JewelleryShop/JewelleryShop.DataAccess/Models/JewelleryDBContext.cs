@@ -289,10 +289,6 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ItemInvoiceId)
-                    .HasMaxLength(50)
-                    .HasColumnName("ItemInvoiceID");
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Warranties)
                     .HasForeignKey(d => d.CustomerId)
