@@ -13,6 +13,7 @@ namespace JewelleryShop.DataAccess
         public ICustomerRepository CustomerRepository { get; }
         public IInvoiceRepository InvoiceRepository { get; }
         public IWarrantyRepository WarrantyRepository { get; }
+        public IItemRepository ItemRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

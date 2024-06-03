@@ -16,13 +16,15 @@ namespace JewelleryShop.DataAccess
         private readonly ICustomerRepository _customerRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IWarrantyRepository _warrantyRepository;
+        private readonly IItemRepository _itemRepository;
 
         public UnitOfWork(
             JewelleryDBContext dbContext,
             IEmployeeRepository employeeRepository,
             ICustomerRepository customerRepository,
             IInvoiceRepository invoiceRepository,
-            IWarrantyRepository warrantyRepository
+            IWarrantyRepository warrantyRepository,
+            IItemRepository itemRepository
         )
         {
             _dbContext = dbContext;
@@ -30,12 +32,14 @@ namespace JewelleryShop.DataAccess
             _customerRepository = customerRepository;
             _invoiceRepository = invoiceRepository;
             _warrantyRepository = warrantyRepository;
+            _itemRepository = itemRepository; 
         }
 
         public IEmployeeRepository EmployeeRepository => _employeeRepository;
         public ICustomerRepository CustomerRepository => _customerRepository;
         public IInvoiceRepository InvoiceRepository => _invoiceRepository;
         public IWarrantyRepository WarrantyRepository => _warrantyRepository;
+        public IItemRepository ItemRepository => _itemRepository;
 
         public async Task<int> SaveChangeAsync()
         {

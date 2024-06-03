@@ -17,5 +17,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
         void UpdateRange(List<T> entities);
         void Remove(T entity);
         void RemoveRange(List<T> entities);
+        void SoftDelete(T entity);
     }
 }
