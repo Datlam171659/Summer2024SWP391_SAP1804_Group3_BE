@@ -16,14 +16,6 @@ namespace JewelleryShop.DataAccess.Repository
         {
             _dbContext = dbcontext;
         }
-        public void Add(Warranty warrantyEntity)
-        {
-            _dbContext.Warranties.Add(warrantyEntity);
-        }
-        public async Task<Warranty> GetByWarrantyIdAsync(string id)
-        {
-            return await _dbContext.Warranties.FindAsync(id);
-        }
 
     }
 }
