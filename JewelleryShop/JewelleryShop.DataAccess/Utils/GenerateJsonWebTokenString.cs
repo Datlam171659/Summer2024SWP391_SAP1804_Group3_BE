@@ -31,7 +31,7 @@ namespace JewelleryShop.DataAccess.Utils
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = now.AddHours(2), // Adjust the expiration time
+                Expires = now.AddHours(3), // Adjust the expiration time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)
             };
 

@@ -9,5 +9,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface IInvoiceRepository : IGenericRepository<Invoice>
     {
+
     }
 }
