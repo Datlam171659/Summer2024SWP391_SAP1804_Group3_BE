@@ -25,6 +25,9 @@ namespace JewelleryShop.API
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IWarrantyService, WarrantyService>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddHttpContextAccessor();
+
             return services;
         }
     }
