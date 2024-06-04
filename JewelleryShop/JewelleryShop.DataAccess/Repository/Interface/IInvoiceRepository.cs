@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    public interface IInvoiceRepository
+    public interface IInvoiceRepository : IGenericRepository<Invoice>
     {
-        Task<List<Invoice>> GetAllAsync();
-        Task<Invoice> GetByInvoiceIdAsync(string id);
-        void Add(Invoice invoiceEntity);
     }
 }

@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    public interface IWarrantyRepository
+    public interface IWarrantyRepository : IGenericRepository<Warranty>
     {
-        Task<List<Warranty>> GetAllAsync();
-        Task<Warranty> GetByWarrantyIdAsync(string id);
-        void Add(Warranty warrantyEntity);
     }
 }

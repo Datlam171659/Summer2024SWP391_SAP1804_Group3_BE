@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.Business.Service.Interface
 {
-    public interface IEmployeeService : IGenericRepository<Employee>
+    public interface IEmployeeService
     {
         public Task<string> LoginAsync(EmployeeLoginDTO employee);
+        public Task<EmployeeCommonDTO> AddEmployeeAsync(EmployeeCommonDTO employee);
     }
 }

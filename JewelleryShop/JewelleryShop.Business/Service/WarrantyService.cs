@@ -40,7 +40,7 @@ namespace JewelleryShop.Business.Service
 
         public async Task<WarrantyCommonDTO> GetWarrantyById(string id)
         {
-            var warranty = await _unitOfWork.WarrantyRepository.GetByWarrantyIdAsync(id);
+            var warranty = await _unitOfWork.WarrantyRepository.GetByIdAsync(id);
 
             if (warranty == null)
             {
@@ -62,7 +62,7 @@ namespace JewelleryShop.Business.Service
             Warranty warrantyEntity = _mapper.Map<Warranty>(warrantyDto);
             warrantyEntity.WarrantyId = Guid.NewGuid().ToString();
             warrantyEntity.ExpiryDate = DateTime.Now.AddMonths(3);
-            _unitOfWork.WarrantyRepository.Add(warrantyEntity);
+            await _unitOfWork.WarrantyRepository.AddAsync(warrantyEntity);
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<WarrantyCommonDTO>(warrantyEntity);
         }
