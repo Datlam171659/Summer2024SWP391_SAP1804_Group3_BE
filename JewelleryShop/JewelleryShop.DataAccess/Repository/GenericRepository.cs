@@ -1,4 +1,5 @@
 ﻿
+using Application.Commons;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -40,5 +41,24 @@ namespace JewelleryShop.DataAccess.Repository
         public void RemoveRange(List<T> entities) => _dbSet.RemoveRange(entities);
 
         public void SoftDelete(T entity) => _dbSet.Update(entity);
+        
+        public async Task<Pagination<T>> ToPagination(int pageIndex = 0, int pageSize = 10)
+        {
+            var itemCount = await _dbSet.CountAsync();
+            var items = await _dbSet.Skip(pageIndex * pageSize)
+                                    .Take(pageSize)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            var result = new Pagination<T>()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = itemCount,
+                Items = items,
+            };
+
+            return result;
+        }
     }
 }

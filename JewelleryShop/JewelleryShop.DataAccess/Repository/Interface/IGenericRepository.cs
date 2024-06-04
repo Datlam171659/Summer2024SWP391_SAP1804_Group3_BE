@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Commons;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
         void Remove(T entity);
         void RemoveRange(List<T> entities);
         void SoftDelete(T entity);
+        Task<Pagination<T>> ToPagination(int pageIndex = 0, int pageSize = 10);
     }
 }

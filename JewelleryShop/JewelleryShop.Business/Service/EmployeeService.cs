@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
+using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.ViewModel.EmployeeViewModel;
 using JewelleryShop.DataAccess.Utils;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,16 @@ namespace JewelleryShop.Business.Service
             _mapper = mapper;
             _configuration = configuration;
         }
+
+        public async Task<EmployeeCommonDTO> AddEmployeeAsync(EmployeeCommonDTO employee)
+        {
+            var emp = _mapper.Map<Employee>(employee);
+            await _unitOfWork.EmployeeRepository.AddAsync(emp);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<EmployeeCommonDTO>(emp); ;
+        }
+
         public async Task<string> LoginAsync(EmployeeLoginDTO employee)
         {
             var user = await _unitOfWork.EmployeeRepository.CheckLoginCredentials(employee.UsernameOrEmail, employee.Password);
