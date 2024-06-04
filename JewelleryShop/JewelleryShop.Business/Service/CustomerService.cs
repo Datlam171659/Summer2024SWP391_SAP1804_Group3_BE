@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AnyAscii;
+using AutoMapper;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
@@ -11,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AnyAscii;
 
 namespace JewelleryShop.Business.Service
 {
@@ -51,20 +53,8 @@ namespace JewelleryShop.Business.Service
 
             private string RemoveDiacritics(string text)
             {
-                var normalized = text.Normalize(NormalizationForm.FormD);
-                var stringBuilder = new StringBuilder();
 
-                foreach (var c in normalized)
-                {
-                    var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                    if (unicodeCategory != UnicodeCategory.NonSpacingMark)
-                    {
-                        stringBuilder.Append(c);
-                    }
-                }
-                var result = stringBuilder.ToString().Normalize(NormalizationForm.FormC);
-                result = result.Replace("Đ", "D").Replace("đ", "d");
-                return result.ToString().Normalize(NormalizationForm.FormC);
+            return text.Transliterate();
             }
             private string GenerateCustomerId(string name, DateTime creationDate)
             {

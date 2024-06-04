@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AnyAscii" Version="0.3.2" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
