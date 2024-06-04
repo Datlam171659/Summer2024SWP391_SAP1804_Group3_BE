@@ -35,12 +35,16 @@ namespace JewelleryShop.API.Controllers
 
                 return Ok(
                     APIResponse<List<CustomerCommonDTO>>
-                    .SuccessResponse(data, "Login successully.")
+                    .SuccessResponse(data, "Successfully fetched customers.")
                 );
             }
             catch (Exception ex)
             {
-                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
+                return StatusCode(500, 
+                        APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, 
+                        "An error occurred while fetching customers."
+                    )
+                );
             }
         }
 

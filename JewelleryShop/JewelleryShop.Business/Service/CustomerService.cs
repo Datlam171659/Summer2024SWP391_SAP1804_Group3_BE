@@ -27,27 +27,27 @@ namespace JewelleryShop.Business.Service
             _configuration = configuration;
         }
 
-            public async Task<List<CustomerCommonDTO>> GetAllAsync()
-            {
-                return _mapper.Map<List<CustomerCommonDTO>>(await _unitOfWork.CustomerRepository.GetAllAsync());
-            }
-            public async Task<CustomerCommonDTO> GetByIDAsync(string id)
-            {
-                var entity = await _unitOfWork.CustomerRepository.GetByIDAsync(id);
-                return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
-            }
+        public async Task<List<CustomerCommonDTO>> GetAllAsync()
+        {
+            return _mapper.Map<List<CustomerCommonDTO>>(await _unitOfWork.CustomerRepository.GetAllAsync());
+        }
+        public async Task<CustomerCommonDTO> GetByIDAsync(string id)
+        {
+            var entity = await _unitOfWork.CustomerRepository.GetByIDAsync(id);
+            return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
+        }
 
-            public async Task<CustomerCommonDTO> GetByEmailAsync(string email)
-            {
-                var entity = await _unitOfWork.CustomerRepository.GetByEmailAsync(email);
-                return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
-            }
+        public async Task<CustomerCommonDTO> GetByEmailAsync(string email)
+        {
+            var entity = await _unitOfWork.CustomerRepository.GetByEmailAsync(email);
+            return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
+        }
 
-            public async Task<CustomerCommonDTO> GetByPhoneNumberAsync(string phoneNumber)
-            {
-                var entity = await _unitOfWork.CustomerRepository.GetByPhoneNumberAsync(phoneNumber);
-                return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
-            }
+        public async Task<CustomerCommonDTO> GetByPhoneNumberAsync(string phoneNumber)
+        {
+            var entity = await _unitOfWork.CustomerRepository.GetByPhoneNumberAsync(phoneNumber);
+            return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
+        }
 
             private string RemoveDiacritics(string text)
             {
@@ -79,7 +79,7 @@ namespace JewelleryShop.Business.Service
                     var customerEntity = _mapper.Map<Customer>(customerData);
                     customerEntity.Id = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
                     
-                    _unitOfWork.CustomerRepository.Add(customerEntity);
+                    await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
                     await _unitOfWork.SaveChangeAsync();
 
                     return _mapper.Map<CustomerCommonDTO>(customerEntity);
