@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    public interface IItemRepository
+    public interface IItemRepository : IGenericRepository<Item>
     {
-        public Task<List<Item>> GetAllAsync();
         public Task<Item> GetByIdAsync(string id);
         public void Update(Item item);
         public Task AddAsync(Item item);

@@ -1,8 +1,10 @@
 ﻿using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 
 namespace JewelleryShop.API.Controllers
@@ -18,16 +20,15 @@ namespace JewelleryShop.API.Controllers
             _itemService = itemService;
         }
 
-        // GET: api/item
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> ListItems()
+        public async Task<IActionResult> ListItems()
         {
-            return await _itemService.GetAllAsync();
+            var list = await _itemService.GetAllAsync();
+            return Ok(list);
         }
 
-        // GET: api/item/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> SearchItem(string id)
+        public async Task<IActionResult> SearchItem(string id)
         {
             var item = await _itemService.GetByIdAsync(id);
 
@@ -36,51 +37,36 @@ namespace JewelleryShop.API.Controllers
                 return NotFound();
             }
 
-            return item;
+            return Ok(item);
         }
 
 
         [HttpPost]
-        public IActionResult CreateItem(ItemDto request) {
-            return Ok(_itemService.AddAsync(request));
+        public async Task<IActionResult> CreateItem(ItemDto request) {
+            await _itemService.AddAsync(request);
+            return Ok(APIResponse<string>
+                    .SuccessResponse(data:null, "Create successully.")
+                );
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateItem(string id, ItemDto request)
         {
-            return ;
+            _itemService.Update(request);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItem(string id)
+        public async Task<IActionResult> DeleteItem(string id, ItemDto request)
         {
-            var item = await _context.Items.FindAsync(id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
-
+            _itemService.RemoveAsync(request);
             return NoContent();
         }
 
         [HttpPut("softdelete/{id}")]
-        public async Task<IActionResult> SoftDeleteItem(string id)
+        public async Task<IActionResult> SoftDeleteItem(string id, ItemDto request)
         {
-            var item = await _context.Items.FindAsync(id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            item.Status = "out stock";
-            _context.Items.Update(item);
-            await _context.SaveChangesAsync();
-
+            _itemService.SoftDelete(request);
             return NoContent();
         }
     }

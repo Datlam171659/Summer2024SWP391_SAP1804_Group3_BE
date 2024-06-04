@@ -30,18 +30,6 @@ namespace JewelleryShop.DataAccess.Repository
             }
         }
 
-        public async Task<List<Item>> GetAllAsync()
-        {
-            try
-            {
-                var itemList = await _context.Items.ToListAsync();
-                return itemList;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Cannot get all item" + ex.Message);
-            }
-        }
 
         public async Task<Item?> GetByIdAsync(string id)
         {
@@ -73,7 +61,8 @@ namespace JewelleryShop.DataAccess.Repository
         {
             try
             {
-                item.Status = "Out stock";
+                string iStatus = "Out stock";
+                iStatus = item.Status;
                 _context.Items.Update(item);
                 await _context.SaveChangesAsync();
             }

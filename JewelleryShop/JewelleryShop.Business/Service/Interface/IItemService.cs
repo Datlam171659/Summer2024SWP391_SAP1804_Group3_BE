@@ -15,6 +15,6 @@ namespace JewelleryShop.Business.Service.Interface
         public void Update(ItemDto item);
         public Task AddAsync(ItemDto item);
         public void SoftDelete(ItemDto item);
-        public void Remove(ItemDto item);
+        public void RemoveAsync(ItemDto item);
     }
 }

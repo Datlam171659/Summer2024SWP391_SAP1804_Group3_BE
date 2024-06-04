@@ -38,5 +38,7 @@ namespace JewelleryShop.DataAccess.Repository
         public void UpdateRange(List<T> entities) => _dbSet.UpdateRange(entities);
 
         public void RemoveRange(List<T> entities) => _dbSet.RemoveRange(entities);
+
+        public void SoftDelete(T entity) => _dbSet.Update(entity);
     }
 }
