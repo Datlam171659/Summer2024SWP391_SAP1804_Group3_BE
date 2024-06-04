@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace JewelleryShop.DataAccess.Models
 {
@@ -17,44 +16,64 @@ namespace JewelleryShop.DataAccess.Models
         {
         }
 
+        public virtual DbSet<Brand> Brands { get; set; } = null!;
+        public virtual DbSet<Collection> Collections { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
-        public virtual DbSet<Employee> Employees { get; set; } = null!;
-        public virtual DbSet<Image> Images { get; set; } = null!;
+        public virtual DbSet<Discount> Discounts { get; set; } = null!;
+        public virtual DbSet<Gemstone> Gemstones { get; set; } = null!;
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
         public virtual DbSet<Item> Items { get; set; } = null!;
+        public virtual DbSet<ItemImage> ItemImages { get; set; } = null!;
         public virtual DbSet<ItemInvoice> ItemInvoices { get; set; } = null!;
+        public virtual DbSet<ItemMaterial> ItemMaterials { get; set; } = null!;
+        public virtual DbSet<Material> Materials { get; set; } = null!;
+        public virtual DbSet<MaterialPrice> MaterialPrices { get; set; } = null!;
+        public virtual DbSet<Promotion> Promotions { get; set; } = null!;
+        public virtual DbSet<ReturnPolicy> ReturnPolicies { get; set; } = null!;
+        public virtual DbSet<RewardsProgram> RewardsPrograms { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<StaffStation> StaffStations { get; set; } = null!;
         public virtual DbSet<Station> Stations { get; set; } = null!;
-
-        public virtual DbSet<Discount> Discounts { get; set; }
-
-
-
         public virtual DbSet<Warranty> Warranties { get; set; } = null!;
         public virtual DbSet<staff> staff { get; set; } = null!;
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(GetConnectionString());
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016;Database=grumbly_PWS;User Id=grumbly_PWS;Password=1234!;Trusted_Connection=False;");
             }
         }
-        private string GetConnectionString()
-        {
-            IConfiguration config = new ConfigurationBuilder()
-             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", true, true)
-            .Build();
-            var strConn = config.GetConnectionString("DB");
 
-            return strConn;
-        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Discount>().ToTable("Discount");
+            modelBuilder.Entity<Brand>(entity =>
+            {
+                entity.ToTable("Brand");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ItemId)
+                    .HasMaxLength(50)
+                    .HasColumnName("ItemID");
+
+                entity.Property(e => e.Name).HasMaxLength(255);
+
+                entity.HasOne(d => d.Item)
+                    .WithMany(p => p.Brands)
+                    .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK__Brand__ItemID__208CD6FA");
+            });
+
+            modelBuilder.Entity<Collection>(entity =>
+            {
+                entity.ToTable("Collection");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.ToTable("Customer");
@@ -74,49 +93,32 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.Status).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Employee>(entity =>
+            modelBuilder.Entity<Discount>(entity =>
             {
-                entity.Property(e => e.EmployeeId)
-                    .HasMaxLength(50)
-                    .HasColumnName("EmployeeID");
+                entity.ToTable("Discount");
 
-                entity.Property(e => e.Address).HasMaxLength(50);
+                entity.Property(e => e.DiscountCode).HasMaxLength(50);
 
-                entity.Property(e => e.Email).HasMaxLength(50);
-
-                entity.Property(e => e.FullName).HasMaxLength(50);
-
-                entity.Property(e => e.Gender).HasMaxLength(50);
-
-                entity.Property(e => e.PasswordHash).HasMaxLength(50);
-
-                entity.Property(e => e.PhoneNumber).HasMaxLength(50);
-
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
-
-                entity.Property(e => e.StationId)
-                    .HasMaxLength(50)
-                    .HasColumnName("StationID");
+                entity.Property(e => e.DiscountPercentage).HasColumnType("decimal(5, 2)");
 
                 entity.Property(e => e.Status).HasMaxLength(50);
-
-                entity.Property(e => e.UserName).HasMaxLength(50);
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_Staffs_Roles");
             });
 
-            modelBuilder.Entity<Image>(entity =>
+            modelBuilder.Entity<Gemstone>(entity =>
             {
-                entity.HasKey(e => e.ItemImagesId);
+                entity.ToTable("Gemstone");
 
-                entity.ToTable("Image");
+                entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.ItemImagesId)
-                    .HasMaxLength(50)
-                    .HasColumnName("ItemImagesID");
+                entity.Property(e => e.Colour).HasMaxLength(255);
+
+                entity.Property(e => e.GemstoneName).HasMaxLength(255);
+
+                entity.Property(e => e.Hardness).HasMaxLength(255);
+
+                entity.Property(e => e.Origin).HasMaxLength(255);
+
+                entity.Property(e => e.Rarity).HasMaxLength(255);
             });
 
             modelBuilder.Entity<Invoice>(entity =>
@@ -174,6 +176,10 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.Description).HasMaxLength(50);
 
+                entity.Property(e => e.GemStoneId)
+                    .HasMaxLength(450)
+                    .HasColumnName("GemStoneID");
+
                 entity.Property(e => e.ItemImagesId)
                     .HasMaxLength(50)
                     .HasColumnName("ItemImagesID");
@@ -190,10 +196,48 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.Weight).HasMaxLength(50);
 
-                entity.HasOne(d => d.ItemImages)
+                entity.HasOne(d => d.GemStone)
                     .WithMany(p => p.Items)
-                    .HasForeignKey(d => d.ItemImagesId)
-                    .HasConstraintName("FK_Items_Image");
+                    .HasForeignKey(d => d.GemStoneId)
+                    .HasConstraintName("FK_Items_Gemstone");
+
+                entity.HasMany(d => d.Collections)
+                    .WithMany(p => p.Items)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "ItemCollection",
+                        l => l.HasOne<Collection>().WithMany().HasForeignKey("CollectionId").HasConstraintName("FK__ItemColle__Colle__1DB06A4F"),
+                        r => r.HasOne<Item>().WithMany().HasForeignKey("ItemId").HasConstraintName("FK__ItemColle__ItemI__1CBC4616"),
+                        j =>
+                        {
+                            j.HasKey("ItemId", "CollectionId").HasName("PK__ItemColl__25A0E829219DFE2F");
+
+                            j.ToTable("ItemCollection");
+
+                            j.IndexerProperty<string>("ItemId").HasMaxLength(50).HasColumnName("ItemID");
+
+                            j.IndexerProperty<string>("CollectionId").HasColumnName("CollectionID");
+                        });
+            });
+
+            modelBuilder.Entity<ItemImage>(entity =>
+            {
+                entity.ToTable("ItemImage");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
+
+                entity.Property(e => e.ItemId)
+                    .HasMaxLength(50)
+                    .HasColumnName("ItemID");
+
+                entity.Property(e => e.ThumbnailUrl).HasColumnName("ThumbnailURL");
+
+                entity.HasOne(d => d.Item)
+                    .WithMany(p => p.ItemImages)
+                    .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK__ItemImage__ItemI__123EB7A3");
             });
 
             modelBuilder.Entity<ItemInvoice>(entity =>
@@ -228,10 +272,109 @@ namespace JewelleryShop.DataAccess.Models
                     .HasForeignKey(d => d.ItemId)
                     .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
 
+                entity.HasOne(d => d.ReturnPolicy)
+                    .WithMany()
+                    .HasForeignKey(d => d.ReturnPolicyId)
+                    .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
+
                 entity.HasOne(d => d.Warranty)
                     .WithMany()
                     .HasForeignKey(d => d.WarrantyId)
                     .HasConstraintName("FK_ItemInvoice_Warranty");
+            });
+
+            modelBuilder.Entity<ItemMaterial>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("ItemMaterial");
+
+                entity.Property(e => e.ItemId)
+                    .HasMaxLength(50)
+                    .HasColumnName("ItemID");
+
+                entity.Property(e => e.MaterialId)
+                    .HasMaxLength(450)
+                    .HasColumnName("MaterialID");
+
+                entity.HasOne(d => d.Item)
+                    .WithMany()
+                    .HasForeignKey(d => d.ItemId)
+                    .HasConstraintName("FK__ItemMater__ItemI__395884C4");
+            });
+
+            modelBuilder.Entity<Material>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Material");
+
+                entity.Property(e => e.MaterialId)
+                    .HasMaxLength(50)
+                    .HasColumnName("MaterialID");
+            });
+
+            modelBuilder.Entity<MaterialPrice>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.PriceUsd)
+                    .HasColumnType("decimal(12, 2)")
+                    .HasColumnName("PriceUSD");
+
+                entity.Property(e => e.Symbol)
+                    .HasMaxLength(255)
+                    .HasColumnName("symbol");
+
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Promotion>(entity =>
+            {
+                entity.ToTable("Promotion");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Code).HasMaxLength(255);
+
+                entity.Property(e => e.DiscountPct).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ReturnPolicy>(entity =>
+            {
+                entity.ToTable("ReturnPolicy");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ReturnPolicyType).HasMaxLength(255);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<RewardsProgram>(entity =>
+            {
+                entity.ToTable("RewardsProgram");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(50)
+                    .HasColumnName("id");
+
+                entity.Property(e => e.CustomerId)
+                    .HasMaxLength(50)
+                    .HasColumnName("CustomerID");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.RewardsPrograms)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_RewardsProgram_Customer");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -247,17 +390,19 @@ namespace JewelleryShop.DataAccess.Models
 
             modelBuilder.Entity<StaffStation>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.StationId);
 
                 entity.ToTable("StaffStation");
+
+                entity.Property(e => e.StationId)
+                    .HasMaxLength(50)
+                    .HasColumnName("StationID");
 
                 entity.Property(e => e.StaffId)
                     .HasMaxLength(50)
                     .HasColumnName("StaffID");
 
-                entity.Property(e => e.StationId)
-                    .HasMaxLength(50)
-                    .HasColumnName("StationID");
+                entity.Property(e => e.StaionName).HasMaxLength(450);
             });
 
             modelBuilder.Entity<Station>(entity =>
@@ -299,7 +444,9 @@ namespace JewelleryShop.DataAccess.Models
             {
                 entity.ToTable("Staff");
 
-                entity.Property(e => e.Id).HasMaxLength(50);
+                entity.Property(e => e.StaffId)
+                    .HasMaxLength(50)
+                    .HasColumnName("StaffID");
 
                 entity.Property(e => e.Address).HasMaxLength(150);
 
@@ -313,15 +460,25 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(25);
 
-                entity.Property(e => e.RoleId)
-                    .HasMaxLength(50)
-                    .HasColumnName("RoleID");
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.StationId)
                     .HasMaxLength(50)
                     .HasColumnName("StationID");
 
                 entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.Property(e => e.UserName).HasMaxLength(50);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.staff)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("FK_Staff_Roles");
+
+                entity.HasOne(d => d.Station)
+                    .WithMany(p => p.staff)
+                    .HasForeignKey(d => d.StationId)
+                    .HasConstraintName("FK_Staff_StaffStation");
             });
 
             OnModelCreatingPartial(modelBuilder);

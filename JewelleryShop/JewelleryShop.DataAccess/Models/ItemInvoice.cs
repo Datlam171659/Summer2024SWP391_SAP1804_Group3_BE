@@ -12,6 +12,7 @@ namespace JewelleryShop.DataAccess.Models
 
         public virtual Invoice? Invoice { get; set; }
         public virtual Item? Item { get; set; }
+        public virtual ReturnPolicy? ReturnPolicy { get; set; }
         public virtual Warranty? Warranty { get; set; }
     }
 }

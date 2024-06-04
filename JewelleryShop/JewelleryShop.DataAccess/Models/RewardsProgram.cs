@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace JewelleryShop.DataAccess.Models
 {
-    public partial class Warranty
+    public partial class RewardsProgram
     {
-        public string WarrantyId { get; set; } = null!;
+        public string Id { get; set; } = null!;
         public string? CustomerId { get; set; }
-        public DateTime? ExpiryDate { get; set; }
+        public int? PointsTotal { get; set; }
 
         public virtual Customer? Customer { get; set; }
     }

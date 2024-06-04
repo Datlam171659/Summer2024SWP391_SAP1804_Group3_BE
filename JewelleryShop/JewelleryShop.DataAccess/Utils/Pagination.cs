@@ -1,4 +1,4 @@
-﻿namespace Application.Commons
+﻿namespace JewelleryShop.DataAccess.Utils
 {
     public class Pagination<T>
     {

@@ -5,6 +5,13 @@ namespace JewelleryShop.DataAccess.Models
 {
     public partial class Item
     {
+        public Item()
+        {
+            Brands = new HashSet<Brand>();
+            ItemImages = new HashSet<ItemImage>();
+            Collections = new HashSet<Collection>();
+        }
+
         public string ItemId { get; set; } = null!;
         public string? ItemImagesId { get; set; }
         public string? BrandId { get; set; }
@@ -18,7 +25,12 @@ namespace JewelleryShop.DataAccess.Models
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? Status { get; set; }
+        public string? GemStoneId { get; set; }
 
-        public virtual Image? ItemImages { get; set; }
+        public virtual Gemstone? GemStone { get; set; }
+        public virtual ICollection<Brand> Brands { get; set; }
+        public virtual ICollection<ItemImage> ItemImages { get; set; }
+
+        public virtual ICollection<Collection> Collections { get; set; }
     }
 }

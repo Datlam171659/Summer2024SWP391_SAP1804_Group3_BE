@@ -51,44 +51,44 @@ namespace JewelleryShop.Business.Service
             return entity == null ? null : _mapper.Map<CustomerCommonDTO>(entity);
         }
 
-            private string RemoveDiacritics(string text)
-            {
+        private string RemoveDiacritics(string text)
+        {
 
             return text.Transliterate();
-            }
-            private string GenerateCustomerId(string name, DateTime creationDate)
-            {
-                    name = RemoveDiacritics(name);
-                    var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
-                    var formattedDate = creationDate.ToString("ddMMyyHHmmss");
-                    return $"{initials}{formattedDate}";
-            }
-            public async Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData)
-            {
-   
-                    var customerEntity = _mapper.Map<Customer>(customerData);
-                    customerEntity.Id = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
-                    
-                    await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
-                    await _unitOfWork.SaveChangeAsync();
+        }
+        private string GenerateCustomerId(string name, DateTime creationDate)
+        {
+            name = RemoveDiacritics(name);
+            var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
+            var formattedDate = creationDate.ToString("ddMMyyHHmmss");
+            return $"{initials}{formattedDate}";
+        }
+        public async Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData)
+        {
 
-                    return _mapper.Map<CustomerCommonDTO>(customerEntity);
-            }
+            var customerEntity = _mapper.Map<Customer>(customerData);
+            customerEntity.Id = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
 
-            public async Task<CustomerInputDTO> UpdateCustomerAsync(string id, CustomerInputDTO newCustomerData)
-            {
-                var existingCustomer = await _unitOfWork.CustomerRepository.GetByIDAsync(id);
+            await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
+            await _unitOfWork.SaveChangeAsync();
 
-                if (existingCustomer == null)
-                    return null;
+            return _mapper.Map<CustomerCommonDTO>(customerEntity);
+        }
 
-                _mapper.Map(newCustomerData, existingCustomer);
+        public async Task<CustomerInputDTO> UpdateCustomerAsync(string id, CustomerInputDTO newCustomerData)
+        {
+            var existingCustomer = await _unitOfWork.CustomerRepository.GetByIDAsync(id);
 
-                _unitOfWork.CustomerRepository.Update(existingCustomer);
-                await _unitOfWork.SaveChangeAsync();
+            if (existingCustomer == null)
+                return null;
 
-                return _mapper.Map<CustomerInputDTO>(existingCustomer);
-            }
+            _mapper.Map(newCustomerData, existingCustomer);
+
+            _unitOfWork.CustomerRepository.Update(existingCustomer);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<CustomerInputDTO>(existingCustomer);
+        }
     }
 }
 
