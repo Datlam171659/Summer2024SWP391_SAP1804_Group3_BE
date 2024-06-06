@@ -1,5 +1,5 @@
 ﻿using JewelleryShop.DataAccess.Models;
-using JewelleryShop.DataAccess.Models.ViewModel.EmployeeViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.Business.Service.Interface
 {
-    public interface IEmployeeService
+    public interface IStaffService
     {
-        public Task<string> LoginAsync(EmployeeLoginDTO employee);
-        public Task<EmployeeCommonDTO> AddEmployeeAsync(EmployeeCommonDTO employee);
+        public Task<string> LoginAsync(StaffLoginDTO employee);
+        public Task<StaffCommonDTO> AddEmployeeAsync(StaffRegisterDTO employee);
     }
 }
