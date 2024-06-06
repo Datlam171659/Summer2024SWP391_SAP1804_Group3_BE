@@ -50,23 +50,24 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItem(string id, ItemDto request)
+        public async Task<IActionResult> UpdateItem(string id, Item request)
         {
             _itemService.Update(request);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItem(string id, ItemDto request)
+        public async Task<IActionResult> DeleteItem(string id, Item request)
         {
             _itemService.RemoveAsync(request);
             return NoContent();
         }
 
         [HttpPut("softdelete/{id}")]
-        public async Task<IActionResult> SoftDeleteItem(string id, ItemDto request)
+        public async Task<IActionResult> SoftDeleteItem(string id)
         {
-            _itemService.SoftDelete(request);
+            var item = await _itemService.GetByIdAsync(id);
+            _itemService.SoftDelete(item);
             return NoContent();
         }
     }

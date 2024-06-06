@@ -44,24 +44,22 @@ namespace JewelleryShop.Business.Service
             return _itemRepository.GetByIdAsync(id);
         }
 
-        public void RemoveAsync(ItemDto item)
+        public void RemoveAsync(Item item)
         {
-            var itemtoDelete = _mapper.Map<Item>(item);
-            _unitOfWork.ItemRepository.Remove(itemtoDelete);
+            _unitOfWork.ItemRepository.Remove(item);
             _unitOfWork.SaveChangeAsync();
         }
 
-        public void SoftDelete(ItemDto item)
+        public void SoftDelete(Item item)
         {
-            var itemtoSoftDelete = _mapper.Map<Item>(item);
-            _unitOfWork.ItemRepository.SoftDelete(itemtoSoftDelete);
+            item.Status = "Out stock";
+            _unitOfWork.ItemRepository.Update(item);
             _unitOfWork.SaveChangeAsync();
         }
 
-        public void Update(ItemDto item)
+        public void Update(Item item)
         {
-            var itemtoUpdate = _mapper.Map<Item>(item);
-            _unitOfWork.ItemRepository.Update(itemtoUpdate);
+            _unitOfWork.ItemRepository.Update(item);
             _unitOfWork.SaveChangeAsync();
 
         }

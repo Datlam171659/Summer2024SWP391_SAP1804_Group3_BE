@@ -49,7 +49,6 @@ namespace JewelleryShop.DataAccess.Repository
             try
             {
                 _context.Items.Remove(item);
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -57,14 +56,11 @@ namespace JewelleryShop.DataAccess.Repository
             }
         }
 
-        public async void SoftDelete(Item item)
+        public void SoftDelete(Item item)
         {
             try
             {
-                string iStatus = "Out stock";
-                iStatus = item.Status;
                 _context.Items.Update(item);
-                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
