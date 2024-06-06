@@ -1,4 +1,5 @@
 ﻿using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
@@ -15,22 +16,25 @@ namespace JewelleryShop.API.Controllers
     {
         // dependency injection
         private readonly IItemService _itemService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ItemController(IItemService itemService) {
+        public ItemController(IItemService itemService, IUnitOfWork unitOfWork)
+        {
             _itemService = itemService;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public async Task<IActionResult> ListItems()
         {
-            var list = await _itemService.GetAllAsync();
+            var list = await _unitOfWork.ItemRepository.GetAllAsync();
             return Ok(list);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> SearchItem(string id)
         {
-            var item = await _itemService.GetByIdAsync(id);
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
 
             if (item == null)
             {
@@ -42,33 +46,34 @@ namespace JewelleryShop.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateItem(ItemDto request) {
-            await _itemService.AddAsync(request);
-            return Ok(APIResponse<string>
-                    .SuccessResponse(data:null, "Create successully.")
-                );
+        public async Task<IActionResult> CreateItem(Item item) {
+            _unitOfWork.ItemRepository.AddAsync(item);
+            return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItem(string id, Item request)
+        public async Task<IActionResult> UpdateItem(string id)
         {
-            _itemService.Update(request);
-            return NoContent();
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            _unitOfWork.ItemRepository.Update(item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItem(string id, Item request)
+        public async Task<IActionResult> DeleteItem(string id)
         {
-            _itemService.RemoveAsync(request);
-            return NoContent();
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            _itemService.RemoveAsync(item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
+    
 
         [HttpPut("softdelete/{id}")]
         public async Task<IActionResult> SoftDeleteItem(string id)
         {
-            var item = await _itemService.GetByIdAsync(id);
-            _itemService.SoftDelete(item);
-            return NoContent();
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            _unitOfWork.ItemRepository.SoftDelete(item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
     }
 }

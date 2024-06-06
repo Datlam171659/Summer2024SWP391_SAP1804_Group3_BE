@@ -16,13 +16,12 @@ namespace JewelleryShop.Business.Service
     public class ItemService : IItemService
     {
         // dependency injection
-        private readonly IItemRepository _itemRepository;
+        
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ItemService(IItemRepository itemRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public ItemService(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _itemRepository = itemRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -36,12 +35,12 @@ namespace JewelleryShop.Business.Service
 
         public Task<List<Item>> GetAllAsync()
         {
-            return _itemRepository.GetAllAsync();
+            return _unitOfWork.ItemRepository.GetAllAsync();
         }
 
         public Task<Item> GetByIdAsync(string id)
         {
-            return _itemRepository.GetByIdAsync(id);
+            return _unitOfWork.ItemRepository.GetByIdAsync(id);
         }
 
         public void RemoveAsync(Item item)

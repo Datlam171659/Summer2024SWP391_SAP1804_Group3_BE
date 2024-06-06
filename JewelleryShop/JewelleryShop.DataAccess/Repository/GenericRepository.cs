@@ -60,5 +60,10 @@ namespace JewelleryShop.DataAccess.Repository
 
             return result;
         }
+
+        public void Approve(T entity) => _dbSet.Update(entity);
+
+        public void Request(T entity) => _dbSet.Update(entity);
+
     }
 }

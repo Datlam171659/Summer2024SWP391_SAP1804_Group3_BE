@@ -17,4 +17,4 @@ namespace JewelleryShop.Business.Service.Interface
         public void SoftDelete(Item item);
         public void RemoveAsync(Item item);
     }
-}
+} 

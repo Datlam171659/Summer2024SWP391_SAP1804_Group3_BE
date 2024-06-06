@@ -49,6 +49,7 @@ namespace JewelleryShop.DataAccess.Repository
             try
             {
                 _context.Items.Remove(item);
+
             }
             catch (Exception ex)
             {
