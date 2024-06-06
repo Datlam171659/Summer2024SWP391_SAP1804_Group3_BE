@@ -52,7 +52,7 @@ namespace JewelleryShop.API.Controllers
                 Description = request.Description,
                 Price = request.Price,
                 Size = request.Size,
-                Sku = request.Sku,
+                SerialNumber = request.SerialNumber,
                 UpdatedDate = request.UpdatedDate,
                 Status = request.Status,
                 Weight = request.Weight,
@@ -79,7 +79,7 @@ namespace JewelleryShop.API.Controllers
             item.Description = request.Description;
             item.Price = request.Price;
             item.Size = request.Size;
-            item.Sku = request.Sku;
+            item.SerialNumber = request.SerialNumber;
             item.UpdatedDate = request.UpdatedDate;
             item.Status = request.Status;
             item.Weight = request.Weight;

@@ -1,7 +1,7 @@
 ﻿
-using Application.Commons;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Repository.Interface;
+using JewelleryShop.DataAccess.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
 

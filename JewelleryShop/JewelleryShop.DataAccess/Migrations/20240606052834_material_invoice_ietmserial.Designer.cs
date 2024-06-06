@@ -4,6 +4,7 @@ using JewelleryShop.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JewelleryShop.DataAccess.Migrations
 {
     [DbContext(typeof(JewelleryDBContext))]
-    partial class JewelleryDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240606052834_material_invoice_ietmserial")]
+    partial class material_invoice_ietmserial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

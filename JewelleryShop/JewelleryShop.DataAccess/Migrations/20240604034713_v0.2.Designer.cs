@@ -4,6 +4,7 @@ using JewelleryShop.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JewelleryShop.DataAccess.Migrations
 {
     [DbContext(typeof(JewelleryDBContext))]
-    partial class JewelleryDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240604034713_v0.2")]
+    partial class v02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,6 +143,61 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasKey("DiscountId");
 
                     b.ToTable("Discount", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Employee", b =>
+                {
+                    b.Property<string>("EmployeeId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("EmployeeID");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FullName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Gender")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int")
+                        .HasColumnName("RoleID");
+
+                    b.Property<string>("StationId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("StationID");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("EmployeeId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Gemstone", b =>
@@ -273,13 +330,14 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.Property<int?>("Price")
                         .HasColumnType("int");
 
-                    b.Property<string>("SerialNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Size")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Sku")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("SKU");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)
@@ -328,25 +386,21 @@ namespace JewelleryShop.DataAccess.Migrations
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemInvoice", b =>
                 {
                     b.Property<string>("InvoiceId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("InvoiceID");
 
                     b.Property<string>("ItemId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ItemID");
 
                     b.Property<string>("ReturnPolicyId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ReturnPolicyID");
 
                     b.Property<string>("WarrantyId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("WarrantyID");
@@ -370,13 +424,11 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnName("ItemID");
 
                     b.Property<string>("MaterialId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("MaterialID");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("MaterialId");
 
                     b.ToTable("ItemMaterial", (string)null);
                 });
@@ -387,16 +439,6 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("MaterialID");
-
-                    b.Property<string>("MaterialDescription")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("MaterialName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("MaterialId");
 
                     b.ToTable("Material", (string)null);
                 });
@@ -549,7 +591,7 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("RoleID");
 
@@ -583,7 +625,6 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnName("StationID");
 
                     b.Property<string>("StaffId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("StaffID");
@@ -612,8 +653,6 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("StationId");
-
                     b.ToTable("Station", (string)null);
                 });
 
@@ -625,7 +664,6 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnName("WarrantyID");
 
                     b.Property<string>("CustomerId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("CustomerID");
@@ -666,6 +704,16 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasConstraintName("FK__Brand__ItemID__208CD6FA");
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Employee", b =>
+                {
+                    b.HasOne("JewelleryShop.DataAccess.Models.Role", "Role")
+                        .WithMany("Employees")
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_Staffs_Roles");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Invoice", b =>
@@ -711,25 +759,21 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasOne("JewelleryShop.DataAccess.Models.Invoice", "Invoice")
                         .WithMany()
                         .HasForeignKey("InvoiceId")
-                        .IsRequired()
                         .HasConstraintName("FK__ItemInvoi__Invoi__6FE99F9F");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
-                        .IsRequired()
                         .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.ReturnPolicy", "ReturnPolicy")
                         .WithMany()
                         .HasForeignKey("ReturnPolicyId")
-                        .IsRequired()
                         .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.Warranty", "Warranty")
                         .WithMany()
                         .HasForeignKey("WarrantyId")
-                        .IsRequired()
                         .HasConstraintName("FK_ItemInvoice_Warranty");
 
                     b.Navigation("Invoice");
@@ -748,14 +792,7 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasForeignKey("ItemId")
                         .HasConstraintName("FK__ItemMater__ItemI__395884C4");
 
-                    b.HasOne("JewelleryShop.DataAccess.Models.Material", "Material")
-                        .WithMany()
-                        .HasForeignKey("MaterialId")
-                        .HasConstraintName("FK_ItemMaterial_Material");
-
                     b.Navigation("Item");
-
-                    b.Navigation("Material");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.RewardsProgram", b =>
@@ -773,7 +810,6 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasOne("JewelleryShop.DataAccess.Models.Role", "Role")
                         .WithMany("staff")
                         .HasForeignKey("RoleId")
-                        .IsRequired()
                         .HasConstraintName("FK_Staff_Roles");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.StaffStation", "Station")
@@ -791,7 +827,6 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasOne("JewelleryShop.DataAccess.Models.Customer", "Customer")
                         .WithMany("Warranties")
                         .HasForeignKey("CustomerId")
-                        .IsRequired()
                         .HasConstraintName("FK__Warranty__Custom__00200768");
 
                     b.Navigation("Customer");
@@ -820,6 +855,8 @@ namespace JewelleryShop.DataAccess.Migrations
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Role", b =>
                 {
+                    b.Navigation("Employees");
+
                     b.Navigation("staff");
                 });
 

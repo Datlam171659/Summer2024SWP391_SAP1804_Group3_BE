@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace JewelleryShop.DataAccess.Models.ViewModel.EmployeeViewModel
+namespace JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel
 {
-    public class EmployeeCommonDTO
+    public class StaffRegisterDTO
     {
-        public string EmployeeId { get; set; } = null!;
+        public string StaffId { get; set; } = null!;
         public int? RoleId { get; set; }
         public string? StationId { get; set; }
         public string? FullName { get; set; }
