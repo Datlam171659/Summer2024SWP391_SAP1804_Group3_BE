@@ -39,11 +39,7 @@ namespace JewelleryShop.DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016;Database=grumbly_PWS;User Id=grumbly_PWS;Password=1234!;Trusted_Connection=False;");
-            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -186,11 +182,9 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.ItemName).HasMaxLength(50);
 
-                entity.Property(e => e.Size).HasMaxLength(50);
+                entity.Property(e => e.SerialNumber).HasMaxLength(50);
 
-                entity.Property(e => e.Sku)
-                    .HasMaxLength(50)
-                    .HasColumnName("SKU");
+                entity.Property(e => e.Size).HasMaxLength(50);
 
                 entity.Property(e => e.Status).HasMaxLength(50);
 
@@ -265,21 +259,25 @@ namespace JewelleryShop.DataAccess.Models
                 entity.HasOne(d => d.Invoice)
                     .WithMany()
                     .HasForeignKey(d => d.InvoiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ItemInvoi__Invoi__6FE99F9F");
 
                 entity.HasOne(d => d.Item)
                     .WithMany()
                     .HasForeignKey(d => d.ItemId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
 
                 entity.HasOne(d => d.ReturnPolicy)
                     .WithMany()
                     .HasForeignKey(d => d.ReturnPolicyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
 
                 entity.HasOne(d => d.Warranty)
                     .WithMany()
                     .HasForeignKey(d => d.WarrantyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemInvoice_Warranty");
             });
 
@@ -294,24 +292,31 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("ItemID");
 
                 entity.Property(e => e.MaterialId)
-                    .HasMaxLength(450)
+                    .HasMaxLength(50)
                     .HasColumnName("MaterialID");
 
                 entity.HasOne(d => d.Item)
                     .WithMany()
                     .HasForeignKey(d => d.ItemId)
                     .HasConstraintName("FK__ItemMater__ItemI__395884C4");
+
+                entity.HasOne(d => d.Material)
+                    .WithMany()
+                    .HasForeignKey(d => d.MaterialId)
+                    .HasConstraintName("FK_ItemMaterial_Material");
             });
 
             modelBuilder.Entity<Material>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Material");
 
                 entity.Property(e => e.MaterialId)
                     .HasMaxLength(50)
                     .HasColumnName("MaterialID");
+
+                entity.Property(e => e.MaterialDescription).HasMaxLength(450);
+
+                entity.Property(e => e.MaterialName).HasMaxLength(150);
             });
 
             modelBuilder.Entity<MaterialPrice>(entity =>
@@ -407,8 +412,6 @@ namespace JewelleryShop.DataAccess.Models
 
             modelBuilder.Entity<Station>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Station");
 
                 entity.Property(e => e.StationId)
@@ -437,6 +440,7 @@ namespace JewelleryShop.DataAccess.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Warranties)
                     .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Warranty__Custom__00200768");
             });
 
@@ -473,6 +477,7 @@ namespace JewelleryShop.DataAccess.Models
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.staff)
                     .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Staff_Roles");
 
                 entity.HasOne(d => d.Station)

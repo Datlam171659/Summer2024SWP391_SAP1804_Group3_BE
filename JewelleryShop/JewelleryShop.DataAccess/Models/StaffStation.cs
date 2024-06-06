@@ -11,7 +11,7 @@ namespace JewelleryShop.DataAccess.Models
         }
 
         public string StationId { get; set; } = null!;
-        public string? StaffId { get; set; }
+        public string StaffId { get; set; } = null!;
         public string? StaionName { get; set; }
 
         public virtual ICollection<staff> staff { get; set; }

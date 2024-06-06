@@ -11,7 +11,7 @@ namespace JewelleryShop.DataAccess.Models
         }
 
         public string StaffId { get; set; } = null!;
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public string? StationId { get; set; }
         public string? UserName { get; set; }
         public string? FullName { get; set; }
@@ -22,7 +22,7 @@ namespace JewelleryShop.DataAccess.Models
         public string? Gender { get; set; }
         public string? Status { get; set; }
 
-        public virtual Role? Role { get; set; }
+        public virtual Role Role { get; set; } = null!;
         public virtual StaffStation? Station { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }
     }

@@ -9,5 +9,6 @@ namespace JewelleryShop.DataAccess.Models
         public string? MaterialId { get; set; }
 
         public virtual Item? Item { get; set; }
+        public virtual Material? Material { get; set; }
     }
 }
