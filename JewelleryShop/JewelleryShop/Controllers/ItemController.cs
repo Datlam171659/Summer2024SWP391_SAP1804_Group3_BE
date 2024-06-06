@@ -15,12 +15,10 @@ namespace JewelleryShop.API.Controllers
     public class ItemController : ControllerBase
     {
         // dependency injection
-        private readonly IItemService _itemService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ItemController(IItemService itemService, IUnitOfWork unitOfWork)
+        public ItemController(IUnitOfWork unitOfWork)
         {
-            _itemService = itemService;
             _unitOfWork = unitOfWork;
         }
 
@@ -63,7 +61,7 @@ namespace JewelleryShop.API.Controllers
         public async Task<IActionResult> DeleteItem(string id)
         {
             var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _itemService.RemoveAsync(item);
+            _unitOfWork.ItemRepository.Remove(item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
     
