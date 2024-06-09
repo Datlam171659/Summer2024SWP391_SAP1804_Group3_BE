@@ -11,5 +11,7 @@ namespace JewelleryShop.DataAccess.Repository.Interface
     {
         public Task<staff> CheckLoginCredentials(string usernameOrEmail, string password);
         public Task<bool> CheckUserExists(string username);
+        public Task<staff> UpdateAsync(string id, staff employee);
+        public Task DeleteAsync(string id);
     }
 }
