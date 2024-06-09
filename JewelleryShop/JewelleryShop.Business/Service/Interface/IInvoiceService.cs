@@ -9,8 +9,8 @@ namespace JewelleryShop.Business.Service.Interface
 {
     public interface IInvoiceService
     {
-        Task<List<InvoiceCommonDTO>> GetAllInvoices();
-        Task<InvoiceCommonDTO> GetInvoiceById(string id);
-        Task<InvoiceCommonDTO> AddInvoice(InvoiceInputDTO invoiceDTO);
+        public Task<List<InvoiceCommonDTO>> GetAllInvoices();
+        public Task<InvoiceCommonDTO> GetInvoiceById(string id);
+        public Task<InvoiceCommonDTO> AddInvoice(InvoiceInputDTO invoiceDTO);
     }
 }
