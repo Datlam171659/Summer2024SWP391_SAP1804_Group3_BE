@@ -8,7 +8,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel
 {
     public class StaffRegisterDTO
     {
-        public string StaffId { get; set; } = null!;
         public int? RoleId { get; set; }
         public string? StationId { get; set; }
         public string? FullName { get; set; }

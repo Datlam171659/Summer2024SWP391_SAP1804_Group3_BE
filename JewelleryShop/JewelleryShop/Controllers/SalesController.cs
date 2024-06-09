@@ -27,7 +27,7 @@ namespace JewelleryShop.API.Controllers
             _invoiceService = invoiceService;
             _warrantyService = warrantyService;
         }
-        // Invoice APIs
+
         [HttpGet("Invoices")]
         public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoice()
         {
@@ -36,7 +36,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("Invoice/{id}")]
-        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoiceById(string id)
+        public async Task<IActionResult> GetInvoiceById(string id)
         {
             var invoiceDTO = await _invoiceService.GetInvoiceById(id);
             if (invoiceDTO == null)
