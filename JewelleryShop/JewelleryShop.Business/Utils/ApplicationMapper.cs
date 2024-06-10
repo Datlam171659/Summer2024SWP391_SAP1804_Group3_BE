@@ -13,6 +13,7 @@ using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffShiftViewsModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
@@ -37,6 +38,9 @@ namespace JewelleryShop.DataAccess.Utils
 
             CreateMap<StaffStation, StaffShiftCommonDTO>().ReverseMap();
             CreateMap<StaffStation, StaffShiftInputDTO>().ReverseMap();
+
+            CreateMap<RewardsProgram, RewardsProgramCommonDTO>().ReverseMap();
+            CreateMap<RewardsProgram, RewardsProgramInputDTO>().ReverseMap();
         }
     }
 }

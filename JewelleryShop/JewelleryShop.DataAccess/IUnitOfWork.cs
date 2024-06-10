@@ -14,6 +14,7 @@ namespace JewelleryShop.DataAccess
         public IInvoiceRepository InvoiceRepository { get; }
         public IWarrantyRepository WarrantyRepository { get; }
         public IStaffShiftRepository StaffShiftRepository { get; }
+        public IRewardsProgramRepository RewardsProgramRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }
