@@ -21,12 +21,14 @@ namespace JewelleryShop.API
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IWarrantyRepository, WarrantyRepository>();
             services.AddScoped<IStaffShiftRepository, StaffShiftRepository>();
+            services.AddScoped<IRewardsProgramRepository, RewardsProgramRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IWarrantyService, WarrantyService>();
             services.AddScoped<IStaffShiftService, StaffShiftService>();
+            services.AddScoped<IRewardsProgramService, RewardsProgramService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHttpContextAccessor();
 
