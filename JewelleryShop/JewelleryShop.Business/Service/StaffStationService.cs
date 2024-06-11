@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.Business.Service
 {
-    public class StaffShiftService : IStaffShiftService
+    public class StaffStationService : IStaffStationService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public StaffShiftService(IUnitOfWork unitOfWork, IMapper mapper)
+        public StaffStationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -26,13 +26,13 @@ namespace JewelleryShop.Business.Service
 
         public async Task<List<StaffShiftCommonDTO>> GetAllStaffShifts()
         {
-            var staffShifts = await _unitOfWork.StaffShiftRepository.GetAllAsync();
+            var staffShifts = await _unitOfWork.StaffStationRepository.GetAllAsync();
             return _mapper.Map<List<StaffShiftCommonDTO>>(staffShifts);
         }
 
         public async Task<StaffShiftCommonDTO> GetStaffShiftById(string id)
         {
-            var staffShift = await _unitOfWork.StaffShiftRepository.GetByIdAsync(id);
+            var staffShift = await _unitOfWork.StaffStationRepository.GetByIdAsync(id);
             return _mapper.Map<StaffShiftCommonDTO>(staffShift);
         }
 
@@ -40,7 +40,7 @@ namespace JewelleryShop.Business.Service
         {
             var staffShift = _mapper.Map<StaffStation>(staffShiftDTO);
             staffShift.StationId = Guid.NewGuid().ToString();
-            await _unitOfWork.StaffShiftRepository.AddAsync(staffShift);
+            await _unitOfWork.StaffStationRepository.AddAsync(staffShift);
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<StaffShiftCommonDTO>(staffShift);
@@ -48,10 +48,10 @@ namespace JewelleryShop.Business.Service
 
         public async Task<StaffShiftCommonDTO> UpdateStaffShiftAsync(string id, StaffShiftInputDTO station)
         {
-            var shift = await _unitOfWork.StaffShiftRepository.GetByIdAsync(id);
+            var shift = await _unitOfWork.StaffStationRepository.GetByIdAsync(id);
             if (shift == null) { throw new ArgumentException("Shift not found!"); }
             _mapper.Map(station, shift);
-            await _unitOfWork.StaffShiftRepository.UpdateAsync(id, shift);
+            await _unitOfWork.StaffStationRepository.UpdateAsync(id, shift);
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<StaffShiftCommonDTO>(shift);
@@ -59,10 +59,10 @@ namespace JewelleryShop.Business.Service
 
         public async Task DeleteShiftAsync(string id)
         {
-            var shift = await _unitOfWork.StaffShiftRepository.GetByIdAsync(id);
+            var shift = await _unitOfWork.StaffStationRepository.GetByIdAsync(id);
             if (shift != null)
             {
-                await _unitOfWork.StaffShiftRepository.DeleteAsync(id);
+                await _unitOfWork.StaffStationRepository.DeleteAsync(id);
                 await _unitOfWork.SaveChangeAsync();
             }
             else

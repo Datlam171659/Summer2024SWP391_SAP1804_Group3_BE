@@ -12,7 +12,6 @@ namespace JewelleryShop.DataAccess.Models
 
         public string Id { get; set; } = null!;
         public string? StaffId { get; set; }
-        public string? ReturnPolicyId { get; set; }
         public string? ItemId { get; set; }
         public string? CustomerId { get; set; }
         public string? CompanyName { get; set; }

@@ -30,7 +30,6 @@ namespace JewelleryShop.DataAccess.Repository
                 {
                     InvoiceId = invoice.Id,
                     ItemId = itemId,
-                    ReturnPolicyId = invoice.ReturnPolicyId,
                     WarrantyId = warrantyId
                 };
 

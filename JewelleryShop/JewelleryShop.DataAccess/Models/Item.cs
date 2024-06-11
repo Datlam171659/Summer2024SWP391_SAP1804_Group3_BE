@@ -27,6 +27,7 @@ namespace JewelleryShop.DataAccess.Models
         public DateTime? UpdatedDate { get; set; }
         public string? Status { get; set; }
         public string? GemStoneId { get; set; }
+        public int? Quantity { get; set; }
 
         public virtual Gemstone? GemStone { get; set; }
         public virtual ICollection<Brand> Brands { get; set; }

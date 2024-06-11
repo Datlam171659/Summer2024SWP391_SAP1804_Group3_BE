@@ -15,12 +15,12 @@ namespace JewelleryShop.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class StaffShiftController : ControllerBase
+    public class StaffStationController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IStaffShiftService _staffShiftService;
+        private readonly IStaffStationService _staffShiftService;
 
-        public StaffShiftController(IMapper mapper, IStaffShiftService staffShiftService)
+        public StaffStationController(IMapper mapper, IStaffStationService staffShiftService)
         {
             _mapper = mapper;
             _staffShiftService = staffShiftService;

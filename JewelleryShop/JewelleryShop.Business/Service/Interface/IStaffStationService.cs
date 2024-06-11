@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.Business.Service.Interface
 {
-    public interface IStaffShiftService
+    public interface IStaffStationService
     {
         public Task<List<StaffShiftCommonDTO>> GetAllStaffShifts();
         public Task<StaffShiftCommonDTO> GetStaffShiftById(string id);
