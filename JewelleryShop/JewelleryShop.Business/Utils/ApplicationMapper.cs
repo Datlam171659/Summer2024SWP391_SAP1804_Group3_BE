@@ -23,6 +23,7 @@ namespace JewelleryShop.DataAccess.Utils
         public ApplicationMapper()
         {
             CreateMap<Invoice, InvoiceCommonDTO>().ReverseMap();
+            CreateMap<Invoice, InvoiceInputNewDTO>().ReverseMap();
             CreateMap<Warranty, WarrantyCommonDTO>().ReverseMap();
 
             CreateMap<Invoice, InvoiceInputDTO>().ReverseMap();

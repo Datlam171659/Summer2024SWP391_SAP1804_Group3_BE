@@ -236,17 +236,17 @@ namespace JewelleryShop.DataAccess.Models
 
             modelBuilder.Entity<ItemInvoice>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.ItemId, e.InvoiceId });
 
                 entity.ToTable("ItemInvoice");
-
-                entity.Property(e => e.InvoiceId)
-                    .HasMaxLength(50)
-                    .HasColumnName("InvoiceID");
 
                 entity.Property(e => e.ItemId)
                     .HasMaxLength(50)
                     .HasColumnName("ItemID");
+
+                entity.Property(e => e.InvoiceId)
+                    .HasMaxLength(50)
+                    .HasColumnName("InvoiceID");
 
                 entity.Property(e => e.ReturnPolicyId)
                     .HasMaxLength(50)
@@ -257,25 +257,25 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("WarrantyID");
 
                 entity.HasOne(d => d.Invoice)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.InvoiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ItemInvoi__Invoi__6FE99F9F");
 
                 entity.HasOne(d => d.Item)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.ItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
 
                 entity.HasOne(d => d.ReturnPolicy)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.ReturnPolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
 
                 entity.HasOne(d => d.Warranty)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.WarrantyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemInvoice_Warranty");
