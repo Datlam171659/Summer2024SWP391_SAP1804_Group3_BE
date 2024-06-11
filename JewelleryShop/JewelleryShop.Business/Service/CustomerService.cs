@@ -65,10 +65,11 @@ namespace JewelleryShop.Business.Service
         }
         public async Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData)
         {
-
+            var customerID = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
+            var isDuplicate = await _unitOfWork.CustomerRepository.GetByIDAsync(customerID);
+            if (isDuplicate != null) { throw new Exception("Duplicate Customer ID!"); }
             var customerEntity = _mapper.Map<Customer>(customerData);
-            customerEntity.Id = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
-
+            customerEntity.Id = customerID;
             await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
             await _unitOfWork.SaveChangeAsync();
 

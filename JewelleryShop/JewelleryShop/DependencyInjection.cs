@@ -17,15 +17,19 @@ namespace JewelleryShop.API
         public static IServiceCollection AddScopedService(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IWarrantyRepository, WarrantyRepository>();
+            services.AddScoped<IStaffShiftRepository, StaffShiftRepository>();
+            services.AddScoped<IRewardsProgramRepository, RewardsProgramRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IWarrantyService, WarrantyService>();
+            services.AddScoped<IStaffShiftService, StaffShiftService>();
+            services.AddScoped<IRewardsProgramService, RewardsProgramService>();
             return services;
         }
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)

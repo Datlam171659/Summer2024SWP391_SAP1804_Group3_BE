@@ -40,5 +40,25 @@ namespace JewelleryShop.DataAccess.Repository
             return usernameExists;
         }
 
+        public async Task<staff> UpdateAsync(string id, staff employee)
+        {
+            var staffToUpdate = await GetByIdAsync(id);
+            if (staffToUpdate != null)
+            {
+                Update(employee);
+                await _dbContext.SaveChangesAsync();
+            }
+            return employee;
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var employee = await GetByIdAsync(id);
+            if (employee != null)
+            {
+                Remove(employee);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }
