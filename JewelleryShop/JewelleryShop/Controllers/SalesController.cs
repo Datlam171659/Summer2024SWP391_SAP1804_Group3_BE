@@ -10,6 +10,7 @@ using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.Business.Service;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
@@ -32,6 +33,25 @@ namespace JewelleryShop.API.Controllers
         public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoice()
         {
             var invoices = await _invoiceService.GetAllInvoices();
+            return Ok(invoices);
+        }
+        
+        [HttpPost("CreateInvoiceWithItems")]
+        public async Task<ActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
+        {
+            var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.itemIds, data.returnPolicyId, data.warrantyId);
+            return Ok(
+                APIResponse<InvoiceWithItemsDTO>.SuccessResponse(
+                    data: res, 
+                    message:"Successfully created invoice."
+                )
+            );
+        }
+
+        [HttpGet("InvoiceItems")]
+        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoiceItems(string invoiceID)
+        {
+            var invoices = await _invoiceService.GetInvoiceItems(invoiceID);
             return Ok(invoices);
         }
 

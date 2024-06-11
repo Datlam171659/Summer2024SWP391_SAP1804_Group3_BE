@@ -1,4 +1,5 @@
-﻿using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+﻿using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,10 @@ namespace JewelleryShop.Business.Service.Interface
 {
     public interface IInvoiceService
     {
-        public Task<List<InvoiceCommonDTO>> GetAllInvoices();
-        public Task<InvoiceCommonDTO> GetInvoiceById(string id);
-        public Task<InvoiceCommonDTO> AddInvoice(InvoiceInputDTO invoiceDTO);
+        Task<List<InvoiceCommonDTO>> GetAllInvoices();
+        Task<InvoiceCommonDTO> GetInvoiceById(string id);
+        Task<InvoiceCommonDTO> AddInvoice(InvoiceInputDTO invoiceDTO);
+        Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<string> itemIds, string returnPolicyId, string warrantyId);
+        Task<List<Item>> GetInvoiceItems(string invoiceID);
     }
 }
