@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository
 {
-    public class StaffShiftRepository : GenericRepository<StaffStation>, IStaffShiftRepository
+    public class StaffStationRepository : GenericRepository<StaffStation>, IStaffStationRepository
     {
         private readonly JewelleryDBContext _dbContext;
-        public StaffShiftRepository(JewelleryDBContext context) : base(context)
+        public StaffStationRepository(JewelleryDBContext context) : base(context)
         {
             _dbContext = context;
         }

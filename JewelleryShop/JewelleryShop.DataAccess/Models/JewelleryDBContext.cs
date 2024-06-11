@@ -19,6 +19,7 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<Collection> Collections { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
+        public virtual DbSet<CustomerPromotion> CustomerPromotions { get; set; } = null!;
         public virtual DbSet<Discount> Discounts { get; set; } = null!;
         public virtual DbSet<Gemstone> Gemstones { get; set; } = null!;
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
@@ -28,7 +29,6 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<ItemMaterial> ItemMaterials { get; set; } = null!;
         public virtual DbSet<Material> Materials { get; set; } = null!;
         public virtual DbSet<MaterialPrice> MaterialPrices { get; set; } = null!;
-        public virtual DbSet<Promotion> Promotions { get; set; } = null!;
         public virtual DbSet<ReturnPolicy> ReturnPolicies { get; set; } = null!;
         public virtual DbSet<RewardsProgram> RewardsPrograms { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
@@ -89,6 +89,21 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.Status).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<CustomerPromotion>(entity =>
+            {
+                entity.ToTable("CustomerPromotion");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Code).HasMaxLength(255);
+
+                entity.Property(e => e.DiscountPct).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.ToTable("Discount");
@@ -136,10 +151,6 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("ItemID");
 
                 entity.Property(e => e.PaymentType).HasMaxLength(50);
-
-                entity.Property(e => e.ReturnPolicyId)
-                    .HasMaxLength(50)
-                    .HasColumnName("ReturnPolicyID");
 
                 entity.Property(e => e.StaffId).HasMaxLength(50);
 
@@ -334,21 +345,6 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<Promotion>(entity =>
-            {
-                entity.ToTable("Promotion");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Code).HasMaxLength(255);
-
-                entity.Property(e => e.DiscountPct).HasColumnType("decimal(5, 2)");
-
-                entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Status).HasMaxLength(50);
-            });
-
             modelBuilder.Entity<ReturnPolicy>(entity =>
             {
                 entity.ToTable("ReturnPolicy");
@@ -484,6 +480,11 @@ namespace JewelleryShop.DataAccess.Models
                     .WithMany(p => p.staff)
                     .HasForeignKey(d => d.StationId)
                     .HasConstraintName("FK_Staff_StaffStation");
+
+                entity.HasOne(d => d.StationNavigation)
+                    .WithMany(p => p.staff)
+                    .HasForeignKey(d => d.StationId)
+                    .HasConstraintName("FK_Staff_Station");
             });
 
             OnModelCreatingPartial(modelBuilder);
