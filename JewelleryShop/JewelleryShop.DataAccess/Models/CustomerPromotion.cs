@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JewelleryShop.DataAccess.Models
 {
-    public partial class Promotion
+    public partial class CustomerPromotion
     {
         public string Id { get; set; } = null!;
         public string? Code { get; set; }

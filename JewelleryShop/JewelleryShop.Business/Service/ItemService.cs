@@ -62,5 +62,9 @@ namespace JewelleryShop.Business.Service
             _unitOfWork.SaveChangeAsync();
 
         }
+        public void Pagination()
+        {
+            _unitOfWork.ItemRepository.ToPagination(10);
+        }
     }
 }

@@ -35,6 +35,13 @@ namespace JewelleryShop.Business.Service
             return _mapper.Map<StaffCommonDTO>(emp); ;
         }
 
+        public void DisableAccount(staff staff)
+        {
+            staff.Status = "Inactive";
+            _unitOfWork.StaffRepository.Update(staff);
+            _unitOfWork.SaveChangeAsync();
+        }
+
         public async Task<string> LoginAsync(StaffLoginDTO employee)
         {
             var user = await _unitOfWork.StaffRepository.CheckLoginCredentials(employee.UsernameOrEmail, employee.Password);

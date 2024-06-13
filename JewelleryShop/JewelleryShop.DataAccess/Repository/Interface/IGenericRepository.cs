@@ -19,10 +19,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
         void UpdateRange(List<T> entities);
         void Remove(T entity);
         void RemoveRange(List<T> entities);
-        void SoftDelete(T entity);
-        void Approve(T entity);
-        void Request(T entity);
-
         Task<Pagination<T>> ToPagination(int pageIndex = 0, int pageSize = 10);
     }
 }

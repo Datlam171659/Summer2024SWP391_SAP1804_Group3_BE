@@ -73,5 +73,7 @@ namespace JewelleryShop.API.Controllers
             _unitOfWork.ItemRepository.SoftDelete(item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
+
+       
     }
 }

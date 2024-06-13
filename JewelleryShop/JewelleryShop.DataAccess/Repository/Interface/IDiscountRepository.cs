@@ -9,14 +9,7 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface IDiscountRepository : IGenericRepository<Discount>
     {
-        Task<List<Discount>> GetAllAsync();
-        Task<Discount?> GetByIdAsync(int id);
-        Task AddAsync(Discount entity);
-        void Update(Discount entity);
-        void Remove(Discount entity);
-        void Approve(Discount entity);
-        void Request(Discount entity);
-
-
+        void Approve(Discount discount);
+        void Request(Discount discount);
     }
 }

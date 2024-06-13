@@ -1,6 +1,7 @@
 ﻿using BCrypt.Net;
 using JewelleryShop.Business.Service;
 using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
@@ -15,10 +16,12 @@ namespace JewelleryShop.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IStaffService _staffService;
+        private readonly UnitOfWork _unitOfWork;
 
-        public EmployeeController(IStaffService staffService)
+        public EmployeeController(IStaffService staffService, UnitOfWork unitOfWork)
         {
             _staffService = staffService;
+            _unitOfWork = unitOfWork; 
         }
 
         [HttpPost("Login")]
@@ -58,6 +61,13 @@ namespace JewelleryShop.API.Controllers
                         new List<string> { ex.Message }, "An error occurred while registering employee.")
                     );
             }
-        } 
+        }
+        [HttpPut("DisableAccount/{id}")]
+        public async Task<IActionResult> DisableAccount(string id)
+        {
+            var staff = await _unitOfWork.StaffRepository.GetByIdAsync(id);
+            _unitOfWork.StaffRepository.DisableAccount(staff);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+        }
     }
 }

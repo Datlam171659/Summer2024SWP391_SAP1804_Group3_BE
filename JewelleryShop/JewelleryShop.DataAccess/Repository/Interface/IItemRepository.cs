@@ -9,10 +9,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface IItemRepository : IGenericRepository<Item>
     {
-        public Task<Item> GetByIdAsync(string id);
-        public void Update(Item item);
-        public Task AddAsync(Item item);
-        public void SoftDelete(Item item);
-        public void Remove(Item item);
+        void SoftDelete(Item item);
     }
 }

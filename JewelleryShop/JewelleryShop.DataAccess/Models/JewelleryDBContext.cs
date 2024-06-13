@@ -28,7 +28,7 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<ItemMaterial> ItemMaterials { get; set; } = null!;
         public virtual DbSet<Material> Materials { get; set; } = null!;
         public virtual DbSet<MaterialPrice> MaterialPrices { get; set; } = null!;
-        public virtual DbSet<Promotion> Promotions { get; set; } = null!;
+        public virtual DbSet<CustomerPromotion> CustomerPromotion { get; set; } = null!;
         public virtual DbSet<ReturnPolicy> ReturnPolicies { get; set; } = null!;
         public virtual DbSet<RewardsProgram> RewardsPrograms { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
@@ -334,9 +334,9 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<Promotion>(entity =>
+            modelBuilder.Entity<CustomerPromotion>(entity =>
             {
-                entity.ToTable("Promotion");
+                entity.ToTable("CustomerPromotion");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
