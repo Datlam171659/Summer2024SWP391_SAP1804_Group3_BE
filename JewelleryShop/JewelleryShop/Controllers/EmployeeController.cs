@@ -1,6 +1,9 @@
-﻿using JewelleryShop.Business.Service.Interface;
+﻿using BCrypt.Net;
+using JewelleryShop.Business.Service;
+using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
-using JewelleryShop.DataAccess.Models.ViewModel.EmployeeViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,19 +15,21 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IStaffService _staffService;
+        private readonly UnitOfWork _unitOfWork;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IStaffService staffService, UnitOfWork unitOfWork)
         {
-            _employeeService = employeeService;
+            _staffService = staffService;
+            _unitOfWork = unitOfWork; 
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(EmployeeLoginDTO employee)
+        public async Task<IActionResult> Login(StaffLoginDTO employee)
         {
             try
             {
-                string token = await _employeeService.LoginAsync(employee);
+                string token = await _staffService.LoginAsync(employee);
 
                 return Ok(
                     APIResponse<string>
@@ -36,5 +41,33 @@ namespace JewelleryShop.API.Controllers
                 return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
             }
         } 
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(StaffRegisterDTO employee)
+        {
+            try
+            {
+                var emp = await _staffService.AddEmployeeAsync(employee);
+
+                return Ok(
+                    APIResponse<StaffCommonDTO>
+                    .SuccessResponse(emp, "Employee registered successully.")
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, 
+                    APIResponse<object>.ErrorResponse(
+                        new List<string> { ex.Message }, "An error occurred while registering employee.")
+                    );
+            }
+        }
+        [HttpPut("DisableAccount/{id}")]
+        public async Task<IActionResult> DisableAccount(string id)
+        {
+            var staff = await _unitOfWork.StaffRepository.GetByIdAsync(id);
+            _unitOfWork.StaffRepository.DisableAccount(staff);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+        }
     }
 }

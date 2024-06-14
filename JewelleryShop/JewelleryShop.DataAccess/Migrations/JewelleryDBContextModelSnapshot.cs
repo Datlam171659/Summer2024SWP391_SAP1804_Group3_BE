@@ -22,6 +22,64 @@ namespace JewelleryShop.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ItemCollection", b =>
+                {
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ItemID");
+
+                    b.Property<string>("CollectionId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("CollectionID");
+
+                    b.HasKey("ItemId", "CollectionId")
+                        .HasName("PK__ItemColl__25A0E829219DFE2F");
+
+                    b.HasIndex("CollectionId");
+
+                    b.ToTable("ItemCollection", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Brand", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ItemID");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Brand", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Collection", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CollectionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Collection", (string)null);
+                });
+
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Customer", b =>
                 {
                     b.Property<string>("Id")
@@ -57,75 +115,66 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.ToTable("Customer", (string)null);
                 });
 
-            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Employee", b =>
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Discount", b =>
                 {
-                    b.Property<string>("EmployeeId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("EmployeeID");
+                    b.Property<int>("DiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiscountId"), 1L, 1);
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("DiscountCode")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Gender")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int")
-                        .HasColumnName("RoleID");
-
-                    b.Property<string>("StationId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("StationID");
+                    b.Property<decimal>("DiscountPercentage")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.HasKey("DiscountId");
 
-                    b.HasKey("EmployeeId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("Employees");
+                    b.ToTable("Discount", (string)null);
                 });
 
-            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Image", b =>
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Gemstone", b =>
                 {
-                    b.Property<string>("ItemImagesId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("ItemImagesID");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
 
-                    b.Property<string>("ImageSource")
-                        .IsRequired()
+                    b.Property<string>("Colour")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ItemImagesId");
+                    b.Property<string>("GemstoneName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.ToTable("Image", (string)null);
+                    b.Property<string>("Hardness")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Origin")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Rarity")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Gemstone", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Invoice", b =>
@@ -207,6 +256,11 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("GemStoneId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("GemStoneID");
+
                     b.Property<string>("ItemImagesId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -219,14 +273,13 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.Property<int?>("Price")
                         .HasColumnType("int");
 
-                    b.Property<string>("Size")
+                    b.Property<string>("SerialNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Sku")
+                    b.Property<string>("Size")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("SKU");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Status")
                         .HasMaxLength(50)
@@ -241,29 +294,59 @@ namespace JewelleryShop.DataAccess.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.HasIndex("ItemImagesId");
+                    b.HasIndex("GemStoneId");
 
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemInvoice", b =>
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemImage", b =>
                 {
-                    b.Property<string>("InvoiceId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("InvoiceID");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ImageURL");
 
                     b.Property<string>("ItemId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ItemID");
 
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ThumbnailURL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("ItemImage", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemInvoice", b =>
+                {
+                    b.Property<string>("InvoiceId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("InvoiceID");
+
+                    b.Property<string>("ItemId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ItemID");
+
                     b.Property<string>("ReturnPolicyId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ReturnPolicyID");
 
                     b.Property<string>("WarrantyId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("WarrantyID");
@@ -272,9 +355,148 @@ namespace JewelleryShop.DataAccess.Migrations
 
                     b.HasIndex("ItemId");
 
+                    b.HasIndex("ReturnPolicyId");
+
                     b.HasIndex("WarrantyId");
 
                     b.ToTable("ItemInvoice", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemMaterial", b =>
+                {
+                    b.Property<string>("ItemId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ItemID");
+
+                    b.Property<string>("MaterialId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("MaterialID");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("ItemMaterial", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Material", b =>
+                {
+                    b.Property<string>("MaterialId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("MaterialID");
+
+                    b.Property<string>("MaterialDescription")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MaterialName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("MaterialId");
+
+                    b.ToTable("Material", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.MaterialPrice", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<decimal?>("PriceUsd")
+                        .HasColumnType("decimal(12,2)")
+                        .HasColumnName("PriceUSD");
+
+                    b.Property<string>("Symbol")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("symbol");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MaterialPrices");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Promotion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal?>("DiscountPct")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotion", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ReturnPolicy", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ReturnDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReturnPolicyType")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReturnPolicy", (string)null);
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.RewardsProgram", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CustomerId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("CustomerID");
+
+                    b.Property<int?>("PointsTotal")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("RewardsProgram", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Role", b =>
@@ -298,9 +520,10 @@ namespace JewelleryShop.DataAccess.Migrations
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.staff", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("StaffId")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("StaffID");
 
                     b.Property<string>("Address")
                         .HasMaxLength(150)
@@ -326,9 +549,8 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("RoleId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int")
                         .HasColumnName("RoleID");
 
                     b.Property<string>("StationId")
@@ -340,22 +562,37 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("StaffId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("StationId");
 
                     b.ToTable("Staff", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.StaffStation", b =>
                 {
-                    b.Property<string>("StaffId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("StaffID");
-
                     b.Property<string>("StationId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("StationID");
+
+                    b.Property<string>("StaffId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("StaffID");
+
+                    b.Property<string>("StaionName")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("StationId");
 
                     b.ToTable("StaffStation", (string)null);
                 });
@@ -375,6 +612,8 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.HasKey("StationId");
+
                     b.ToTable("Station", (string)null);
                 });
 
@@ -386,17 +625,13 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnName("WarrantyID");
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("CustomerID");
 
                     b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("ItemInvoiceId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("ItemInvoiceID");
 
                     b.HasKey("WarrantyId");
 
@@ -405,14 +640,32 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.ToTable("Warranty", (string)null);
                 });
 
-            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Employee", b =>
+            modelBuilder.Entity("ItemCollection", b =>
                 {
-                    b.HasOne("JewelleryShop.DataAccess.Models.Role", "Role")
-                        .WithMany("Employees")
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK_Staffs_Roles");
+                    b.HasOne("JewelleryShop.DataAccess.Models.Collection", null)
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__ItemColle__Colle__1DB06A4F");
 
-                    b.Navigation("Role");
+                    b.HasOne("JewelleryShop.DataAccess.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__ItemColle__ItemI__1CBC4616");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Brand", b =>
+                {
+                    b.HasOne("JewelleryShop.DataAccess.Models.Item", "Item")
+                        .WithMany("Brands")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Brand__ItemID__208CD6FA");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Invoice", b =>
@@ -434,12 +687,23 @@ namespace JewelleryShop.DataAccess.Migrations
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Item", b =>
                 {
-                    b.HasOne("JewelleryShop.DataAccess.Models.Image", "ItemImages")
+                    b.HasOne("JewelleryShop.DataAccess.Models.Gemstone", "GemStone")
                         .WithMany("Items")
-                        .HasForeignKey("ItemImagesId")
-                        .HasConstraintName("FK_Items_Image");
+                        .HasForeignKey("GemStoneId")
+                        .HasConstraintName("FK_Items_Gemstone");
 
-                    b.Navigation("ItemImages");
+                    b.Navigation("GemStone");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemImage", b =>
+                {
+                    b.HasOne("JewelleryShop.DataAccess.Models.Item", "Item")
+                        .WithMany("ItemImages")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__ItemImage__ItemI__123EB7A3");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemInvoice", b =>
@@ -447,23 +711,79 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasOne("JewelleryShop.DataAccess.Models.Invoice", "Invoice")
                         .WithMany()
                         .HasForeignKey("InvoiceId")
+                        .IsRequired()
                         .HasConstraintName("FK__ItemInvoi__Invoi__6FE99F9F");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
+                        .IsRequired()
                         .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
+
+                    b.HasOne("JewelleryShop.DataAccess.Models.ReturnPolicy", "ReturnPolicy")
+                        .WithMany()
+                        .HasForeignKey("ReturnPolicyId")
+                        .IsRequired()
+                        .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.Warranty", "Warranty")
                         .WithMany()
                         .HasForeignKey("WarrantyId")
+                        .IsRequired()
                         .HasConstraintName("FK_ItemInvoice_Warranty");
 
                     b.Navigation("Invoice");
 
                     b.Navigation("Item");
 
+                    b.Navigation("ReturnPolicy");
+
                     b.Navigation("Warranty");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemMaterial", b =>
+                {
+                    b.HasOne("JewelleryShop.DataAccess.Models.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .HasConstraintName("FK__ItemMater__ItemI__395884C4");
+
+                    b.HasOne("JewelleryShop.DataAccess.Models.Material", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .HasConstraintName("FK_ItemMaterial_Material");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.RewardsProgram", b =>
+                {
+                    b.HasOne("JewelleryShop.DataAccess.Models.Customer", "Customer")
+                        .WithMany("RewardsPrograms")
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("FK_RewardsProgram_Customer");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.staff", b =>
+                {
+                    b.HasOne("JewelleryShop.DataAccess.Models.Role", "Role")
+                        .WithMany("staff")
+                        .HasForeignKey("RoleId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Staff_Roles");
+
+                    b.HasOne("JewelleryShop.DataAccess.Models.StaffStation", "Station")
+                        .WithMany("staff")
+                        .HasForeignKey("StationId")
+                        .HasConstraintName("FK_Staff_StaffStation");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Station");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Warranty", b =>
@@ -471,6 +791,7 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasOne("JewelleryShop.DataAccess.Models.Customer", "Customer")
                         .WithMany("Warranties")
                         .HasForeignKey("CustomerId")
+                        .IsRequired()
                         .HasConstraintName("FK__Warranty__Custom__00200768");
 
                     b.Navigation("Customer");
@@ -480,22 +801,36 @@ namespace JewelleryShop.DataAccess.Migrations
                 {
                     b.Navigation("Invoices");
 
+                    b.Navigation("RewardsPrograms");
+
                     b.Navigation("Warranties");
                 });
 
-            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Image", b =>
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Gemstone", b =>
                 {
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Item", b =>
+                {
+                    b.Navigation("Brands");
+
+                    b.Navigation("ItemImages");
+                });
+
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Role", b =>
                 {
-                    b.Navigation("Employees");
+                    b.Navigation("staff");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.staff", b =>
                 {
                     b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.StaffStation", b =>
+                {
+                    b.Navigation("staff");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    public interface IEmployeeRepository
+    public interface IStaffRepository : IGenericRepository<staff>
     {
-        public Task<Employee> CheckLoginCredentials(string usernameOrEmail, string passwordHash);
+        public Task<staff> CheckLoginCredentials(string usernameOrEmail, string password);
         public Task<bool> CheckUserExists(string username);
+        void DisableAccount(staff staff);
     }
 }

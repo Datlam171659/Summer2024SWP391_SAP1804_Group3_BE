@@ -1,5 +1,8 @@
-﻿using JewelleryShop.DataAccess.Models;
+﻿using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.DataAccess;
+using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -11,121 +14,72 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class DiscountController : ControllerBase
     {
-        private readonly JewelleryDBContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DiscountController(JewelleryDBContext context)
+        public DiscountController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Discount>>> GetDiscounts()
+        public async Task<IActionResult> GetDiscountList()
         {
-            return await _context.Discounts.ToListAsync();
+            var list = _unitOfWork.DiscountRepository.GetAllAsync();
+            return Ok(list);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Discount>> GetDiscount(int id)
+        public async Task<IActionResult> GetDiscount(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
 
             if (discount == null)
             {
                 return NotFound();
             }
 
-            return discount;
+            return Ok(discount);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Discount>> CreateDiscount(DiscountDto request)
+        public async Task<ActionResult<Discount>> CreateDiscount(Discount request)
         {
-            var discount = new Discount
-            {
-                DiscountCode = request.DiscountCode,
-                DiscountPercentage = request.DiscountPercentage,
-                Description = request.Description,
-                Status = "Pending"  // Set initial status to "Pending"
-            };
-
-            _context.Discounts.Add(discount);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetDiscount), new { id = discount.DiscountId }, discount);
+            _unitOfWork.DiscountRepository.AddAsync(request);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDiscount(int id, DiscountDto request)
+        public async Task<IActionResult> UpdateDiscount(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
-
-            if (discount == null)
-            {
-                return NotFound();
-            }
-
-            discount.DiscountCode = request.DiscountCode;
-            discount.DiscountPercentage = request.DiscountPercentage;
-            discount.Description = request.Description;
-
-            _context.Discounts.Update(discount);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
+            _unitOfWork.DiscountRepository.Update(discount);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiscount(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
-
-            if (discount == null)
-            {
-                return NotFound();
-            }
-
-            _context.Discounts.Remove(discount);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
+            _unitOfWork.DiscountRepository.Remove(discount);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete successfully."));
         }
 
      
         [HttpPut("approve/{id}")]
         public async Task<IActionResult> ApproveDiscount(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
-
-            if (discount == null)
-            {
-                return NotFound();
-            }
-
-            discount.Status = "Approved"; // Update status to "Approved"
-
-            _context.Discounts.Update(discount);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
+            _unitOfWork.DiscountRepository.Approve(discount);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
         }
 
   
         [HttpPut("request/{id}")]
         public async Task<IActionResult> RequestDiscount(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
-
-            if (discount == null)
-            {
-                return NotFound();
-            }
-
-            discount.Status = "Pending"; // Update status to "Pending"
-
-            _context.Discounts.Update(discount);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
+            _unitOfWork.DiscountRepository.Request(discount);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Request successfully."));
         }
     }
 }

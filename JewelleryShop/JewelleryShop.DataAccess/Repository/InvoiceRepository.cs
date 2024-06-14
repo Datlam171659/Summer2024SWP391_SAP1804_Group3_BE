@@ -17,15 +17,6 @@ namespace JewelleryShop.DataAccess.Repository
         {
             _dbContext = dbcontext;
         }
-        public async Task<Invoice> GetByInvoiceIdAsync(string id)
-        {
-            return await _dbContext.Invoices.FindAsync(id);
-        }
-        public void Add(Invoice invoiceEntity)
-        {
-            _dbContext.Invoices.Add(invoiceEntity);
-        }
-        
 
     }
 }

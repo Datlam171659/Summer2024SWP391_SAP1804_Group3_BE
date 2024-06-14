@@ -5,13 +5,14 @@ namespace JewelleryShop.DataAccess.Models
 {
     public partial class ItemInvoice
     {
-        public string? ItemId { get; set; }
-        public string? InvoiceId { get; set; }
-        public string? ReturnPolicyId { get; set; }
-        public string? WarrantyId { get; set; }
+        public string ItemId { get; set; } = null!;
+        public string InvoiceId { get; set; } = null!;
+        public string ReturnPolicyId { get; set; } = null!;
+        public string WarrantyId { get; set; } = null!;
 
-        public virtual Invoice? Invoice { get; set; }
-        public virtual Item? Item { get; set; }
-        public virtual Warranty? Warranty { get; set; }
+        public virtual Invoice Invoice { get; set; } = null!;
+        public virtual Item Item { get; set; } = null!;
+        public virtual ReturnPolicy ReturnPolicy { get; set; } = null!;
+        public virtual Warranty Warranty { get; set; } = null!;
     }
 }
