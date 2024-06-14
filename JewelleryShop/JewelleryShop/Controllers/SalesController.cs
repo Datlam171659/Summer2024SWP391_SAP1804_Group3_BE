@@ -17,14 +17,12 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class SalesController : ControllerBase 
     {
-        private readonly IMapper _mapper;
         private readonly IInvoiceService _invoiceService;
         private readonly IWarrantyService _warrantyService; 
 
 
-        public SalesController(JewelleryDBContext context, IMapper mapper, IInvoiceService invoiceService, IWarrantyService warrantyService)
+        public SalesController(IInvoiceService invoiceService, IWarrantyService warrantyService)
         {
-            _mapper = mapper;
             _invoiceService = invoiceService;
             _warrantyService = warrantyService;
         }

@@ -9,7 +9,7 @@ using AutoMapper;
 using JewelleryShop.DataAccess.Models;
 
 using JewelleryShop.DataAccess.Models.dto;
-
+using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
@@ -42,6 +42,9 @@ namespace JewelleryShop.DataAccess.Utils
 
             CreateMap<RewardsProgram, RewardsProgramCommonDTO>().ReverseMap();
             CreateMap<RewardsProgram, RewardsProgramInputDTO>().ReverseMap();
+            
+            CreateMap<Collection, CollectionCommonDTO>().ReverseMap();
+            CreateMap<Collection, CollectionInputDTO>().ReverseMap();
         }
     }
 }
