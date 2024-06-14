@@ -33,14 +33,14 @@ namespace JewelleryShop.Business.Service
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public Task<List<Item>> GetAllAsync()
+        public async Task<List<Item>> GetAllAsync()
         {
-            return _unitOfWork.ItemRepository.GetAllAsync();
+            return await _unitOfWork.ItemRepository.GetAllAsync();
         }
 
-        public Task<Item> GetByIdAsync(string id)
+        public async Task<Item> GetByIdAsync(string id)
         {
-            return _unitOfWork.ItemRepository.GetByIdAsync(id);
+            return await _unitOfWork.ItemRepository.GetByIdAsync(id);
         }
 
         public void RemoveAsync(Item item)
@@ -49,20 +49,20 @@ namespace JewelleryShop.Business.Service
             _unitOfWork.SaveChangeAsync();
         }
 
-        public void SoftDelete(Item item)
+        public async void SoftDelete(Item item)
         {
             item.Status = "Out stock";
             _unitOfWork.ItemRepository.Update(item);
             _unitOfWork.SaveChangeAsync();
         }
 
-        public void Update(Item item)
+        public async void Update(Item item)
         {
             _unitOfWork.ItemRepository.Update(item);
             _unitOfWork.SaveChangeAsync();
 
         }
-        public void Pagination()
+        public async void Pagination()
         {
             _unitOfWork.ItemRepository.ToPagination(10);
         }

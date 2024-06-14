@@ -22,6 +22,7 @@ namespace JewelleryShop.API
             services.AddScoped<IWarrantyRepository, WarrantyRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<ICustomerPromotionRepository, CustomerPromotionRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
@@ -29,6 +30,7 @@ namespace JewelleryShop.API
             services.AddScoped<IWarrantyService, WarrantyService>();
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<ICustomerPromotionService, CustomerPromotionService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHttpContextAccessor();
 
