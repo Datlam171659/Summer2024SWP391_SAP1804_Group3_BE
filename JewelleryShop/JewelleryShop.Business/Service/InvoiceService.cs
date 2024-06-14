@@ -23,7 +23,7 @@ public class InvoiceService : IInvoiceService
 
     public async Task<InvoiceCommonDTO> GetInvoiceById(string id)
     {
-        var invoice = await _unitOfWork.InvoiceRepository.GetByInvoiceIdAsync(id);
+        var invoice = await _unitOfWork.InvoiceRepository.GetByIdAsync(id);
         return _mapper.Map<InvoiceCommonDTO>(invoice);
     }
 
@@ -31,7 +31,7 @@ public class InvoiceService : IInvoiceService
     {
         var invoice = _mapper.Map<Invoice>(invoiceDTO);
         invoice.Id = Guid.NewGuid().ToString();
-        _unitOfWork.InvoiceRepository.Add(invoice);
+        await _unitOfWork.InvoiceRepository.AddAsync(invoice);
         await _unitOfWork.SaveChangeAsync();
 
         return _mapper.Map<InvoiceCommonDTO>(invoice);

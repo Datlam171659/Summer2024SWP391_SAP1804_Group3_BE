@@ -9,10 +9,12 @@ namespace JewelleryShop.DataAccess
 {
     public interface IUnitOfWork
     {
-        public IEmployeeRepository EmployeeRepository { get; }
+        public IStaffRepository StaffRepository { get; }
         public ICustomerRepository CustomerRepository { get; }
         public IInvoiceRepository InvoiceRepository { get; }
         public IWarrantyRepository WarrantyRepository { get; }
+        public IItemRepository ItemRepository { get; }
+        public IDiscountRepository DiscountRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

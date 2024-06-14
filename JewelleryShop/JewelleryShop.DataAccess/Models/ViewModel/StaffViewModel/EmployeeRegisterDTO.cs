@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace JewelleryShop.DataAccess.Models
+namespace JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel
 {
-    public partial class Employee
+    public class StaffRegisterDTO
     {
-        public string EmployeeId { get; set; } = null!;
+        public string StaffId { get; set; } = null!;
         public int? RoleId { get; set; }
         public string? StationId { get; set; }
         public string? FullName { get; set; }
@@ -16,7 +19,5 @@ namespace JewelleryShop.DataAccess.Models
         public string? PhoneNumber { get; set; }
         public string? Gender { get; set; }
         public string? Status { get; set; }
-
-        public virtual Role? Role { get; set; }
     }
 }

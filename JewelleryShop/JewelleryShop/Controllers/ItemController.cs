@@ -1,7 +1,11 @@
-﻿using JewelleryShop.DataAccess.Models;
+﻿using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.DataAccess;
+using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 
 namespace JewelleryShop.API.Controllers
@@ -10,117 +14,66 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly JewelleryDBContext _context;
+        // dependency injection
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ItemController(JewelleryDBContext context)
+        public ItemController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
-        // GET: api/item
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> ListItems()
+        public async Task<IActionResult> ListItems()
         {
-            return await _context.Items.ToListAsync();
+            var list = await _unitOfWork.ItemRepository.GetAllAsync();
+            return Ok(list);
         }
 
-        // GET: api/item/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> SearchItem(string id)
+        public async Task<IActionResult> SearchItem(string id)
         {
-            var itemId = await _context.Items.FindAsync(id);
-
-            if (itemId == null)
-            {
-                return NotFound();
-            }
-
-            return itemId;
-        }
-
-
-        [HttpPost]
-        public IActionResult CreateItem(ItemDto request) {
-            var item = new Item()
-            {
-                ItemId = request.ItemId,
-                ItemImagesId = request.ItemImagesId,
-                ItemName = request.ItemName,
-                BrandId = request.BrandId,
-                AccessoryType = request.AccessoryType,
-                CreatedDate = request.CreatedDate,
-                Description = request.Description,
-                Price = request.Price,
-                Size = request.Size,
-                Sku = request.Sku,
-                UpdatedDate = request.UpdatedDate,
-                Status = request.Status,
-                Weight = request.Weight,
-            };
-            _context.Items.Add(item);
-            _context.SaveChanges();
-            return Ok();
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItem(string id, ItemDto request)
-        {
-            var item = await _context.Items.FindAsync(id);
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
 
             if (item == null)
             {
                 return NotFound();
             }
-            item.ItemImagesId = request.ItemImagesId;
-            item.ItemName = request.ItemName;
-            item.BrandId = request.BrandId;
-            item.AccessoryType = request.AccessoryType;
-            item.CreatedDate = request.CreatedDate;
-            item.Description = request.Description;
-            item.Price = request.Price;
-            item.Size = request.Size;
-            item.Sku = request.Sku;
-            item.UpdatedDate = request.UpdatedDate;
-            item.Status = request.Status;
-            item.Weight = request.Weight;
 
-            _context.Items.Update(item);
-            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
 
-            return NoContent();
+
+        [HttpPost]
+        public async Task<IActionResult> CreateItem(Item item) {
+            _unitOfWork.ItemRepository.AddAsync(item);
+            return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateItem(string id)
+        {
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            _unitOfWork.ItemRepository.Update(item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(string id)
         {
-            var item = await _context.Items.FindAsync(id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            _unitOfWork.ItemRepository.Remove(item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
+    
 
         [HttpPut("softdelete/{id}")]
         public async Task<IActionResult> SoftDeleteItem(string id)
         {
-            var item = await _context.Items.FindAsync(id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            item.Status = "out stock";
-            _context.Items.Update(item);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            _unitOfWork.ItemRepository.SoftDelete(item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
+
+       
     }
 }

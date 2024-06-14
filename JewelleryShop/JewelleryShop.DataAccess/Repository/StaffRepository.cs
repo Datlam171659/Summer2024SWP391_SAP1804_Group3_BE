@@ -1,42 +1,55 @@
 ﻿using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Repository.Interface;
+using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository
 {
-    public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
+    public class StaffRepository : GenericRepository<staff>, IStaffRepository
     {
         private readonly JewelleryDBContext _dbContext;
-        public EmployeeRepository(JewelleryDBContext dbcontext) : base(dbcontext)
+        public StaffRepository(JewelleryDBContext dbcontext) : base(dbcontext)
         {
             _dbContext = dbcontext;
         }
 
-        public async Task<Employee?> CheckLoginCredentials(string usernameOrEmail, string passwordHash)
+        public async Task<staff?> CheckLoginCredentials(string usernameOrEmail, string password)
         {
-            var user = await _dbContext.Employees
+            var user = await _dbContext.staff
                 .FirstOrDefaultAsync(record => 
                     (
                         record.UserName.Equals(usernameOrEmail) || 
                         record.Email.Equals(usernameOrEmail)
                     ));
             if (user == null) throw new Exception("Incorrect login credentials. Please try again");
-            if (user.PasswordHash.Equals(passwordHash))
+            if (StringUtils.VerifyPassword(password, user.PasswordHash))
                 return user;
             throw new Exception("Incorrect login credentials. Please try again");
         }
 
         public async Task<bool> CheckUserExists(string username) {
-            bool usernameExists = await _dbContext.Employees.AnyAsync(u => u.UserName == username);
+            bool usernameExists = await _dbContext.staff.AnyAsync(u => u.UserName == username);
             if (!usernameExists)
-                return await _dbContext.Employees.AnyAsync(u => u.Email == username);
+                return await _dbContext.staff.AnyAsync(u => u.Email == username);
             return usernameExists;
+        }
+        public void DisableAccount(staff staff)
+        {
+            try
+            {
+                _dbContext.Update(staff);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot Disable Account:" + ex.Message);
+            }
         }
 
     }

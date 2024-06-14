@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Repository.Interface
 {
-    public interface ICustomerRepository
+    public interface ICustomerRepository : IGenericRepository<Customer>
     {
-        Task<List<Customer>> GetAllAsync();
         Task<Customer> GetByIDAsync(string id);
         Task<Customer> GetByPhoneNumberAsync(string phoneNumber);
         Task<Customer> GetByEmailAsync(string email);
-        void Add(Customer customerEntity);
-        void Update(Customer existingCustomer);
-
-
     }
 }

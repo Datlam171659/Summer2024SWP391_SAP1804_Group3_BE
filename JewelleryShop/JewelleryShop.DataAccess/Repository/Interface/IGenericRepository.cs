@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using JewelleryShop.DataAccess.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +19,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
         void UpdateRange(List<T> entities);
         void Remove(T entity);
         void RemoveRange(List<T> entities);
+        Task<Pagination<T>> ToPagination(int pageIndex = 0, int pageSize = 10);
     }
 }

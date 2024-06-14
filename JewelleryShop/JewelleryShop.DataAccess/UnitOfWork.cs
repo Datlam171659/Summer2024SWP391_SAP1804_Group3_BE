@@ -12,30 +12,39 @@ namespace JewelleryShop.DataAccess
     public class UnitOfWork : IUnitOfWork
     {
         private readonly JewelleryDBContext _dbContext;
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IStaffRepository _staffRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IWarrantyRepository _warrantyRepository;
+        private readonly IItemRepository _itemRepository;
+        private readonly IDiscountRepository _discountRepository;
 
         public UnitOfWork(
             JewelleryDBContext dbContext,
-            IEmployeeRepository employeeRepository,
+            IStaffRepository staffRepository,
             ICustomerRepository customerRepository,
             IInvoiceRepository invoiceRepository,
-            IWarrantyRepository warrantyRepository
+            IWarrantyRepository warrantyRepository,
+            IItemRepository itemRepository,
+            IDiscountRepository discountRepository
+
         )
         {
             _dbContext = dbContext;
-            _employeeRepository = employeeRepository;
+            _staffRepository = staffRepository;
             _customerRepository = customerRepository;
             _invoiceRepository = invoiceRepository;
             _warrantyRepository = warrantyRepository;
+            _itemRepository = itemRepository;
+            _discountRepository = discountRepository;
         }
 
-        public IEmployeeRepository EmployeeRepository => _employeeRepository;
+        public IStaffRepository StaffRepository => _staffRepository;
         public ICustomerRepository CustomerRepository => _customerRepository;
         public IInvoiceRepository InvoiceRepository => _invoiceRepository;
         public IWarrantyRepository WarrantyRepository => _warrantyRepository;
+        public IItemRepository ItemRepository => _itemRepository;
+        public IDiscountRepository DiscountRepository => _discountRepository;
 
         public async Task<int> SaveChangeAsync()
         {

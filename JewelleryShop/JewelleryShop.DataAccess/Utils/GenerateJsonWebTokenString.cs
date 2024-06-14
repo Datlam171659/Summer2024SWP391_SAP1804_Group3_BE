@@ -12,14 +12,14 @@ namespace JewelleryShop.DataAccess.Utils
 {
     public static class GenerateJsonWebTokenString
     {
-        public static string GenerateJsonWebToken(this Employee employee, string secretKey, DateTime now)
+        public static string GenerateJsonWebToken(this staff employee, string secretKey, DateTime now, double expiration)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, employee.EmployeeId),
+                new Claim(ClaimTypes.NameIdentifier, employee.StaffId),
                 new Claim(ClaimTypes.Role, employee.RoleId.ToString() ?? string.Empty),
                 new Claim(ClaimTypes.Name, employee.FullName ?? string.Empty),
                 new Claim(ClaimTypes.Email, employee.Email ?? string.Empty),
@@ -31,7 +31,7 @@ namespace JewelleryShop.DataAccess.Utils
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = now.AddHours(2), // Adjust the expiration time
+                Expires = now.AddMinutes(expiration), // Adjust the expiration time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha512Signature)
             };
 
