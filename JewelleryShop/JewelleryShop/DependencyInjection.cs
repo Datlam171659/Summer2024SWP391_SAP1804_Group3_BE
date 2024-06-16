@@ -24,6 +24,7 @@ namespace JewelleryShop.API
             services.AddScoped<IStaffStationRepository, StaffStationRepository>();
             services.AddScoped<IRewardsProgramRepository, RewardsProgramRepository>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
+            services.AddScoped<IGemstoneRepository, GemstoneRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
@@ -32,6 +33,7 @@ namespace JewelleryShop.API
             services.AddScoped<IStaffStationService, StaffStationService>();
             services.AddScoped<IRewardsProgramService, RewardsProgramService>();
             services.AddScoped<ICollectionService, CollectionService>();
+            services.AddScoped<IGemstoneService, GemstoneService>();
             return services;
         }
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)

@@ -18,15 +18,13 @@ namespace JewelleryShop.Business.Service
 {
     public class CustomerService : ICustomerService
     {
-        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _configuration = configuration;
         }
 
         public async Task<List<CustomerCommonDTO>> GetAllAsync()

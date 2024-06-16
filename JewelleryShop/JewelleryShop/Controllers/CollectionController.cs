@@ -61,11 +61,11 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpDelete("Collection/{id}")]
-        public async Task<IActionResult> DeleteEmployeeAsync(string id)
+        public async Task<IActionResult> DeleteCollectionAsync(string id)
         {
             try
             {
-                await _collectionService.DeleteEmployeeAsync(id);
+                await _collectionService.DeleteCollectionAsync(id);
                 var response = APIResponse<string>.SuccessResponse(id, "Collection deleted successfully");
                 return Ok(response);
             }

@@ -61,7 +61,7 @@ namespace JewelleryShop.Business.Service
             return _mapper.Map<CollectionCommonDTO>(collections);
         }
 
-        public async Task DeleteEmployeeAsync(string id)
+        public async Task DeleteCollectionAsync(string id)
         {
             var collection = await _unitOfWork.CollectionRepository.GetByIdAsync(id);
             if (collection != null)
