@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace JewelleryShop.DataAccess.Repository
 {
     public class ItemRepository : GenericRepository<Item>, IItemRepository
@@ -28,11 +29,18 @@ namespace JewelleryShop.DataAccess.Repository
             }
         }
 
-        public async Task<List<Item>> ListItemByName(string itemName) 
+        public async Task<List<Item>> GetByNameAsync(string itemName) 
         {
-            var itemsearch = await _context.Items.FindAsync(itemName);
-            var list = _context.Items.ToList();
-            return list;            
+            var items = _context.Items.Where(Item => Item.ItemName.Contains(itemName));
+            var result = items.Select(Item => new Item
+            {
+                ItemId = Item.ItemId,
+                ItemName = Item.ItemName,
+                SerialNumber = Item.SerialNumber,
+                Price = Item.Price,
+                AccessoryType = Item.AccessoryType
+            });
+            return result.ToList();
         }
 
     }

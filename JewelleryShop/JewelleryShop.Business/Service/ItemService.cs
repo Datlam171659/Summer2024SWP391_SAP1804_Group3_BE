@@ -70,16 +70,7 @@ namespace JewelleryShop.Business.Service
         }
         public async Task<List<Item>> GetByName(string itemName)
         {
-            var items = _context.Items.Where(Item => Item.ItemName.Contains(itemName));
-            var result = items.Select(Item => new Item
-            {
-                ItemId = Item.ItemId,
-                ItemName = Item.ItemName,
-                SerialNumber = Item.SerialNumber,
-                Price = Item.Price,
-                AccessoryType = Item.AccessoryType
-            });
-            return result.ToList();
+            return await _unitOfWork.ItemRepository.GetByNameAsync(itemName);
         }
 
     }

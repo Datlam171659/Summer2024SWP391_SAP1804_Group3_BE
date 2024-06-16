@@ -45,7 +45,7 @@ namespace JewelleryShop.API.Controllers
         [HttpGet]
         public async Task<IActionResult> SearchItemByName(string itemName)
         {
-            var item = await _unitOfWork.ItemRepository.ListItemByName(itemName);
+            var item = await _unitOfWork.ItemRepository.GetByNameAsync(itemName);
 
             if (item == null)
             {
