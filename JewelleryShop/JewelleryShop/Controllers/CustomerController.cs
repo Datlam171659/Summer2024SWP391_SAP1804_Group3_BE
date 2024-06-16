@@ -22,15 +22,10 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly JewelleryDBContext _context;
-        private readonly IMapper _mapper;
         private readonly ICustomerService _customerService;
 
-        public CustomerController(JewelleryDBContext context, IMapper mapper, ICustomerService customerService)
+        public CustomerController(ICustomerService customerService)
         {
-            _mapper = mapper;
-            _context = context;
-            _mapper = mapper;
             _customerService = customerService;
         }
 
@@ -116,26 +111,40 @@ namespace JewelleryShop.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCustomer(CustomerInputDTO customerDto)
         {
-            var customer = await _customerService.CreateCustomerAsync(customerDto);
-            if (customer == null)
+            try
             {
-                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string>(), "An error occurred while creating the customer."));
+                var customer = await _customerService.CreateCustomerAsync(customerDto);
+                if (customer == null)
+                {
+                    return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string>(), "An error occurred while creating the customer."));
+                }
+                return CreatedAtAction("GetCustomersById", new { id = customer.Id }, customer);
             }
-            return CreatedAtAction("GetCustomersById", new { id = customer.Id }, customer);
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomerById(string id, [FromBody] CustomerInputDTO newCustomerData)
         {
-            var updatedCustomerDto = await _customerService.UpdateCustomerAsync(id, newCustomerData);
-
-            if (updatedCustomerDto == null)
+            try
             {
-                return NotFound();
-            }
+                var updatedCustomerDto = await _customerService.UpdateCustomerAsync(id, newCustomerData);
 
-            return Ok(updatedCustomerDto); // Success
+                if (updatedCustomerDto == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedCustomerDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

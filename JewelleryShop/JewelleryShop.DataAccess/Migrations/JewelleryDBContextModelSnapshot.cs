@@ -115,6 +115,31 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.ToTable("Customer", (string)null);
                 });
 
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.CustomerPromotion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal?>("DiscountPct")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerPromotion", (string)null);
+                });
+
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Discount", b =>
                 {
                     b.Property<int>("DiscountId")
@@ -208,11 +233,6 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReturnPolicyId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("ReturnPolicyID");
-
                     b.Property<string>("StaffId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -273,6 +293,9 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.Property<int?>("Price")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("SerialNumber")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -327,17 +350,15 @@ namespace JewelleryShop.DataAccess.Migrations
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemInvoice", b =>
                 {
-                    b.Property<string>("InvoiceId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("InvoiceID");
-
                     b.Property<string>("ItemId")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ItemID");
+
+                    b.Property<string>("InvoiceId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("InvoiceID");
 
                     b.Property<string>("ReturnPolicyId")
                         .IsRequired()
@@ -351,9 +372,9 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("WarrantyID");
 
-                    b.HasIndex("InvoiceId");
+                    b.HasKey("ItemId", "InvoiceId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("InvoiceId");
 
                     b.HasIndex("ReturnPolicyId");
 
@@ -422,31 +443,6 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MaterialPrices");
-                });
-
-            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Promotion", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<decimal?>("DiscountPct")
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Status")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Promotion", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ReturnPolicy", b =>
@@ -709,25 +705,25 @@ namespace JewelleryShop.DataAccess.Migrations
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemInvoice", b =>
                 {
                     b.HasOne("JewelleryShop.DataAccess.Models.Invoice", "Invoice")
-                        .WithMany()
+                        .WithMany("ItemInvoices")
                         .HasForeignKey("InvoiceId")
                         .IsRequired()
                         .HasConstraintName("FK__ItemInvoi__Invoi__6FE99F9F");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.Item", "Item")
-                        .WithMany()
+                        .WithMany("ItemInvoices")
                         .HasForeignKey("ItemId")
                         .IsRequired()
                         .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.ReturnPolicy", "ReturnPolicy")
-                        .WithMany()
+                        .WithMany("ItemInvoices")
                         .HasForeignKey("ReturnPolicyId")
                         .IsRequired()
                         .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.Warranty", "Warranty")
-                        .WithMany()
+                        .WithMany("ItemInvoices")
                         .HasForeignKey("WarrantyId")
                         .IsRequired()
                         .HasConstraintName("FK_ItemInvoice_Warranty");
@@ -781,9 +777,16 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasForeignKey("StationId")
                         .HasConstraintName("FK_Staff_StaffStation");
 
+                    b.HasOne("JewelleryShop.DataAccess.Models.Station", "StationNavigation")
+                        .WithMany("staff")
+                        .HasForeignKey("StationId")
+                        .HasConstraintName("FK_Staff_Station");
+
                     b.Navigation("Role");
 
                     b.Navigation("Station");
+
+                    b.Navigation("StationNavigation");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Warranty", b =>
@@ -811,11 +814,23 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Invoice", b =>
+                {
+                    b.Navigation("ItemInvoices");
+                });
+
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Item", b =>
                 {
                     b.Navigation("Brands");
 
                     b.Navigation("ItemImages");
+
+                    b.Navigation("ItemInvoices");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.ReturnPolicy", b =>
+                {
+                    b.Navigation("ItemInvoices");
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.Role", b =>
@@ -831,6 +846,16 @@ namespace JewelleryShop.DataAccess.Migrations
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.StaffStation", b =>
                 {
                     b.Navigation("staff");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Station", b =>
+                {
+                    b.Navigation("staff");
+                });
+
+            modelBuilder.Entity("JewelleryShop.DataAccess.Models.Warranty", b =>
+                {
+                    b.Navigation("ItemInvoices");
                 });
 #pragma warning restore 612, 618
         }

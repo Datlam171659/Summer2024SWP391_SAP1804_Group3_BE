@@ -19,6 +19,7 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<Collection> Collections { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
+        public virtual DbSet<CustomerPromotion> CustomerPromotions { get; set; } = null!;
         public virtual DbSet<Discount> Discounts { get; set; } = null!;
         public virtual DbSet<Gemstone> Gemstones { get; set; } = null!;
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
@@ -89,6 +90,21 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.Status).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<CustomerPromotion>(entity =>
+            {
+                entity.ToTable("CustomerPromotion");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Code).HasMaxLength(255);
+
+                entity.Property(e => e.DiscountPct).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.ToTable("Discount");
@@ -136,10 +152,6 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("ItemID");
 
                 entity.Property(e => e.PaymentType).HasMaxLength(50);
-
-                entity.Property(e => e.ReturnPolicyId)
-                    .HasMaxLength(50)
-                    .HasColumnName("ReturnPolicyID");
 
                 entity.Property(e => e.StaffId).HasMaxLength(50);
 
@@ -236,17 +248,17 @@ namespace JewelleryShop.DataAccess.Models
 
             modelBuilder.Entity<ItemInvoice>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.ItemId, e.InvoiceId });
 
                 entity.ToTable("ItemInvoice");
-
-                entity.Property(e => e.InvoiceId)
-                    .HasMaxLength(50)
-                    .HasColumnName("InvoiceID");
 
                 entity.Property(e => e.ItemId)
                     .HasMaxLength(50)
                     .HasColumnName("ItemID");
+
+                entity.Property(e => e.InvoiceId)
+                    .HasMaxLength(50)
+                    .HasColumnName("InvoiceID");
 
                 entity.Property(e => e.ReturnPolicyId)
                     .HasMaxLength(50)
@@ -257,25 +269,25 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("WarrantyID");
 
                 entity.HasOne(d => d.Invoice)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.InvoiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ItemInvoi__Invoi__6FE99F9F");
 
                 entity.HasOne(d => d.Item)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.ItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ItemInvoi__ItemI__6EF57B66");
 
                 entity.HasOne(d => d.ReturnPolicy)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.ReturnPolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemInvoice_ReturnPolicy");
 
                 entity.HasOne(d => d.Warranty)
-                    .WithMany()
+                    .WithMany(p => p.ItemInvoices)
                     .HasForeignKey(d => d.WarrantyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ItemInvoice_Warranty");
@@ -484,6 +496,11 @@ namespace JewelleryShop.DataAccess.Models
                     .WithMany(p => p.staff)
                     .HasForeignKey(d => d.StationId)
                     .HasConstraintName("FK_Staff_StaffStation");
+
+                entity.HasOne(d => d.StationNavigation)
+                    .WithMany(p => p.staff)
+                    .HasForeignKey(d => d.StationId)
+                    .HasConstraintName("FK_Staff_Station");
             });
 
             OnModelCreatingPartial(modelBuilder);

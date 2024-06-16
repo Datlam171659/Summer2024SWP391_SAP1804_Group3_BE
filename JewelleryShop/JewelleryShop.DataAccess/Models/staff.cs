@@ -24,6 +24,7 @@ namespace JewelleryShop.DataAccess.Models
 
         public virtual Role Role { get; set; } = null!;
         public virtual StaffStation? Station { get; set; }
+        public virtual Station? StationNavigation { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }
     }
 }

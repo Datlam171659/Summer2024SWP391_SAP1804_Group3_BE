@@ -5,9 +5,13 @@ namespace JewelleryShop.DataAccess.Models
 {
     public partial class Invoice
     {
+        public Invoice()
+        {
+            ItemInvoices = new HashSet<ItemInvoice>();
+        }
+
         public string Id { get; set; } = null!;
         public string? StaffId { get; set; }
-        public string? ReturnPolicyId { get; set; }
         public string? ItemId { get; set; }
         public string? CustomerId { get; set; }
         public string? CompanyName { get; set; }
@@ -19,5 +23,6 @@ namespace JewelleryShop.DataAccess.Models
 
         public virtual Customer? Customer { get; set; }
         public virtual staff? Staff { get; set; }
+        public virtual ICollection<ItemInvoice> ItemInvoices { get; set; }
     }
 }

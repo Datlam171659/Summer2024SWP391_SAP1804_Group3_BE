@@ -19,11 +19,13 @@ namespace JewelleryShop.Business.Service
         
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly JewelleryDBContext _context;
 
-        public ItemService(IMapper mapper, IUnitOfWork unitOfWork)
+        public ItemService(IMapper mapper, IUnitOfWork unitOfWork, JewelleryDBContext context)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _context = context; 
         }
 
         public async Task AddAsync(ItemDto item)
@@ -64,7 +66,12 @@ namespace JewelleryShop.Business.Service
         }
         public async void Pagination()
         {
-            _unitOfWork.ItemRepository.ToPagination(10);
+            _unitOfWork.ItemRepository.ToPagination();
         }
+        public List<Item> SearchByName(string itemName)
+        {
+            return _unitOfWork.ItemRepository.GetByName(itemName);
+        }
+
     }
 }

@@ -36,4 +36,20 @@ public class InvoiceService : IInvoiceService
 
         return _mapper.Map<InvoiceCommonDTO>(invoice);
     }
+
+    public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<string> itemIds, string returnPolicyId, string warrantyId)
+    {
+        var invoice = _mapper.Map<Invoice>(invoiceDTO);
+        invoice.Id = Guid.NewGuid().ToString();
+        var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, itemIds, returnPolicyId, warrantyId);
+        await _unitOfWork.SaveChangeAsync();
+
+        return res;
+    }
+
+    public async Task<List<Item>> GetInvoiceItems(string invoiceID)
+    {
+        var res = await _unitOfWork.InvoiceRepository.GetInvoiceItems(invoiceID);
+        return res;
+    }
 }

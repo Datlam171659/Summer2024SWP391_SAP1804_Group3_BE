@@ -20,6 +20,10 @@ namespace JewelleryShop.DataAccess
         private readonly IDiscountRepository _discountRepository;
         private readonly ICustomerPromotionRepository _customerPromotionRepository;
 
+        private readonly IStaffStationRepository _staffStationRepository; 
+        private readonly IRewardsProgramRepository _rewardsProgramRepository;
+        private readonly ICollectionRepository _collectionRepository;
+        private readonly IGemstoneRepository _gemstoneRepository;
         public UnitOfWork(
             JewelleryDBContext dbContext,
             IStaffRepository staffRepository,
@@ -28,7 +32,11 @@ namespace JewelleryShop.DataAccess
             IWarrantyRepository warrantyRepository,
             IItemRepository itemRepository,
             IDiscountRepository discountRepository,
-            ICustomerPromotionRepository customerPromotionRepository
+            ICustomerPromotionRepository customerPromotionRepository,
+            IStaffStationRepository staffShiftRepository,
+            IRewardsProgramRepository rewardsProgramRepository,
+            ICollectionRepository collectionRepository,
+            IGemstoneRepository gemstoneRepository
 
         )
         {
@@ -40,6 +48,10 @@ namespace JewelleryShop.DataAccess
             _itemRepository = itemRepository;
             _discountRepository = discountRepository;
             _customerPromotionRepository = customerPromotionRepository;
+            _staffStationRepository = staffShiftRepository;
+            _rewardsProgramRepository = rewardsProgramRepository;
+            _collectionRepository = collectionRepository;
+            _gemstoneRepository = gemstoneRepository;   
         }
 
         public IStaffRepository StaffRepository => _staffRepository;
@@ -49,6 +61,10 @@ namespace JewelleryShop.DataAccess
         public IItemRepository ItemRepository => _itemRepository;
         public IDiscountRepository DiscountRepository => _discountRepository;
         public ICustomerPromotionRepository CustomerPromotionRepository => _customerPromotionRepository;    
+        public IStaffStationRepository StaffStationRepository => _staffStationRepository; 
+        public IRewardsProgramRepository RewardsProgramRepository => _rewardsProgramRepository;
+        public ICollectionRepository CollectionRepository => _collectionRepository;
+        public IGemstoneRepository GemstoneRepository => _gemstoneRepository;
 
         public async Task<int> SaveChangeAsync()
         {

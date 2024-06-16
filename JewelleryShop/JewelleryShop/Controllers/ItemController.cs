@@ -30,7 +30,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> SearchItem(string id)
+        public async Task<IActionResult> SearchItemByID(string id)
         {
             var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
 
@@ -40,6 +40,20 @@ namespace JewelleryShop.API.Controllers
             }
 
             return Ok(item);
+        }
+
+        [HttpGet("search")]
+        public IActionResult SearchItemByName(string itemName)
+        {
+            try
+            {
+                var item = _unitOfWork.ItemRepository.GetByName(itemName);
+                return Ok(item);
+            }
+            catch
+            {
+                return BadRequest("Item with this name does not exist ...");
+            }
         }
 
 
