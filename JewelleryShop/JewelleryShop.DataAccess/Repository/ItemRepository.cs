@@ -31,7 +31,11 @@ namespace JewelleryShop.DataAccess.Repository
 
         public async Task<List<Item>> GetByNameAsync(string itemName) 
         {
-            var items = _context.Items.Where(Item => Item.ItemName.Contains(itemName));
+            var items = _context.Items.AsQueryable();
+            if (!string.IsNullOrEmpty(itemName))
+            {
+                items = items.Where(Item => Item.ItemName.Contains(itemName));
+            }
             var result = items.Select(Item => new Item
             {
                 ItemId = Item.ItemId,
