@@ -27,5 +27,13 @@ namespace JewelleryShop.DataAccess.Repository
                 throw new Exception("Cannot update status item:" + ex.Message);
             }
         }
+
+        public async Task<List<Item>> ListItemByName(string itemName) 
+        {
+            var itemsearch = await _context.Items.FindAsync(itemName);
+            var list = _context.Items.ToList();
+            return list;            
+        }
+
     }
 }

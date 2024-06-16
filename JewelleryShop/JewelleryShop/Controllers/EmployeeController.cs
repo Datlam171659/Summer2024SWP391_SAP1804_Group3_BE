@@ -86,6 +86,7 @@ namespace JewelleryShop.API.Controllers
             var staff = await _unitOfWork.StaffRepository.GetByIdAsync(id);
             _unitOfWork.StaffRepository.DisableAccount(staff);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+        }
 
         [HttpPut("Staff/{id}")]        
         public async Task<IActionResult> UpdateStaff(string id, StaffRegisterDTO staff)

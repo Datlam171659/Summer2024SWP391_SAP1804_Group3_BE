@@ -30,9 +30,22 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> SearchItem(string id)
+        public async Task<IActionResult> SearchItemByID(string id)
         {
             var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(item);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchItemByName(string itemName)
+        {
+            var item = await _unitOfWork.ItemRepository.ListItemByName(itemName);
 
             if (item == null)
             {

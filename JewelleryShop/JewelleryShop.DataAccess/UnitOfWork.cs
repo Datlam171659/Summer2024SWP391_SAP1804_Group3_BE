@@ -32,7 +32,7 @@ namespace JewelleryShop.DataAccess
             IWarrantyRepository warrantyRepository,
             IItemRepository itemRepository,
             IDiscountRepository discountRepository,
-            ICustomerPromotionRepository customerPromotionRepository
+            ICustomerPromotionRepository customerPromotionRepository,
             IStaffStationRepository staffShiftRepository,
             IRewardsProgramRepository rewardsProgramRepository,
             ICollectionRepository collectionRepository,
