@@ -1,4 +1,5 @@
-﻿using JewelleryShop.Business.Service.Interface;
+﻿using JewelleryShop.Business.Service;
+using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
@@ -16,10 +17,12 @@ namespace JewelleryShop.API.Controllers
     {
         // dependency injection
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ItemService _itemService;
 
-        public ItemController(IUnitOfWork unitOfWork)
+        public ItemController(IUnitOfWork unitOfWork, ItemService itemService)
         {
             _unitOfWork = unitOfWork;
+            _itemService = itemService; 
         }
 
         [HttpGet]
@@ -88,6 +91,11 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
 
-       
+        [HttpGet("paginated")]
+        public async Task<IActionResult> GetPaginatedItems([FromQuery] int pageIndex, [FromQuery] int pageSize)
+        {
+            var paginatedItems = await _itemService.GetPaginatedItemsAsync(pageIndex, pageSize);
+            return Ok(paginatedItems);
+        }
     }
 }

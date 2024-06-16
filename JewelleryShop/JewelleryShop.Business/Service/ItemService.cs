@@ -4,6 +4,7 @@ using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Repository.Interface;
+using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -64,14 +65,15 @@ namespace JewelleryShop.Business.Service
             _unitOfWork.SaveChangeAsync();
 
         }
-        public async void Pagination()
+
+        public async Task<Pagination<Item>> GetPaginatedItemsAsync(int pageIndex, int pageSize)
         {
-            _unitOfWork.ItemRepository.ToPagination();
+            return await _unitOfWork.ItemRepository.ToPagination(pageIndex, pageSize);
         }
+
         public List<Item> SearchByName(string itemName)
         {
             return _unitOfWork.ItemRepository.GetByName(itemName);
         }
-
     }
 }
