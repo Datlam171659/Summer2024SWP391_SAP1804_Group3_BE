@@ -13,6 +13,6 @@ namespace JewelleryShop.Business.Service.Interface
         public Task<CollectionCommonDTO> GetCollectionById(string id);
         public Task<CollectionCommonDTO> UpdateCollectionAsync(string id, CollectionInputDTO collectionDTO);
         public Task<CollectionCommonDTO> AddCollection(CollectionInputDTO collection);
-        public Task DeleteEmployeeAsync(string id);
+        public Task DeleteCollectionAsync(string id);
     }
 }

@@ -12,11 +12,9 @@ namespace JewelleryShop.DataAccess.Repository
     public class CollectionRepository : GenericRepository<Collection>,ICollectionRepository
     {
         private readonly JewelleryDBContext _dbContext;
-        private readonly IMapper _mapper;
-        public CollectionRepository(JewelleryDBContext dbcontext, IMapper mapper) : base(dbcontext)
+        public CollectionRepository(JewelleryDBContext dbcontext) : base(dbcontext)
         {
             _dbContext = dbcontext;
-            _mapper = mapper;
         }
         public async Task<Collection> UpdateAsync(string id, Collection collection)
         {
