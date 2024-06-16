@@ -10,33 +10,51 @@ using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.Business.Service;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class SalesController : ControllerBase 
     {
-        private readonly IMapper _mapper;
         private readonly IInvoiceService _invoiceService;
         private readonly IWarrantyService _warrantyService; 
 
 
-        public SalesController(JewelleryDBContext context, IMapper mapper, IInvoiceService invoiceService, IWarrantyService warrantyService)
+        public SalesController(IInvoiceService invoiceService, IWarrantyService warrantyService)
         {
-            _mapper = mapper;
             _invoiceService = invoiceService;
             _warrantyService = warrantyService;
         }
-        // Invoice APIs
+
         [HttpGet("Invoices")]
         public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoice()
         {
             var invoices = await _invoiceService.GetAllInvoices();
             return Ok(invoices);
         }
+        
+        [HttpPost("CreateInvoiceWithItems")]
+        public async Task<ActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
+        {
+            var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.itemIds, data.returnPolicyId, data.warrantyId);
+            return Ok(
+                APIResponse<InvoiceWithItemsDTO>.SuccessResponse(
+                    data: res, 
+                    message:"Successfully created invoice."
+                )
+            );
+        }
+
+        [HttpGet("InvoiceItems")]
+        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoiceItems(string invoiceID)
+        {
+            var invoices = await _invoiceService.GetInvoiceItems(invoiceID);
+            return Ok(invoices);
+        }
 
         [HttpGet("Invoice/{id}")]
-        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoiceById(string id)
+        public async Task<IActionResult> GetInvoiceById(string id)
         {
             var invoiceDTO = await _invoiceService.GetInvoiceById(id);
             if (invoiceDTO == null)

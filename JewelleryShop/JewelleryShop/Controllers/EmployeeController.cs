@@ -24,6 +24,24 @@ namespace JewelleryShop.API.Controllers
             _unitOfWork = unitOfWork; 
         }
 
+        [HttpGet("Staff")]
+        public async Task<ActionResult<IEnumerable<StaffCommonDTO>>>GetStaff()
+        {
+            var staff = await _staffService.GetAllStaff();
+            return Ok(staff);
+        }
+
+        [HttpGet("Staff/{id}")]
+        public async Task<IActionResult> GetStaffByID(string id)
+        {
+            var staff = await _staffService.GetStaffById(id);
+            if (staff == null)
+            {
+                return NotFound();
+            }
+            return Ok(staff);
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(StaffLoginDTO employee)
         {
@@ -68,6 +86,35 @@ namespace JewelleryShop.API.Controllers
             var staff = await _unitOfWork.StaffRepository.GetByIdAsync(id);
             _unitOfWork.StaffRepository.DisableAccount(staff);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+
+        [HttpPut("Staff/{id}")]        
+        public async Task<IActionResult> UpdateStaff(string id, StaffRegisterDTO staff)
+        {
+            try
+            {
+                var updatedEmp = await _staffService.UpdateEmployeeAsync(id, staff);
+                return Ok(APIResponse<StaffCommonDTO>.SuccessResponse(updatedEmp, "Employee updated successfully."));
+            } catch (Exception ex) {
+                return StatusCode(500, 
+                    APIResponse<object>.ErrorResponse(
+                        new List<string> { ex.Message }, "An error occurred while updating the employee."));
+            }
+        }
+
+        [HttpDelete("Staff/{id}")]
+        public async Task<IActionResult> DeleteStaff(string id)
+        {
+            try
+            {
+                await _staffService.DeleteEmployeeAsync(id);
+                return Ok(APIResponse<string>.SuccessResponse(id, "Employee deleted successfully."));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,
+                    APIResponse<object>.ErrorResponse(
+                        new List<string> { ex.Message }, "An error occurred while deleting the employee."));
+            }
         }
     }
 }

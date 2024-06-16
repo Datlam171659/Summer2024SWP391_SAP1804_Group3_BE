@@ -18,15 +18,13 @@ namespace JewelleryShop.Business.Service
 {
     public class CustomerService : ICustomerService
     {
-        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _configuration = configuration;
         }
 
         public async Task<List<CustomerCommonDTO>> GetAllAsync()
@@ -65,10 +63,19 @@ namespace JewelleryShop.Business.Service
         }
         public async Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData)
         {
-
+            var existedEmail = await _unitOfWork.CustomerRepository.GetByEmailAsync(customerData.Email);
+            var existedPhoneNum = await _unitOfWork.CustomerRepository.GetByPhoneNumberAsync(customerData.PhoneNumber);
+            if (existedPhoneNum != null &&  existedEmail != null)
+                throw new Exception("Email and PhoneNumber already exists");
+            if (existedEmail != null)
+                throw new Exception("Email already exists");
+            if (existedPhoneNum != null)
+                throw new Exception("Phone number already exists");
+            var customerID = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
+            var isDuplicate = await _unitOfWork.CustomerRepository.GetByIDAsync(customerID);
+            if (isDuplicate != null) { throw new Exception("Duplicate Customer ID!"); }
             var customerEntity = _mapper.Map<Customer>(customerData);
-            customerEntity.Id = GenerateCustomerId(customerData.CustomerName, DateTime.Now);
-
+            customerEntity.Id = customerID;
             await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
             await _unitOfWork.SaveChangeAsync();
 
@@ -77,6 +84,20 @@ namespace JewelleryShop.Business.Service
 
         public async Task<CustomerInputDTO> UpdateCustomerAsync(string id, CustomerInputDTO newCustomerData)
         {
+            var allCustomer = await _unitOfWork.CustomerRepository.GetAllAsync();
+            var CurrEmail = allCustomer
+                .Where(c => c.Email == newCustomerData.Email && c.Id != id).ToList();
+            var CurrPhoneNumber = allCustomer
+                .Where(c => c.PhoneNumber == newCustomerData.PhoneNumber && c.Id != id).ToList();
+            if (CurrEmail.Any() && CurrPhoneNumber.Any())
+                throw new Exception("Email and PhoneNumber already exists");
+
+            if (CurrPhoneNumber.Any())
+                throw new Exception("PhoneNumber already exists");
+
+            if(CurrEmail.Any())
+                throw new Exception("Email already exists");
+
             var existingCustomer = await _unitOfWork.CustomerRepository.GetByIDAsync(id);
 
             if (existingCustomer == null)

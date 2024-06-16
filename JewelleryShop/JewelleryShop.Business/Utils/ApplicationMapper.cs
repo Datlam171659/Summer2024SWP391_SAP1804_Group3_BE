@@ -9,10 +9,12 @@ using AutoMapper;
 using JewelleryShop.DataAccess.Models;
 
 using JewelleryShop.DataAccess.Models.dto;
-
+using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
-
+using JewelleryShop.DataAccess.Models.ViewModel.GemstoneViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.StaffShiftViewsModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
 
@@ -23,6 +25,7 @@ namespace JewelleryShop.DataAccess.Utils
         public ApplicationMapper()
         {
             CreateMap<Invoice, InvoiceCommonDTO>().ReverseMap();
+            CreateMap<Invoice, InvoiceInputNewDTO>().ReverseMap();
             CreateMap<Warranty, WarrantyCommonDTO>().ReverseMap();
 
             CreateMap<Invoice, InvoiceInputDTO>().ReverseMap();
@@ -35,6 +38,17 @@ namespace JewelleryShop.DataAccess.Utils
             CreateMap<staff, StaffCommonDTO>().ReverseMap();
             CreateMap<staff, StaffRegisterDTO>().ReverseMap();
 
+            CreateMap<StaffStation, StaffShiftCommonDTO>().ReverseMap();
+            CreateMap<StaffStation, StaffShiftInputDTO>().ReverseMap();
+
+            CreateMap<RewardsProgram, RewardsProgramCommonDTO>().ReverseMap();
+            CreateMap<RewardsProgram, RewardsProgramInputDTO>().ReverseMap();
+            
+            CreateMap<Collection, CollectionCommonDTO>().ReverseMap();
+            CreateMap<Collection, CollectionInputDTO>().ReverseMap();
+            
+            CreateMap<Gemstone, GemstoneCommonDTO>().ReverseMap();
+            CreateMap<Gemstone, GemstoneInputDTO>().ReverseMap();
         }
     }
 }
