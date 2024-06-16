@@ -1,5 +1,6 @@
 ﻿using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
+using JewelleryShop.DataAccess.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace JewelleryShop.Business.Service.Interface
         public Task AddAsync(ItemDto item);
         public void SoftDelete(Item item);
         public void RemoveAsync(Item item);
+        public Task<Pagination<Item>> GetPaginatedItemsAsync(int pageIndex, int pageSize);
     }
 } 
