@@ -10,6 +10,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
     public interface IItemRepository : IGenericRepository<Item>
     {
         void SoftDelete(Item item);
-        Task<List<Item?>> GetByNameAsync(string name);
+        List<Item?> GetByName(string name);
     }
 }

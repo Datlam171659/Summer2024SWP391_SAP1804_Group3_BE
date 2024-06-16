@@ -42,17 +42,18 @@ namespace JewelleryShop.API.Controllers
             return Ok(item);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> SearchItemByName(string itemName)
+        [HttpGet("search")]
+        public IActionResult SearchItemByName(string itemName)
         {
-            var item = await _unitOfWork.ItemRepository.GetByNameAsync(itemName);
-
-            if (item == null)
+            try
             {
-                return NotFound();
+                var item = _unitOfWork.ItemRepository.GetByName(itemName);
+                return Ok(item);
             }
-
-            return Ok(item);
+            catch
+            {
+                return BadRequest("Item with this name does not exist ...");
+            }
         }
 
 

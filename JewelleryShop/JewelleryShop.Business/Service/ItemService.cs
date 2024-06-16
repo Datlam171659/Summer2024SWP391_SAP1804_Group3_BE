@@ -68,9 +68,9 @@ namespace JewelleryShop.Business.Service
         {
             _unitOfWork.ItemRepository.ToPagination();
         }
-        public async Task<List<Item>> GetByNameAsync(string itemName)
+        public List<Item> SearchByName(string itemName)
         {
-            return await _unitOfWork.ItemRepository.GetByNameAsync(itemName);
+            return _unitOfWork.ItemRepository.GetByName(itemName);
         }
 
     }

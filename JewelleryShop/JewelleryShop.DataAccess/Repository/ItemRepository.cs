@@ -29,7 +29,7 @@ namespace JewelleryShop.DataAccess.Repository
             }
         }
 
-        public async Task<List<Item>> GetByNameAsync(string itemName) 
+        public List<Item> GetByName(string itemName) 
         {
             var items = _context.Items.AsQueryable();
             if (!string.IsNullOrEmpty(itemName))
