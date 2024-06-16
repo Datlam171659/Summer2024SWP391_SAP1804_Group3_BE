@@ -28,36 +28,37 @@ namespace JewelleryShop.Business.Service
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public void Approve(Discount dis)
+        public async void Approve(Discount dis)
         {
             dis.Status = "Approved";
             _unitOfWork.DiscountRepository.Update(dis);
             _unitOfWork.SaveChangeAsync();
         }
 
-        public Task<List<Discount>> GetAllAsync()
+        public async Task<List<Discount>> GetAllAsync()
         {
-            return _unitOfWork.DiscountRepository.GetAllAsync();
+            return await _unitOfWork.DiscountRepository.GetAllAsync();
         }
 
-        public Task<Discount> GetByIdAsync(int id)
+        public async Task<Discount> GetByIdAsync(int id)
         {
-            return _unitOfWork.DiscountRepository.GetByIdAsync(id);
+            return await _unitOfWork.DiscountRepository.GetByIdAsync(id);
         }
 
-        public void RemoveAsync(Discount dis)
+        public async void RemoveAsync(Discount dis)
         {
             _unitOfWork.DiscountRepository.Remove(dis);
+            _unitOfWork.SaveChangeAsync();
         }
 
-        public void Request(Discount dis)
+        public async void Request(Discount dis)
         {
             dis.Status = "Pending";
             _unitOfWork.DiscountRepository.Update(dis);
             _unitOfWork.SaveChangeAsync();
         }
 
-        public void Update(Discount dis)
+        public async void Update(Discount dis)
         {
             _unitOfWork.DiscountRepository.Update(dis);
             _unitOfWork.SaveChangeAsync();
