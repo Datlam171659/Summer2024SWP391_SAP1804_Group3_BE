@@ -9,7 +9,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
     public class InvoiceInputDTO
     {
         public string? StaffId { get; set; }
-        public string? ReturnPolicyId { get; set; }
         public string? ItemId { get; set; }
         public string? CustomerId { get; set; }
         public string? CompanyName { get; set; }
