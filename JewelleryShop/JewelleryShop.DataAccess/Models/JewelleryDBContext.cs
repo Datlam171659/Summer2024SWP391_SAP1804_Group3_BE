@@ -29,7 +29,6 @@ namespace JewelleryShop.DataAccess.Models
         public virtual DbSet<ItemMaterial> ItemMaterials { get; set; } = null!;
         public virtual DbSet<Material> Materials { get; set; } = null!;
         public virtual DbSet<MaterialPrice> MaterialPrices { get; set; } = null!;
-        public virtual DbSet<CustomerPromotion> CustomerPromotion { get; set; } = null!;
         public virtual DbSet<ReturnPolicy> ReturnPolicies { get; set; } = null!;
         public virtual DbSet<RewardsProgram> RewardsPrograms { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
@@ -40,7 +39,11 @@ namespace JewelleryShop.DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016; Database=grumbly_PWS; User Id=grumbly_PWS; Password=1234!; Trusted_Connection=False;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -344,21 +347,6 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("symbol");
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<CustomerPromotion>(entity =>
-            {
-                entity.ToTable("CustomerPromotion");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Code).HasMaxLength(255);
-
-                entity.Property(e => e.DiscountPct).HasColumnType("decimal(5, 2)");
-
-                entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Status).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ReturnPolicy>(entity =>

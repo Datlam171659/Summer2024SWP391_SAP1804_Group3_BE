@@ -17,9 +17,9 @@ namespace JewelleryShop.API.Controllers
     {
         // dependency injection
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ItemService _itemService;
+        private readonly IItemService _itemService;
 
-        public ItemController(IUnitOfWork unitOfWork, ItemService itemService)
+        public ItemController(IUnitOfWork unitOfWork, IItemService itemService)
         {
             _unitOfWork = unitOfWork;
             _itemService = itemService; 
