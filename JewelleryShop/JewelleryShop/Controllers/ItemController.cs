@@ -17,9 +17,9 @@ namespace JewelleryShop.API.Controllers
     {
         // dependency injection
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ItemService _itemService;
+        private readonly IItemService _itemService;
 
-        public ItemController(IUnitOfWork unitOfWork, ItemService itemService)
+        public ItemController(IUnitOfWork unitOfWork, IItemService itemService)
         {
             _unitOfWork = unitOfWork;
             _itemService = itemService; 
@@ -61,8 +61,8 @@ namespace JewelleryShop.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateItem(Item item) {
-            _unitOfWork.ItemRepository.AddAsync(item);
+        public async Task<IActionResult> CreateItem(ItemDto item) {
+            _itemService.AddAsync(item);
             return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
         }
 
