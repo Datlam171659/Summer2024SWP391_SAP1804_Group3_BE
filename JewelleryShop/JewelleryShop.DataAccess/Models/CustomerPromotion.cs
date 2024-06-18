@@ -10,5 +10,6 @@ namespace JewelleryShop.DataAccess.Models
         public decimal? DiscountPct { get; set; }
         public string? Status { get; set; }
         public DateTime? ExpiryDate { get; set; }
+        public virtual ICollection<Customer> Customers { get; set; }
     }
 }
