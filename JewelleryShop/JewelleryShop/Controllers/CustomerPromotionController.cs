@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CustomerPromotionController : Controller
     {
         private readonly UnitOfWork _unitOfWork;

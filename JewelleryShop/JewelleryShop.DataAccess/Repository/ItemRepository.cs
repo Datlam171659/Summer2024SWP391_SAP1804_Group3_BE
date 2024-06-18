@@ -1,4 +1,5 @@
 ﻿using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,9 @@ namespace JewelleryShop.DataAccess.Repository
             });
             return result.ToList();
         }
+
+        
+
 
     }
 }

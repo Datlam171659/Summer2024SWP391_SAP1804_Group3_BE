@@ -61,8 +61,8 @@ namespace JewelleryShop.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateItem(Item item) {
-            _unitOfWork.ItemRepository.AddAsync(item);
+        public async Task<IActionResult> CreateItem(ItemDto item) {
+            _itemService.AddAsync(item);
             return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
         }
 
