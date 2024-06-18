@@ -54,7 +54,7 @@ namespace JewelleryShop.Business.Service
 
         public async void SoftDelete(Item item)
         {
-            item.Status = "Out stock";
+            item.Status = "Hết hàng";
             _unitOfWork.ItemRepository.Update(item);
             _unitOfWork.SaveChangeAsync();
         }

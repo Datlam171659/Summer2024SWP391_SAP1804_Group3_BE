@@ -1,6 +1,8 @@
-﻿using JewelleryShop.DataAccess;
+﻿using JewelleryShop.Business.Service.Interface;
+using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess.Models.ViewModel.PromotionViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
@@ -10,29 +12,31 @@ namespace JewelleryShop.API.Controllers
     public class CustomerPromotionController : Controller
     {
         private readonly UnitOfWork _unitOfWork;
+        private readonly ICustomerPromotionService _customerPromotionService;
 
-        public CustomerPromotionController(UnitOfWork unitOfWork)
+        public CustomerPromotionController(UnitOfWork unitOfWork, ICustomerPromotionService customerPromotionService)
         {
             _unitOfWork = unitOfWork;
+            _customerPromotionService = customerPromotionService;
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePromotion(CustomerPromotion promotion)
+        public async Task<IActionResult> CreatePromotion(CustomerPromotionDto promotion)
         {
-            _unitOfWork.CustomerPromotionRepository.AddAsync(promotion);
+            _customerPromotionService.AddAsync(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePromotion(string id)
         {
             var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
-            _unitOfWork.CustomerPromotionRepository.Update(promotion);
+            _customerPromotionService.Update(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePromotion(string id) 
         {
             var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
-            _unitOfWork.CustomerPromotionRepository.Remove(promotion);
+            _customerPromotionService.Delete(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
 

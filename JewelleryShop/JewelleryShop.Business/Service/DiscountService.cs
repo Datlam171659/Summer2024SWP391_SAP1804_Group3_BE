@@ -30,7 +30,7 @@ namespace JewelleryShop.Business.Service
 
         public async void Approve(Discount dis)
         {
-            dis.Status = "Approved";
+            dis.Status = "Duyệt";
             _unitOfWork.DiscountRepository.Update(dis);
             _unitOfWork.SaveChangeAsync();
         }
@@ -53,7 +53,7 @@ namespace JewelleryShop.Business.Service
 
         public async void Request(Discount dis)
         {
-            dis.Status = "Pending";
+            dis.Status = "Chờ duyệt";
             _unitOfWork.DiscountRepository.Update(dis);
             _unitOfWork.SaveChangeAsync();
         }

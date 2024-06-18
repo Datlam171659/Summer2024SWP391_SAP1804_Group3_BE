@@ -35,7 +35,7 @@ namespace JewelleryShop.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> SearchItemByID(string id)
         {
-            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            var item = await _itemService.GetByIdAsync(id);
 
             if (item == null)
             {
@@ -50,7 +50,7 @@ namespace JewelleryShop.API.Controllers
         {
             try
             {
-                var item = _unitOfWork.ItemRepository.GetByName(itemName);
+                var item = _itemService.SearchByName(itemName);
                 return Ok(item);
             }
             catch
@@ -70,7 +70,7 @@ namespace JewelleryShop.API.Controllers
         public async Task<IActionResult> UpdateItem(string id)
         {
             var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _unitOfWork.ItemRepository.Update(item);
+            _itemService.Update(item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
 
@@ -78,7 +78,7 @@ namespace JewelleryShop.API.Controllers
         public async Task<IActionResult> DeleteItem(string id)
         {
             var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _unitOfWork.ItemRepository.Remove(item);
+            _itemService.RemoveAsync(item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
     
@@ -87,7 +87,7 @@ namespace JewelleryShop.API.Controllers
         public async Task<IActionResult> SoftDeleteItem(string id)
         {
             var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _unitOfWork.ItemRepository.SoftDelete(item);
+            _itemService.SoftDelete(item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
 
