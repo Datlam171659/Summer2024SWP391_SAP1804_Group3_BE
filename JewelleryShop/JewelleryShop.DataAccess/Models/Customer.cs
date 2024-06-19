@@ -27,5 +27,6 @@ namespace JewelleryShop.DataAccess.Models
         public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<RewardsProgram> RewardsPrograms { get; set; }
         public virtual ICollection<Warranty> Warranties { get; set; }
+        public virtual ICollection<CustomerPromotion> Promotion { get; set; }
     }
 }
