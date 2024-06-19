@@ -42,7 +42,7 @@ namespace JewelleryShop.DataAccess.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016; Database=grumbly_PWS; User Id=grumbly_PWS; Password=1234!; Trusted_Connection=False;");
+                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016; Database=grumbly_PWS; User Id=grumbly_PWS; Password=1234!; Trusted_Connection=False");
             }
         }
 
@@ -90,7 +90,16 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(20);
 
+                entity.Property(e => e.PromotionId)
+                    .HasMaxLength(450)
+                    .HasColumnName("PromotionID");
+
                 entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.HasOne(d => d.Promotion)
+                    .WithMany(p => p.Customers)
+                    .HasForeignKey(d => d.PromotionId)
+                    .HasConstraintName("FK_Customer_CustomerPromotion");
             });
 
             modelBuilder.Entity<CustomerPromotion>(entity =>
@@ -101,11 +110,20 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.Code).HasMaxLength(255);
 
+                entity.Property(e => e.CusId)
+                    .HasMaxLength(50)
+                    .HasColumnName("CusID");
+
                 entity.Property(e => e.DiscountPct).HasColumnType("decimal(5, 2)");
 
                 entity.Property(e => e.ExpiryDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.HasOne(d => d.Cus)
+                    .WithMany(p => p.CustomerPromotions)
+                    .HasForeignKey(d => d.CusId)
+                    .HasConstraintName("FK_CustomerPromotion_Customer");
             });
 
             modelBuilder.Entity<Discount>(entity =>

@@ -10,6 +10,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface ICustomerPromotionRepository : IGenericRepository<CustomerPromotion>
     {
-        
+        void Approve(CustomerPromotion promotion);
     }
 }

@@ -48,6 +48,7 @@ namespace JewelleryShop.API.Controllers
         [HttpGet("search")]
         public IActionResult SearchItemByName(string itemName)
         {
+            
             try
             {
                 var item = _itemService.SearchByName(itemName);

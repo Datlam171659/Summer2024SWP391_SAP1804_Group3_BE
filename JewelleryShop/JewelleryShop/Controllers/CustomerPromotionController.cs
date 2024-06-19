@@ -1,4 +1,6 @@
-﻿using JewelleryShop.Business.Service.Interface;
+
+﻿using JewelleryShop.Business.Service;
+using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
@@ -19,12 +21,15 @@ namespace JewelleryShop.API.Controllers
             _unitOfWork = unitOfWork;
             _customerPromotionService = customerPromotionService;
         }
+
         [HttpPost]
         public async Task<IActionResult> CreatePromotion(CustomerPromotionDto promotion)
         {
+            promotion.Status = "Chờ duyệt";
             _customerPromotionService.AddAsync(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePromotion(string id)
         {
@@ -32,12 +37,21 @@ namespace JewelleryShop.API.Controllers
             _customerPromotionService.Update(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePromotion(string id) 
         {
             var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
             _customerPromotionService.Delete(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ApprovePromotion(int id)
+        {
+            var discount = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
+            _customerPromotionService.Approve(discount);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
         }
 
     }
