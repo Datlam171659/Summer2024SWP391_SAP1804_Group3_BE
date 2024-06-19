@@ -29,6 +29,13 @@ namespace JewelleryShop.Business.Service
             await _unitOfWork.SaveChangeAsync();
         }
 
+        public async void Approve(CustomerPromotion obj)
+        {
+            obj.Status = "Duyệt";
+            _unitOfWork.CustomerPromotionRepository.Update(obj);
+            _unitOfWork.SaveChangeAsync();
+        }
+
         public async void Delete(CustomerPromotion obj)
         {
             _unitOfWork.CustomerPromotionRepository.Remove(obj);

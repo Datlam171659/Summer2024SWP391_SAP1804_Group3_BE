@@ -16,5 +16,17 @@ namespace JewelleryShop.DataAccess.Repository
         {
             _dbContext = context;
         }
+
+        public void Approve(CustomerPromotion customerPromotion)
+        {
+            try
+            {
+                _dbContext.Update<CustomerPromotion>(customerPromotion);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot Approve Promotion: " + ex.Message);
+            }
+        }
     }
 }
