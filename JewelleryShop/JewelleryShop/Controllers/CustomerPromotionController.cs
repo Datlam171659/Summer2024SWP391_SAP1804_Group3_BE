@@ -46,13 +46,13 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ApprovePromotion(int id)
-        {
-            var discount = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
-            _customerPromotionService.Approve(discount);
-            return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
-        }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> ApprovePromotion(int id)
+        //{
+        //    var discount = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
+        //    _customerPromotionService.Approve(discount);
+        //    return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
+        //}
 
     }
 }

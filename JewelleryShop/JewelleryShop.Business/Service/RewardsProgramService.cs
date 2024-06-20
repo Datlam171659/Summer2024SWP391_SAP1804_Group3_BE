@@ -61,7 +61,7 @@ namespace JewelleryShop.Business.Service
 
             if (existReward != null)
             {
-                existReward.PointsTotal = rewards.PointsTotal;
+                existReward.PointsTotal = rewards.AddPoints + existReward.PointsTotal;
                 _unitOfWork.RewardsProgramRepository.Update(existReward);
             }
             else
