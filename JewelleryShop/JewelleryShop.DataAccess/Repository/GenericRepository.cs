@@ -39,7 +39,7 @@ namespace JewelleryShop.DataAccess.Repository
         public void UpdateRange(List<T> entities) => _dbSet.UpdateRange(entities);
 
         public void RemoveRange(List<T> entities) => _dbSet.RemoveRange(entities);
-
+        
         public async Task<Pagination<T>> ToPagination(int pageIndex = 0, int pageSize = 10)
         {
             var itemCount = await _dbSet.CountAsync();
@@ -58,5 +58,6 @@ namespace JewelleryShop.DataAccess.Repository
 
             return result;
         }
+
     }
 }

@@ -13,6 +13,7 @@ namespace JewelleryShop.Business.Service.Interface
     {
         public Task<string> LoginAsync(StaffLoginDTO employee);
         public Task<StaffCommonDTO> AddEmployeeAsync(StaffRegisterDTO employee);
+        public void DisableAccount( staff staff);
 
         public Task<List<StaffCommonDTO>> GetAllStaff();
 

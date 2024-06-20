@@ -16,6 +16,10 @@ namespace JewelleryShop.DataAccess
         private readonly ICustomerRepository _customerRepository;
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IWarrantyRepository _warrantyRepository;
+        private readonly IItemRepository _itemRepository;
+        private readonly IDiscountRepository _discountRepository;
+        private readonly ICustomerPromotionRepository _customerPromotionRepository;
+
         private readonly IStaffStationRepository _staffStationRepository; 
         private readonly IRewardsProgramRepository _rewardsProgramRepository;
         private readonly ICollectionRepository _collectionRepository;
@@ -26,6 +30,9 @@ namespace JewelleryShop.DataAccess
             ICustomerRepository customerRepository,
             IInvoiceRepository invoiceRepository,
             IWarrantyRepository warrantyRepository,
+            IItemRepository itemRepository,
+            IDiscountRepository discountRepository,
+            ICustomerPromotionRepository customerPromotionRepository,
             IStaffStationRepository staffShiftRepository,
             IRewardsProgramRepository rewardsProgramRepository,
             ICollectionRepository collectionRepository,
@@ -38,6 +45,9 @@ namespace JewelleryShop.DataAccess
             _customerRepository = customerRepository;
             _invoiceRepository = invoiceRepository;
             _warrantyRepository = warrantyRepository;
+            _itemRepository = itemRepository;
+            _discountRepository = discountRepository;
+            _customerPromotionRepository = customerPromotionRepository;
             _staffStationRepository = staffShiftRepository;
             _rewardsProgramRepository = rewardsProgramRepository;
             _collectionRepository = collectionRepository;
@@ -48,6 +58,9 @@ namespace JewelleryShop.DataAccess
         public ICustomerRepository CustomerRepository => _customerRepository;
         public IInvoiceRepository InvoiceRepository => _invoiceRepository;
         public IWarrantyRepository WarrantyRepository => _warrantyRepository;
+        public IItemRepository ItemRepository => _itemRepository;
+        public IDiscountRepository DiscountRepository => _discountRepository;
+        public ICustomerPromotionRepository CustomerPromotionRepository => _customerPromotionRepository;    
         public IStaffStationRepository StaffStationRepository => _staffStationRepository; 
         public IRewardsProgramRepository RewardsProgramRepository => _rewardsProgramRepository;
         public ICollectionRepository CollectionRepository => _collectionRepository;

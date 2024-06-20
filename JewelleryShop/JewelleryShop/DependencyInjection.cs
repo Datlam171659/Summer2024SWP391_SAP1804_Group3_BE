@@ -21,6 +21,9 @@ namespace JewelleryShop.API
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IWarrantyRepository, WarrantyRepository>();
+            services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<ICustomerPromotionRepository, CustomerPromotionRepository>();
             services.AddScoped<IStaffStationRepository, StaffStationRepository>();
             services.AddScoped<IRewardsProgramRepository, RewardsProgramRepository>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
@@ -30,6 +33,9 @@ namespace JewelleryShop.API
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IWarrantyService, WarrantyService>();
+            services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<ICustomerPromotionService, CustomerPromotionService>();
             services.AddScoped<IStaffStationService, StaffStationService>();
             services.AddScoped<IRewardsProgramService, RewardsProgramService>();
             services.AddScoped<ICollectionService, CollectionService>();

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,17 @@ namespace JewelleryShop.DataAccess.Repository
             if (!usernameExists)
                 return await _dbContext.staff.AnyAsync(u => u.Email == username);
             return usernameExists;
+        }
+        public void DisableAccount(staff staff)
+        {
+            try
+            {
+                _dbContext.Update(staff);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Cannot Disable Account:" + ex.Message);
+            }
         }
 
         public async Task<staff> UpdateAsync(string id, staff employee)

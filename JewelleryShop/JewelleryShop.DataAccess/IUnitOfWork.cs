@@ -13,6 +13,9 @@ namespace JewelleryShop.DataAccess
         public ICustomerRepository CustomerRepository { get; }
         public IInvoiceRepository InvoiceRepository { get; }
         public IWarrantyRepository WarrantyRepository { get; }
+        public IItemRepository ItemRepository { get; }
+        public IDiscountRepository DiscountRepository { get; }
+        public ICustomerPromotionRepository CustomerPromotionRepository { get; }
         public IStaffStationRepository StaffStationRepository { get; }
         public IRewardsProgramRepository RewardsProgramRepository { get; }
         public ICollectionRepository CollectionRepository { get; }
