@@ -22,6 +22,13 @@ namespace JewelleryShop.API.Controllers
             _customerPromotionService = customerPromotionService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ListPromotion()
+        {
+            var list = await _customerPromotionService.GetAll();
+            return Ok(list);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePromotion(CustomerPromotionDto promotion)
         {
@@ -30,7 +37,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdatePromotion(string id)
         {
             var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
@@ -38,7 +45,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeletePromotion(string id) 
         {
             var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
@@ -46,7 +53,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("approve/{id}")]
         public async Task<IActionResult> ApprovePromotion(int id)
         {
             var discount = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);

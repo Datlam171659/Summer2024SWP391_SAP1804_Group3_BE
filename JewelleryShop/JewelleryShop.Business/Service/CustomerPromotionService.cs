@@ -42,6 +42,11 @@ namespace JewelleryShop.Business.Service
             _unitOfWork.SaveChangeAsync();
         }
 
+        public async Task<List<CustomerPromotion>> GetAll()
+        {
+            return await _unitOfWork.CustomerPromotionRepository.GetAllAsync();
+        }
+
         public async void Update(CustomerPromotion obj)
         {
             _unitOfWork.CustomerPromotionRepository.Update(obj);
