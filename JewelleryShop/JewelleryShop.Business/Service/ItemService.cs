@@ -8,6 +8,7 @@ using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,11 +60,16 @@ namespace JewelleryShop.Business.Service
             _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Update(Item item)
+        public async Task UpdateAsync(string id, ItemDto item)
         {
-            _unitOfWork.ItemRepository.Update(item);
-            _unitOfWork.SaveChangeAsync();
-
+            var itemToUpdate = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+     
+            if (itemToUpdate != null)
+            {
+                _mapper.Map(item, itemToUpdate);
+                _unitOfWork.ItemRepository.Update(itemToUpdate);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
 
         public async Task<Pagination<Item>> GetPaginatedItemsAsync(int pageIndex, int pageSize)

@@ -68,11 +68,10 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItem(string id)
+        public async Task<IActionResult> UpdateItem(string id, ItemDto item)
         {
-            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _itemService.Update(item);
-            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
+            await _itemService.UpdateAsync(id, item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
         [HttpDelete("{id}")]

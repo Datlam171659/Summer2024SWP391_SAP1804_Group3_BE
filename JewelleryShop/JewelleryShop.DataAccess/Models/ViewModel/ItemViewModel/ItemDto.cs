@@ -22,5 +22,6 @@ namespace JewelleryShop.DataAccess.Models.dto
         public DateTime? UpdatedDate { get; set; }
         public string? Status { get; set; }
         public string? GemStoneID { get; set; }
+        public int? Quantity { get; set; }
     }
 }
