@@ -49,6 +49,8 @@ namespace JewelleryShop.DataAccess.Utils
             
             CreateMap<Gemstone, GemstoneCommonDTO>().ReverseMap();
             CreateMap<Gemstone, GemstoneInputDTO>().ReverseMap();
+
+            CreateMap<Discount, DiscountDto>().ReverseMap();
         }
     }
 }

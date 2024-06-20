@@ -67,6 +67,7 @@ namespace JewelleryShop.Business.Service
             else
             {
                 existReward = _mapper.Map<RewardsProgram>(rewards);
+                existReward.PointsTotal = rewards.AddPoints;
                 existReward.Id = Guid.NewGuid().ToString();
                 await _unitOfWork.RewardsProgramRepository.AddAsync(existReward);
             }

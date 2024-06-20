@@ -26,7 +26,7 @@ namespace JewelleryShop.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDiscountList()
         {
-            var list = _discountService.GetAllAsync();
+            var list = await _discountService.GetAllAsync();
             return Ok(list);
         }
 
