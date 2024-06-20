@@ -2,6 +2,7 @@
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Models.dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

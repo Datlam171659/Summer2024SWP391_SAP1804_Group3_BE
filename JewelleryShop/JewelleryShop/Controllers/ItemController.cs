@@ -28,7 +28,7 @@ namespace JewelleryShop.API.Controllers
         [HttpGet]
         public async Task<IActionResult> ListItems()
         {
-            var list = await _unitOfWork.ItemRepository.GetAllAsync();
+            var list = await _itemService.GetAllAsync();
             return Ok(list);
         }
 

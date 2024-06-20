@@ -11,6 +11,7 @@ namespace JewelleryShop.Business.Service.Interface
 {
     public interface ICustomerPromotionService
     {
+        public Task<List<CustomerPromotion>> GetAll();
         public Task AddAsync(CustomerPromotionDto obj);
         public void Update(CustomerPromotion obj);
         public void Delete(CustomerPromotion obj);
