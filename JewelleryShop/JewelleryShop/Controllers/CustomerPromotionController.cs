@@ -13,12 +13,10 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class CustomerPromotionController : Controller
     {
-        private readonly UnitOfWork _unitOfWork;
         private readonly ICustomerPromotionService _customerPromotionService;
 
-        public CustomerPromotionController(UnitOfWork unitOfWork, ICustomerPromotionService customerPromotionService)
+        public CustomerPromotionController(ICustomerPromotionService customerPromotionService)
         {
-            _unitOfWork = unitOfWork;
             _customerPromotionService = customerPromotionService;
         }
 
@@ -32,32 +30,28 @@ namespace JewelleryShop.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePromotion(CustomerPromotionDto promotion)
         {
-            promotion.Status = "Chờ duyệt";
-            _customerPromotionService.AddAsync(promotion);
+            await _customerPromotionService.AddAsync(promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdatePromotion(string id)
+        public async Task<IActionResult> UpdatePromotion(string id, CustomerPromotionDto promotion)
         {
-            var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
-            _customerPromotionService.Update(promotion);
+            await _customerPromotionService.Update(id, promotion);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePromotion(string id) 
         {
-            var promotion = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
-            _customerPromotionService.Delete(promotion);
+            await _customerPromotionService.Delete(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
 
         [HttpPut("approve/{id}")]
-        public async Task<IActionResult> ApprovePromotion(int id)
+        public async Task<IActionResult> ApprovePromotion(string id)
         {
-            var discount = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
-            _customerPromotionService.Approve(discount);
+            await _customerPromotionService.Approve(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
         }
 

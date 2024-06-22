@@ -14,19 +14,17 @@ namespace JewelleryShop.API.Controllers
     [ApiController]
     public class DiscountController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IDiscountService _discountService;
 
-        public DiscountController(IUnitOfWork unitOfWork, IDiscountService discountService)
+        public DiscountController(IDiscountService discountService)
         {
-            _unitOfWork = unitOfWork;
             _discountService = discountService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDiscountList()
         {
-            var list = _discountService.GetAllAsync();
+            var list = await _discountService.GetAllAsync();
             return Ok(list);
         }
 
@@ -46,23 +44,21 @@ namespace JewelleryShop.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Discount>> CreateDiscount(Discount request)
         {
-            _discountService.AddAsync(request);
+            await _discountService.AddAsync(request);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDiscount(int id)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateDiscount(int id, DiscountDto discount)
         {
-            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
-            _discountService.Update(discount);
+            await _discountService.Update(id, discount);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiscount(int id)
         {
-            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
-            _discountService.RemoveAsync(discount);
+            await _discountService.RemoveAsync(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete successfully."));
         }
 
@@ -70,8 +66,7 @@ namespace JewelleryShop.API.Controllers
         [HttpPut("approve/{id}")]
         public async Task<IActionResult> ApproveDiscount(int id)
         {
-            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
-            _discountService.Approve(discount);
+            await _discountService.Approve(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
         }
 
@@ -79,8 +74,7 @@ namespace JewelleryShop.API.Controllers
         [HttpPut("request/{id}")]
         public async Task<IActionResult> RequestDiscount(int id)
         {
-            var discount = await _unitOfWork.DiscountRepository.GetByIdAsync(id);
-            _discountService.Request(discount);
+            await _discountService.Request(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Request successfully."));
         }
     }

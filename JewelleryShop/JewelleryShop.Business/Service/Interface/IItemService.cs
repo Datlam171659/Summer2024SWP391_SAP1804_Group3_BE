@@ -16,8 +16,8 @@ namespace JewelleryShop.Business.Service.Interface
         public List<Item> SearchByName(string itemName);
         public Task AddAsync(ItemDto item);
         Task UpdateAsync(string id, ItemDto item);
-        public void SoftDelete(Item item);
-        public void RemoveAsync(Item item);
+        public Task SoftDelete(string id);
+        public Task RemoveAsync(string id);
         public Task<Pagination<Item>> GetPaginatedItemsAsync(int pageIndex, int pageSize);
     }
 } 
