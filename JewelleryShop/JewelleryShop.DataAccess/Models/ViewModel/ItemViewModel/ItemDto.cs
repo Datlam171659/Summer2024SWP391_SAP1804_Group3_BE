@@ -10,7 +10,7 @@ namespace JewelleryShop.DataAccess.Models.dto
     {   
         public string ItemId { get; set; } = null!;
         public string? ItemImagesId { get; set; }
-        public string? BrandId { get; set; }
+        public string? Brand { get; set; }
         public string? AccessoryType { get; set; }
         public string? SerialNumber { get; set; }
         public string? ItemName { get; set; }
@@ -21,7 +21,7 @@ namespace JewelleryShop.DataAccess.Models.dto
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? Status { get; set; }
-        public string? GemStoneID { get; set; }
+        public string? GemStoneId { get; set; }
         public int? Quantity { get; set; }
     }
 }

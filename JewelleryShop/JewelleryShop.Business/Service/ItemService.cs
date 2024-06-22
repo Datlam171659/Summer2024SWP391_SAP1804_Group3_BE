@@ -21,13 +21,11 @@ namespace JewelleryShop.Business.Service
         
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly JewelleryDBContext _context;
 
-        public ItemService(IMapper mapper, IUnitOfWork unitOfWork, JewelleryDBContext context)
+        public ItemService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _context = context; 
         }
 
         public async Task AddAsync(ItemDto item)
@@ -47,28 +45,48 @@ namespace JewelleryShop.Business.Service
             return await _unitOfWork.ItemRepository.GetByIdAsync(id);
         }
 
-        public void RemoveAsync(Item item)
+        public async Task RemoveAsync(string id)
         {
-            _unitOfWork.ItemRepository.Remove(item);
-            _unitOfWork.SaveChangeAsync();
+            var item = await GetByIdAsync(id);
+            if (item != null)
+            {
+                _unitOfWork.ItemRepository.Remove(item);
+                _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Can not delete Item");
+            }
         }
 
-        public async void SoftDelete(Item item)
+        public async Task SoftDelete(string id)
         {
-            item.Status = "Hết hàng";
-            _unitOfWork.ItemRepository.Update(item);
-            _unitOfWork.SaveChangeAsync();
+            var item = await GetByIdAsync(id);
+            if (item != null)
+            {
+                item.Status = "Hết hàng";
+                _unitOfWork.ItemRepository.Update(item);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else 
+            {
+                throw new Exception("Can not update Item status");
+            }
         }
 
         public async Task UpdateAsync(string id, ItemDto item)
         {
-            var itemToUpdate = await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            var itemToUpdate = await GetByIdAsync(id);
      
             if (itemToUpdate != null)
             {
-                _mapper.Map(item, itemToUpdate);
+                itemToUpdate = _mapper.Map<ItemDto, Item>(item, itemToUpdate);
                 _unitOfWork.ItemRepository.Update(itemToUpdate);
                 await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Can not update Item");
             }
         }
 
