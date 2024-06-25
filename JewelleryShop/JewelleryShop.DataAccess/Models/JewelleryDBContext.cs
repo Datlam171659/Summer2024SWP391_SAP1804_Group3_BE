@@ -210,7 +210,7 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("GemStoneID");
 
                 entity.Property(e => e.ItemImagesId)
-                    .HasMaxLength(50)
+                    .HasMaxLength(450)
                     .HasColumnName("ItemImagesID");
 
                 entity.Property(e => e.ItemName).HasMaxLength(50);
@@ -248,9 +248,13 @@ namespace JewelleryShop.DataAccess.Models
 
             modelBuilder.Entity<ItemImage>(entity =>
             {
+                entity.HasNoKey();
+
                 entity.ToTable("ItemImage");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasMaxLength(450)
+                    .HasColumnName("id");
 
                 entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
 
@@ -261,7 +265,7 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.ThumbnailUrl).HasColumnName("ThumbnailURL");
 
                 entity.HasOne(d => d.Item)
-                    .WithMany(p => p.ItemImages)
+                    .WithMany()
                     .HasForeignKey(d => d.ItemId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__ItemImage__ItemI__123EB7A3");
