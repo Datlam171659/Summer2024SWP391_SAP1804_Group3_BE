@@ -37,13 +37,21 @@ namespace JewelleryShop.API.Controllers
         [HttpPost("CreateInvoiceWithItems")]
         public async Task<ActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
         {
-            var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.itemIds, data.returnPolicyId, data.warrantyId);
-            return Ok(
-                APIResponse<InvoiceWithItemsDTO>.SuccessResponse(
-                    data: res, 
-                    message:"Successfully created invoice."
-                )
-            );
+            try
+            {
+                var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.itemIds, data.returnPolicyId, data.warrantyId);
+                return Ok(
+                    APIResponse<InvoiceWithItemsDTO>.SuccessResponse(
+                        data: res,
+                        message: "Successfully created invoice."
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while creating invoice."));
+            }
+
         }
 
         [HttpGet("InvoiceItems")]

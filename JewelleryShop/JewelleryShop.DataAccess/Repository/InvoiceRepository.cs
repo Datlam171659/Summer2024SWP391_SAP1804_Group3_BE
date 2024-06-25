@@ -15,10 +15,12 @@ namespace JewelleryShop.DataAccess.Repository
     {
         private readonly JewelleryDBContext _dbContext;
         private readonly IMapper _mapper;
-        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper) : base(dbcontext)
+        private readonly IItemRepository _itemRepository;
+        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, IItemRepository itemRepository) : base(dbcontext)
         {
             _dbContext = dbcontext;
             _mapper = mapper;
+            _itemRepository = itemRepository;
         }
 
         public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<string> itemIds, string returnPolicyId, string warrantyId)
@@ -32,7 +34,13 @@ namespace JewelleryShop.DataAccess.Repository
                     ItemId = itemId,
                     WarrantyId = warrantyId
                 };
-
+                var item = await _itemRepository.GetByIdAsync(itemId);
+                if (item != null && item.Quantity > 0)
+                {
+                    item.Quantity -= 1;
+                    _itemRepository.Update(item);
+                }
+                else throw new Exception($"Item: {item.ItemName}({item.ItemId}) is out of stock");
                 await _dbContext.ItemInvoices.AddAsync(itemInvoice);
                 itemIDAdded.Add(itemId);
             }
