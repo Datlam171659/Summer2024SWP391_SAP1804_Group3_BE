@@ -12,10 +12,10 @@ namespace JewelleryShop.Business.Service.Interface
     {
         public Task<List<DiscountDto>> GetAllAsync();
         public Task<Discount> GetByIdAsync(int id);
-        public void Update(Discount dis);
+        public Task Update(int id, DiscountDto dis);
         public Task AddAsync(Discount dis);
-        public void RemoveAsync(Discount dis);
-        public void Approve(Discount dis);
-        public void Request(Discount dis);
+        public Task RemoveAsync(int id);
+        public Task Approve(int id);
+        public Task Request(int id);
     }
 }

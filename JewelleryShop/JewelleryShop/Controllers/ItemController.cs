@@ -16,19 +16,17 @@ namespace JewelleryShop.API.Controllers
     public class ItemController : ControllerBase
     {
         // dependency injection
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IItemService _itemService;
 
-        public ItemController(IUnitOfWork unitOfWork, IItemService itemService)
+        public ItemController(IItemService itemService)
         {
-            _unitOfWork = unitOfWork;
             _itemService = itemService; 
         }
 
         [HttpGet]
         public async Task<IActionResult> ListItems()
         {
-            var list = await _unitOfWork.ItemRepository.GetAllAsync();
+            var list = await _itemService.GetAllAsync();
             return Ok(list);
         }
 
@@ -63,23 +61,21 @@ namespace JewelleryShop.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateItem(ItemDto item) {
-            _itemService.AddAsync(item);
+            await _itemService.AddAsync(item);
             return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItem(string id)
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateItem(string id, ItemDto item)
         {
-            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _itemService.Update(item);
-            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update Successfully."));
+            await _itemService.UpdateItemAsync(id, item);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(string id)
         {
-            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _itemService.RemoveAsync(item);
+            await _itemService.RemoveAsync(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
         }
     
@@ -87,8 +83,7 @@ namespace JewelleryShop.API.Controllers
         [HttpPut("softdelete/{id}")]
         public async Task<IActionResult> SoftDeleteItem(string id)
         {
-            var item = await _unitOfWork.ItemRepository.GetByIdAsync(id);
-            _itemService.SoftDelete(item);
+            await _itemService.SoftDelete(id);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
 
@@ -98,5 +93,14 @@ namespace JewelleryShop.API.Controllers
             var paginatedItems = await _itemService.GetPaginatedItemsAsync(pageIndex, pageSize);
             return Ok(paginatedItems);
         }
+
+        [HttpPut("updateQuantity/{id}")]
+        public async Task<IActionResult> UpdateQuantity(string id, int quantity)
+        {
+            await _itemService.UpdateQuantityAsync(id, quantity);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
+        }
+
+
     }
 }

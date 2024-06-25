@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AnyAscii;
+using AutoMapper;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
@@ -24,28 +25,44 @@ namespace JewelleryShop.Business.Service
 
         public async Task AddAsync(CustomerPromotionDto obj)
         {
-            var itemToAdd = _mapper.Map<CustomerPromotion>(obj);
-            await _unitOfWork.CustomerPromotionRepository.AddAsync(itemToAdd);
+            string ID = Guid.NewGuid().ToString();
+            obj.Status = "Chờ duyệt";
+            var promotionToAdd = _mapper.Map<CustomerPromotion>(obj);
+            promotionToAdd.Id = ID;
+            await _unitOfWork.CustomerPromotionRepository.AddAsync(promotionToAdd);
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Approve(CustomerPromotion obj)
+        public async Task Approve(string id)
         {
+            var obj = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
             obj.Status = "Duyệt";
             _unitOfWork.CustomerPromotionRepository.Update(obj);
-            _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Delete(CustomerPromotion obj)
+        public async Task Delete(string id)
         {
+            var obj = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
             _unitOfWork.CustomerPromotionRepository.Remove(obj);
-            _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Update(CustomerPromotion obj)
+        public async Task<List<CustomerPromotion>> GetAll()
         {
-            _unitOfWork.CustomerPromotionRepository.Update(obj);
-            _unitOfWork.SaveChangeAsync();
+            return await _unitOfWork.CustomerPromotionRepository.GetAllAsync();
+        }
+
+        public async Task Update(string id, CustomerPromotionDto obj)
+        {
+            var promotionToUpdate = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
+
+            if (promotionToUpdate != null)
+            {
+                _mapper.Map(obj, promotionToUpdate);
+                _unitOfWork.CustomerPromotionRepository.Update(promotionToUpdate);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
     }
 }

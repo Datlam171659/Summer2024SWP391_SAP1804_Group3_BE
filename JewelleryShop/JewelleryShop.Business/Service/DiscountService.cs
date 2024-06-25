@@ -30,8 +30,9 @@ namespace JewelleryShop.Business.Service
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Approve(Discount dis)
+        public async Task Approve(int id)
         {
+            var dis = await GetByIdAsync(id);
             dis.Status = "Duyệt";
             _unitOfWork.DiscountRepository.Update(dis);
             _unitOfWork.SaveChangeAsync();
@@ -48,23 +49,31 @@ namespace JewelleryShop.Business.Service
             return await _unitOfWork.DiscountRepository.GetByIdAsync(id);
         }
 
-        public async void RemoveAsync(Discount dis)
+        public async Task RemoveAsync(int id)
         {
+            var dis = await GetByIdAsync(id);
             _unitOfWork.DiscountRepository.Remove(dis);
-            _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Request(Discount dis)
+        public async Task Request(int id)
         {
+            var dis = await GetByIdAsync(id);
             dis.Status = "Chờ duyệt";
             _unitOfWork.DiscountRepository.Update(dis);
-            _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
         }
 
-        public async void Update(Discount dis)
+        public async Task Update(int id, DiscountDto dis)
         {
-            _unitOfWork.DiscountRepository.Update(dis);
-            _unitOfWork.SaveChangeAsync();
+            var disToUpdate = await GetByIdAsync(id);
+
+            if (disToUpdate != null)
+            {
+                _mapper.Map(dis, disToUpdate);
+                _unitOfWork.DiscountRepository.Update(disToUpdate);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
     }
 }
