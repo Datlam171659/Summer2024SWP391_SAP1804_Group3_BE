@@ -8,7 +8,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.PromotionViewModel
 {
     public class CustomerPromotionDto
     {
-        public string ID { get; set; } = null;
         public string Code { get; set; }
         public decimal  DiscountPct { get; set; }
         public string Status { get; set; }

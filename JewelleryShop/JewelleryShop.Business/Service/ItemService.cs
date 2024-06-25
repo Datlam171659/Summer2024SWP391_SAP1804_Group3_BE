@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AnyAscii;
+using AutoMapper;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
@@ -28,9 +29,25 @@ namespace JewelleryShop.Business.Service
             _unitOfWork = unitOfWork;
         }
 
+        private string RemoveDiacritics(string text)
+        {
+
+            return text.Transliterate();
+        }
+        private string GenerateItemId(string name, DateTime creationDate)
+        {
+            name = RemoveDiacritics(name);
+            var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
+            var formattedDate = creationDate.ToString("ddMMyyHHmmss");
+            return $"{initials}{formattedDate}";
+        }
+
         public async Task AddAsync(ItemDto item)
         {
+            var itemID = GenerateItemId(item.ItemName, DateTime.Now);
             var itemToAdd = _mapper.Map<Item>(item);
+            itemToAdd.ItemId = itemID;
+            itemToAdd.SerialNumber = itemID;
             await _unitOfWork.ItemRepository.AddAsync(itemToAdd);
             await _unitOfWork.SaveChangeAsync();
         }
@@ -74,7 +91,7 @@ namespace JewelleryShop.Business.Service
             }
         }
 
-        public async Task UpdateAsync(string id, ItemDto item)
+        public async Task UpdateItemAsync(string id, ItemDto item)
         {
             var itemToUpdate = await GetByIdAsync(id);
      
@@ -98,6 +115,27 @@ namespace JewelleryShop.Business.Service
         public List<Item> SearchByName(string itemName)
         {
             return _unitOfWork.ItemRepository.GetByName(itemName);
+        }
+
+        public async Task UpdateQuantityAsync(string id, int quantity)
+        {
+            var itemToUpdate = await GetByIdAsync(id);
+            if (quantity == 0) 
+            {
+                throw new Exception("The quantity entered is invalid...!!!");
+            }
+            if (quantity >= 1 && itemToUpdate.Quantity >= quantity)
+            {
+                int newQuantity = (int)itemToUpdate.Quantity - quantity;
+                itemToUpdate.Quantity = newQuantity;
+                _unitOfWork.ItemRepository.Update(itemToUpdate);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("The quantity entered is greater than the amount of stock in the store...!!!");
+            }
+
         }
     }
 }
