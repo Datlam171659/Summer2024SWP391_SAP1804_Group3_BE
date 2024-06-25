@@ -8,7 +8,6 @@ namespace JewelleryShop.DataAccess.Models.dto
 {
     public class ItemDto
     {   
-        public string ItemId { get; set; } = null!;
         public string? ItemImagesId { get; set; }
         public string? Brand { get; set; }
         public string? AccessoryType { get; set; }

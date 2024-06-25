@@ -68,7 +68,7 @@ namespace JewelleryShop.API.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateItem(string id, ItemDto item)
         {
-            await _itemService.UpdateAsync(id, item);
+            await _itemService.UpdateItemAsync(id, item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
@@ -93,5 +93,14 @@ namespace JewelleryShop.API.Controllers
             var paginatedItems = await _itemService.GetPaginatedItemsAsync(pageIndex, pageSize);
             return Ok(paginatedItems);
         }
+
+        [HttpPut("updateQuantity/{id}")]
+        public async Task<IActionResult> UpdateQuantity(string id, int quantity)
+        {
+            await _itemService.UpdateQuantityAsync(id, quantity);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
+        }
+
+
     }
 }

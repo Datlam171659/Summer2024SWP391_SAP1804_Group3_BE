@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AnyAscii;
+using AutoMapper;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
@@ -24,8 +25,10 @@ namespace JewelleryShop.Business.Service
 
         public async Task AddAsync(CustomerPromotionDto obj)
         {
+            string ID = Guid.NewGuid().ToString();
             obj.Status = "Chờ duyệt";
             var promotionToAdd = _mapper.Map<CustomerPromotion>(obj);
+            promotionToAdd.Id = ID;
             await _unitOfWork.CustomerPromotionRepository.AddAsync(promotionToAdd);
             await _unitOfWork.SaveChangeAsync();
         }
