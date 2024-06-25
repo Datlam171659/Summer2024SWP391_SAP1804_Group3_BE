@@ -128,6 +128,11 @@ namespace JewelleryShop.Business.Service
             {
                 int newQuantity = (int)itemToUpdate.Quantity - quantity;
                 itemToUpdate.Quantity = newQuantity;
+                if (itemToUpdate.Quantity == 0)
+                {
+                    string itemId = itemToUpdate.ItemId.ToString();
+                    await SoftDelete(itemId);
+                }
                 _unitOfWork.ItemRepository.Update(itemToUpdate);
                 await _unitOfWork.SaveChangeAsync();
             }
