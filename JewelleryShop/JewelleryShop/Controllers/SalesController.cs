@@ -96,5 +96,12 @@ namespace JewelleryShop.API.Controllers
             var createdWarrantyDTO = await _warrantyService.AddWarranty(warrantyDTO);
             return CreatedAtAction(nameof(GetWarrantyById), new { id = createdWarrantyDTO.WarrantyId }, createdWarrantyDTO);
         }
+
+        [HttpGet("MonthlyRevenue")]
+        public async Task<ActionResult<Dictionary<string, decimal>>> GetMonthlyRevenue()
+        {
+            var monthlyRevenue = await _invoiceService.GetMonthlyRevenue();
+            return Ok(monthlyRevenue);
+        }
     }
 }

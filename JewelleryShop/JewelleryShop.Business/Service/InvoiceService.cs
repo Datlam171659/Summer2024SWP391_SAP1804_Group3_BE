@@ -52,4 +52,19 @@ public class InvoiceService : IInvoiceService
         var res = await _unitOfWork.InvoiceRepository.GetInvoiceItems(invoiceID);
         return res;
     }
+
+    public async Task<Dictionary<string, decimal>> GetMonthlyRevenue()
+    {
+        var invoices = await _unitOfWork.InvoiceRepository.GetAllAsync();
+        var validInvoices = invoices.Where(i => i.CreatedDate.HasValue);
+        var monthlyRevenue = validInvoices
+            .GroupBy(i => i.CreatedDate.Value.ToString("yyyy-MM"))
+            .ToDictionary(
+                g => g.Key,
+                g => g.Sum(i => i.SubTotal ?? 0)
+            );
+
+        return monthlyRevenue;
+    }
+
 }
