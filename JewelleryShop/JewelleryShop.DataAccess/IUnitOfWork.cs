@@ -1,4 +1,5 @@
-﻿using JewelleryShop.DataAccess.Repository.Interface;
+﻿using JewelleryShop.DataAccess.Repository;
+using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace JewelleryShop.DataAccess
         public IRewardsProgramRepository RewardsProgramRepository { get; }
         public ICollectionRepository CollectionRepository { get; }
         public IGemstoneRepository GemstoneRepository { get; }
+        public IItemImageRepository ItemImageRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }
