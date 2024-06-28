@@ -16,9 +16,9 @@ namespace JewelleryShop.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IStaffService _staffService;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeController(IStaffService staffService, UnitOfWork unitOfWork)
+        public EmployeeController(IStaffService staffService, IUnitOfWork unitOfWork)
         {
             _staffService = staffService;
             _unitOfWork = unitOfWork; 

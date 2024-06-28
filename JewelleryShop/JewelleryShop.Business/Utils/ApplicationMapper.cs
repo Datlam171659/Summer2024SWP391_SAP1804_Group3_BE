@@ -13,6 +13,8 @@ using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.GemstoneViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.PromotionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffShiftViewsModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
@@ -49,6 +51,11 @@ namespace JewelleryShop.DataAccess.Utils
             
             CreateMap<Gemstone, GemstoneCommonDTO>().ReverseMap();
             CreateMap<Gemstone, GemstoneInputDTO>().ReverseMap();
+
+            CreateMap<ItemImage, ItemImageCommonDTO>().ReverseMap();
+            CreateMap<ItemImage, ItemImageInputDTO>().ReverseMap();
+
+            CreateMap<CustomerPromotion, CustomerPromotionDto>().ReverseMap();
         }
     }
 }

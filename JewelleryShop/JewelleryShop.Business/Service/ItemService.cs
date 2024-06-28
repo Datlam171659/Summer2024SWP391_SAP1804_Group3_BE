@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AnyAscii;
+using AutoMapper;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
@@ -8,6 +9,7 @@ using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,18 +22,32 @@ namespace JewelleryShop.Business.Service
         
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly JewelleryDBContext _context;
 
-        public ItemService(IMapper mapper, IUnitOfWork unitOfWork, JewelleryDBContext context)
+        public ItemService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _context = context; 
+        }
+
+        private string RemoveDiacritics(string text)
+        {
+
+            return text.Transliterate();
+        }
+        private string GenerateItemId(string name, DateTime creationDate)
+        {
+            name = RemoveDiacritics(name);
+            var initials = string.Join("", name.Split(' ').Take(3).Select(x => x[0]).ToArray()).ToUpper();
+            var formattedDate = creationDate.ToString("ddMMyyHHmmss");
+            return $"{initials}{formattedDate}";
         }
 
         public async Task AddAsync(ItemDto item)
         {
+            var itemID = GenerateItemId(item.ItemName, DateTime.Now);
             var itemToAdd = _mapper.Map<Item>(item);
+            itemToAdd.ItemId = itemID;
+            itemToAdd.SerialNumber = itemID;
             await _unitOfWork.ItemRepository.AddAsync(itemToAdd);
             await _unitOfWork.SaveChangeAsync();
         }
@@ -46,24 +62,49 @@ namespace JewelleryShop.Business.Service
             return await _unitOfWork.ItemRepository.GetByIdAsync(id);
         }
 
-        public void RemoveAsync(Item item)
+        public async Task RemoveAsync(string id)
         {
-            _unitOfWork.ItemRepository.Remove(item);
-            _unitOfWork.SaveChangeAsync();
+            var item = await GetByIdAsync(id);
+            if (item != null)
+            {
+                _unitOfWork.ItemRepository.Remove(item);
+                _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Can not delete Item");
+            }
         }
 
-        public async void SoftDelete(Item item)
+        public async Task SoftDelete(string id)
         {
-            item.Status = "Hết hàng";
-            _unitOfWork.ItemRepository.Update(item);
-            _unitOfWork.SaveChangeAsync();
+            var item = await GetByIdAsync(id);
+            if (item != null)
+            {
+                item.Status = "Hết hàng";
+                _unitOfWork.ItemRepository.Update(item);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else 
+            {
+                throw new Exception("Can not update Item status");
+            }
         }
 
-        public async void Update(Item item)
+        public async Task UpdateItemAsync(string id, ItemDto item)
         {
-            _unitOfWork.ItemRepository.Update(item);
-            _unitOfWork.SaveChangeAsync();
-
+            var itemToUpdate = await GetByIdAsync(id);
+     
+            if (itemToUpdate != null)
+            {
+                itemToUpdate = _mapper.Map<ItemDto, Item>(item, itemToUpdate);
+                _unitOfWork.ItemRepository.Update(itemToUpdate);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Can not update Item");
+            }
         }
 
         public async Task<Pagination<Item>> GetPaginatedItemsAsync(int pageIndex, int pageSize)
@@ -74,6 +115,32 @@ namespace JewelleryShop.Business.Service
         public List<Item> SearchByName(string itemName)
         {
             return _unitOfWork.ItemRepository.GetByName(itemName);
+        }
+
+        public async Task UpdateQuantityAsync(string id, int quantity)
+        {
+            var itemToUpdate = await GetByIdAsync(id);
+            if (quantity == 0) 
+            {
+                throw new Exception("The quantity entered is invalid...!!!");
+            }
+            if (quantity >= 1 && itemToUpdate.Quantity >= quantity)
+            {
+                int newQuantity = (int)itemToUpdate.Quantity - quantity;
+                itemToUpdate.Quantity = newQuantity;
+                if (itemToUpdate.Quantity == 0)
+                {
+                    string itemId = itemToUpdate.ItemId.ToString();
+                    await SoftDelete(itemId);
+                }
+                _unitOfWork.ItemRepository.Update(itemToUpdate);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("The quantity entered is greater than the amount of stock in the store...!!!");
+            }
+
         }
     }
 }
