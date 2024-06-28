@@ -61,12 +61,13 @@ namespace JewelleryShop.Business.Service
 
             if (existReward != null)
             {
-                existReward.PointsTotal = rewards.PointsTotal;
+                existReward.PointsTotal = rewards.AddPoints + existReward.PointsTotal;
                 _unitOfWork.RewardsProgramRepository.Update(existReward);
             }
             else
             {
                 existReward = _mapper.Map<RewardsProgram>(rewards);
+                existReward.PointsTotal = rewards.AddPoints;
                 existReward.Id = Guid.NewGuid().ToString();
                 await _unitOfWork.RewardsProgramRepository.AddAsync(existReward);
             }

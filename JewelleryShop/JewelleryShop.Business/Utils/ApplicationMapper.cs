@@ -56,6 +56,8 @@ namespace JewelleryShop.DataAccess.Utils
             CreateMap<ItemImage, ItemImageInputDTO>().ReverseMap();
 
             CreateMap<CustomerPromotion, CustomerPromotionDto>().ReverseMap();
+
+            CreateMap<Discount, DiscountDto>().ReverseMap();
         }
     }
 }

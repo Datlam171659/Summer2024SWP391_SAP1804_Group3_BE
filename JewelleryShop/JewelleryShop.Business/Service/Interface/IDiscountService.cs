@@ -10,7 +10,7 @@ namespace JewelleryShop.Business.Service.Interface
 {
     public interface IDiscountService
     {
-        public Task<List<Discount>> GetAllAsync();
+        public Task<List<DiscountDto>> GetAllAsync();
         public Task<Discount> GetByIdAsync(int id);
         public Task Update(int id, DiscountDto dis);
         public Task AddAsync(Discount dis);
