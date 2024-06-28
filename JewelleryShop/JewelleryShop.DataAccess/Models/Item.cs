@@ -8,6 +8,7 @@ namespace JewelleryShop.DataAccess.Models
         public Item()
         {
             Brands = new HashSet<Brand>();
+            ItemImages = new HashSet<ItemImage>();
             ItemInvoices = new HashSet<ItemInvoice>();
             Collections = new HashSet<Collection>();
         }
@@ -30,6 +31,7 @@ namespace JewelleryShop.DataAccess.Models
 
         public virtual Gemstone? GemStone { get; set; }
         public virtual ICollection<Brand> Brands { get; set; }
+        public virtual ICollection<ItemImage> ItemImages { get; set; }
         public virtual ICollection<ItemInvoice> ItemInvoices { get; set; }
 
         public virtual ICollection<Collection> Collections { get; set; }

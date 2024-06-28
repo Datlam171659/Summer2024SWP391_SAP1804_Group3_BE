@@ -15,6 +15,7 @@ namespace JewelleryShop.DataAccess.Models
         public string? Colour { get; set; }
         public string? Rarity { get; set; }
         public string? Origin { get; set; }
+        public int? Price { get; set; }
         public string? Hardness { get; set; }
         public string? Description { get; set; }
 
