@@ -10,7 +10,7 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface IInvoiceRepository : IGenericRepository<Invoice>
     {
-        public Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<string> itemIds, string returnPolicyId, string warrantyId);
+        public Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items, string returnPolicyId, string warrantyId);
         public Task<List<Item>> GetInvoiceItems(string invoiceID);
     }
 }

@@ -23,26 +23,29 @@ namespace JewelleryShop.DataAccess.Repository
             _itemRepository = itemRepository;
         }
 
-        public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<string> itemIds, string returnPolicyId, string warrantyId)
+        public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items, string returnPolicyId, string warrantyId)
         {
             var itemIDAdded = new List<string>();
-            foreach (var itemId in itemIds)
+            foreach (var _item in items)
             {
                 var itemInvoice = new ItemInvoice
                 {
                     InvoiceId = invoice.Id,
-                    ItemId = itemId,
-                    WarrantyId = warrantyId
+                    ItemId = _item.itemID,
+                    WarrantyId = warrantyId,
+                    ReturnPolicyId = returnPolicyId
                 };
-                var item = await _itemRepository.GetByIdAsync(itemId);
+                var item = await _itemRepository.GetByIdAsync(_item.itemID);
                 if (item != null && item.Quantity > 0)
                 {
-                    item.Quantity -= 1;
+                    var itemStockDelta = item.Quantity - _item.itemQuantity;
+                    if (itemStockDelta < 0) throw new Exception($"Insufficient stock for Item: {item.ItemName}({item.ItemId})");
+                    item.Quantity -= _item.itemQuantity;
                     _itemRepository.Update(item);
                 }
                 else throw new Exception($"Item: {item.ItemName}({item.ItemId}) is out of stock");
                 await _dbContext.ItemInvoices.AddAsync(itemInvoice);
-                itemIDAdded.Add(itemId);
+                itemIDAdded.Add(_item.itemID);
             }
 
             await _dbContext.Invoices.AddAsync(invoice);

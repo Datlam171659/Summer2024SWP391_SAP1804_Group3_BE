@@ -206,7 +206,7 @@ namespace JewelleryShop.DataAccess.Models
                     .HasColumnName("GemStoneID");
 
                 entity.Property(e => e.ItemImagesId)
-                    .HasMaxLength(50)
+                    .HasMaxLength(450)
                     .HasColumnName("ItemImagesID");
 
                 entity.Property(e => e.ItemName).HasMaxLength(50);
