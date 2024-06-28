@@ -39,11 +39,7 @@ namespace JewelleryShop.DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=sql.bsite.net\\MSSQL2016; Database=grumbly_PWS; User Id=grumbly_PWS; Password=1234!; Trusted_Connection=False");
-            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -248,13 +244,9 @@ namespace JewelleryShop.DataAccess.Models
 
             modelBuilder.Entity<ItemImage>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("ItemImage");
 
-                entity.Property(e => e.Id)
-                    .HasMaxLength(450)
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
 
@@ -265,7 +257,7 @@ namespace JewelleryShop.DataAccess.Models
                 entity.Property(e => e.ThumbnailUrl).HasColumnName("ThumbnailURL");
 
                 entity.HasOne(d => d.Item)
-                    .WithMany()
+                    .WithMany(p => p.ItemImages)
                     .HasForeignKey(d => d.ItemId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__ItemImage__ItemI__123EB7A3");
