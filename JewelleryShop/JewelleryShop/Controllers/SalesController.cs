@@ -98,7 +98,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("MonthlyRevenue")]
-        public async Task<ActionResult<Dictionary<string, decimal>>> GetMonthlyRevenue()
+        public async Task<ActionResult<List<KeyValuePair<string, decimal>>>> GetMonthlyRevenue()
         {
             var monthlyRevenue = await _invoiceService.GetMonthlyRevenue();
             return Ok(monthlyRevenue);

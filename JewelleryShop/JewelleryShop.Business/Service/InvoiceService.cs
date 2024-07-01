@@ -53,16 +53,17 @@ public class InvoiceService : IInvoiceService
         return res;
     }
 
-    public async Task<Dictionary<string, decimal>> GetMonthlyRevenue()
+    public async Task<List<KeyValuePair<string, decimal>>> GetMonthlyRevenue()
     {
         var invoices = await _unitOfWork.InvoiceRepository.GetAllAsync();
         var validInvoices = invoices.Where(i => i.CreatedDate.HasValue);
         var monthlyRevenue = validInvoices
             .GroupBy(i => i.CreatedDate.Value.ToString("yyyy-MM"))
-            .ToDictionary(
-                g => g.Key,
-                g => g.Sum(i => i.SubTotal ?? 0)
-            );
+            .OrderBy(g => g.Key)
+            .Select(g => new KeyValuePair<string, decimal>(
+                g.Key,
+                g.Sum(i => i.SubTotal ?? 0)))
+            .ToList();
 
         return monthlyRevenue;
     }
