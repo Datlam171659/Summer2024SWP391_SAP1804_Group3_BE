@@ -4,12 +4,12 @@ using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
 using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +42,7 @@ namespace JewelleryShop.Business.Service
             return $"{initials}{formattedDate}";
         }
 
-        public async Task AddAsync(ItemDto item)
+        public async Task AddAsync(ItemCreateDTO item)
         {
             var itemID = GenerateItemId(item.ItemName, DateTime.Now);
             var itemToAdd = _mapper.Map<Item>(item);
@@ -91,13 +91,13 @@ namespace JewelleryShop.Business.Service
             }
         }
 
-        public async Task UpdateItemAsync(string id, ItemDto item)
+        public async Task UpdateItemAsync(string id, ItemDTO item)
         {
             var itemToUpdate = await GetByIdAsync(id);
      
             if (itemToUpdate != null)
             {
-                itemToUpdate = _mapper.Map<ItemDto, Item>(item, itemToUpdate);
+                itemToUpdate = _mapper.Map<ItemDTO, Item>(item, itemToUpdate);
                 _unitOfWork.ItemRepository.Update(itemToUpdate);
                 await _unitOfWork.SaveChangeAsync();
             }
@@ -141,6 +141,11 @@ namespace JewelleryShop.Business.Service
                 throw new Exception("The quantity entered is greater than the amount of stock in the store...!!!");
             }
 
+        }
+
+        public async Task<List<ItemDTO>> GetAllBuyBackAsync()
+        {
+            return _mapper.Map<List<ItemDTO>>(await _unitOfWork.ItemRepository.GetAllBuyBackAsync());
         }
     }
 }
