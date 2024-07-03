@@ -28,6 +28,7 @@ namespace JewelleryShop.DataAccess.Models
         public string? Status { get; set; }
         public string? GemStoneId { get; set; }
         public int? Quantity { get; set; }
+        public bool? IsBuyBack { get; set; }
 
         public virtual Gemstone? GemStone { get; set; }
         public virtual ICollection<Brand> Brands { get; set; }
