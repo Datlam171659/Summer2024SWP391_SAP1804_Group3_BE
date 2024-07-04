@@ -16,5 +16,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
         public string? PaymentType { get; set; }
         public int? Quantity { get; set; }
         public decimal? SubTotal { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

@@ -27,13 +27,13 @@ namespace JewelleryShop.Business.Service
             var warranties = await _unitOfWork.WarrantyRepository.GetAllAsync();
             var warrantyDTOs = _mapper.Map<IEnumerable<WarrantyCommonDTO>>(warranties);
 
-            foreach (var warranty in warrantyDTOs)
-            {
-                if (warranty.ExpiryDate.HasValue)
-                {
-                    warranty.ExpiryDateValue = warranty.ExpiryDate.Value.ToString("dd-MM-yyyy");
-                }
-            }
+            //foreach (var warranty in warrantyDTOs)
+            //{
+            //    if (warranty.ExpiryDate.HasValue)
+            //    {
+            //        warranty.ExpiryDateValue = warranty.ExpiryDate.Value.ToString("dd-MM-yyyy");
+            //    }
+            //}
 
             return warrantyDTOs;
         }
@@ -49,10 +49,10 @@ namespace JewelleryShop.Business.Service
 
             var warrantyDto = _mapper.Map<WarrantyCommonDTO>(warranty);
 
-            if (warrantyDto.ExpiryDate.HasValue)
-            {
-                warrantyDto.ExpiryDateValue = warrantyDto.ExpiryDate.Value.ToString("dd-MM-yyyy");
-            }
+            //if (warrantyDto.ExpiryDate.HasValue)
+            //{
+            //    warrantyDto.ExpiryDateValue = warrantyDto.ExpiryDate.Value.ToString("dd-MM-yyyy");
+            //}
 
             return warrantyDto;
         }
@@ -60,9 +60,7 @@ namespace JewelleryShop.Business.Service
         public async Task<WarrantyCommonDTO> AddWarranty(WarrantyInputDTO warrantyDto)
         {
             Warranty warrantyEntity = _mapper.Map<Warranty>(warrantyDto);
-            warrantyEntity.WarrantyId = Guid.NewGuid().ToString();
-            warrantyEntity.ExpiryDate = DateTime.Now.AddMonths(3);
-            await _unitOfWork.WarrantyRepository.AddAsync(warrantyEntity);
+            await _unitOfWork.WarrantyRepository.AddWarranty(warrantyEntity);
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<WarrantyCommonDTO>(warrantyEntity);
         }

@@ -11,6 +11,5 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
         public InvoiceInputNewDTO invoiceDTO { get; set; } = null!;
         public IEnumerable<InvoiceInputItemDTO> items { get; set; }
         public string returnPolicyId { get; set; }
-        public string warrantyId { get; set; }
     }
 }

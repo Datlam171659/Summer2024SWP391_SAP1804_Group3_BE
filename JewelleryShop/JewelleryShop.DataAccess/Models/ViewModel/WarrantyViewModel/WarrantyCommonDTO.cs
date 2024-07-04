@@ -8,6 +8,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel
         public string WarrantyId { get; set; } = null!;
         public string? CustomerId { get; set; }
         public DateTime? ExpiryDate { get; set; }
-        public string ExpiryDateValue { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }
