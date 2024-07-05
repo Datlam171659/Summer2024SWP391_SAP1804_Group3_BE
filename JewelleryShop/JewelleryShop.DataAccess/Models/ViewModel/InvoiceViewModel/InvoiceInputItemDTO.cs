@@ -11,5 +11,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
         public string itemID { get; set; }
         public int itemQuantity { get; set; }
         public DateTime warrantyExpiryDate { get; set; }
+        public string ReturnPolicyID { get; set; }
     }
 }

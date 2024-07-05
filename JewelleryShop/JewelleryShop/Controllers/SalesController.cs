@@ -39,7 +39,7 @@ namespace JewelleryShop.API.Controllers
         {
             try
             {
-                var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.items, data.returnPolicyId);
+                var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.items);
                 return Ok(
                     APIResponse<InvoiceCreateWithItemsDTO>.SuccessResponse(
                         data: res,
