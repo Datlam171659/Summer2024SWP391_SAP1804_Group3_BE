@@ -2,7 +2,7 @@
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +17,17 @@ namespace JewelleryShop.DataAccess.Repository
             _dbContext = dbcontext;
         }
 
+        public async Task<Warranty> AddWarranty(Warranty warranty)
+        {
+            warranty.WarrantyId = Guid.NewGuid().ToString();
+            if (warranty.ExpiryDate < warranty.CreatedDate)
+            {
+                throw new ArgumentException("Warranty expiry date cannot be less than created date.");
+            }
+            warranty.ExpiryDate = warranty.ExpiryDate;
+            warranty.CreatedDate = DateTime.Now;
+            await _dbContext.AddAsync(warranty);
+            return warranty;
+        }
     }
 }
