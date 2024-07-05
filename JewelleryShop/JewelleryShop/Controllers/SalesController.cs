@@ -37,13 +37,21 @@ namespace JewelleryShop.API.Controllers
         [HttpPost("CreateInvoiceWithItems")]
         public async Task<ActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
         {
-            var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.itemIds, data.returnPolicyId, data.warrantyId);
-            return Ok(
-                APIResponse<InvoiceWithItemsDTO>.SuccessResponse(
-                    data: res, 
-                    message:"Successfully created invoice."
-                )
-            );
+            try
+            {
+                var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.items, data.returnPolicyId, data.warrantyId);
+                return Ok(
+                    APIResponse<InvoiceWithItemsDTO>.SuccessResponse(
+                        data: res,
+                        message: "Successfully created invoice."
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while creating invoice."));
+            }
+
         }
 
         [HttpGet("InvoiceItems")]
@@ -95,6 +103,13 @@ namespace JewelleryShop.API.Controllers
         {
             var createdWarrantyDTO = await _warrantyService.AddWarranty(warrantyDTO);
             return CreatedAtAction(nameof(GetWarrantyById), new { id = createdWarrantyDTO.WarrantyId }, createdWarrantyDTO);
+        }
+
+        [HttpGet("MonthlyRevenue")]
+        public async Task<ActionResult<List<KeyValuePair<string, decimal>>>> GetMonthlyRevenue()
+        {
+            var monthlyRevenue = await _invoiceService.GetMonthlyRevenue();
+            return Ok(monthlyRevenue);
         }
     }
 }

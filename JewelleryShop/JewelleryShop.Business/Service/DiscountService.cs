@@ -6,6 +6,7 @@ using JewelleryShop.DataAccess.Models.dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,9 +38,10 @@ namespace JewelleryShop.Business.Service
             _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<List<Discount>> GetAllAsync()
+        public async Task<List<DiscountDto>> GetAllAsync()
         {
-            return await _unitOfWork.DiscountRepository.GetAllAsync();
+            var discounts = _mapper.Map<List<DiscountDto>>(await _unitOfWork.DiscountRepository.GetAllAsync());
+            return discounts;
         }
 
         public async Task<Discount> GetByIdAsync(int id)

@@ -1,4 +1,4 @@
-﻿using JewelleryShop.Business.Service;
+using JewelleryShop.Business.Service;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Repository.Interface;
@@ -29,7 +29,7 @@ namespace JewelleryShop.API
             services.AddScoped<ICollectionRepository, CollectionRepository>();
             services.AddScoped<IGemstoneRepository, GemstoneRepository>();
             services.AddScoped<IItemInvoiceRepository, ItemInvoiceRepository>();
-
+            services.AddScoped<IItemImageRepository, ItemImageRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
@@ -41,6 +41,7 @@ namespace JewelleryShop.API
             services.AddScoped<IRewardsProgramService, RewardsProgramService>();
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<IGemstoneService, GemstoneService>();
+            services.AddScoped<IItemImageService, ItemImageService>();
             return services;
         }
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)

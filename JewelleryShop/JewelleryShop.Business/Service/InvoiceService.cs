@@ -37,11 +37,11 @@ public class InvoiceService : IInvoiceService
         return _mapper.Map<InvoiceCommonDTO>(invoice);
     }
 
-    public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<string> itemIds, string returnPolicyId, string warrantyId)
+    public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items, string returnPolicyId, string warrantyId)
     {
         var invoice = _mapper.Map<Invoice>(invoiceDTO);
         invoice.Id = Guid.NewGuid().ToString();
-        var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, itemIds, returnPolicyId, warrantyId);
+        var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, items, returnPolicyId, warrantyId);
         await _unitOfWork.SaveChangeAsync();
 
         return res;
@@ -52,4 +52,20 @@ public class InvoiceService : IInvoiceService
         var res = await _unitOfWork.InvoiceRepository.GetInvoiceItems(invoiceID);
         return res;
     }
+
+    public async Task<List<KeyValuePair<string, decimal>>> GetMonthlyRevenue()
+    {
+        var invoices = await _unitOfWork.InvoiceRepository.GetAllAsync();
+        var validInvoices = invoices.Where(i => i.CreatedDate.HasValue);
+        var monthlyRevenue = validInvoices
+            .GroupBy(i => i.CreatedDate.Value.ToString("yyyy-MM"))
+            .OrderBy(g => g.Key)
+            .Select(g => new KeyValuePair<string, decimal>(
+                g.Key,
+                g.Sum(i => i.SubTotal ?? 0)))
+            .ToList();
+
+        return monthlyRevenue;
+    }
+
 }
