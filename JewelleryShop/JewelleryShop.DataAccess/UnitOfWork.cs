@@ -38,7 +38,7 @@ namespace JewelleryShop.DataAccess
             IRewardsProgramRepository rewardsProgramRepository,
             ICollectionRepository collectionRepository,
             IGemstoneRepository gemstoneRepository,
-            IItemInvoiceRepository itemInvoiceRepository
+            IItemInvoiceRepository itemInvoiceRepository,
             IItemImageRepository itemImageRepository
         )
         {
