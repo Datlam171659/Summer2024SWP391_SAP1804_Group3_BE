@@ -1,4 +1,4 @@
-﻿using JewelleryShop.DataAccess.Repository;
+using JewelleryShop.DataAccess.Repository;
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;

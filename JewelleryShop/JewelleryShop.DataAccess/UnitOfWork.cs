@@ -24,7 +24,6 @@ namespace JewelleryShop.DataAccess
         private readonly IRewardsProgramRepository _rewardsProgramRepository;
         private readonly ICollectionRepository _collectionRepository;
         private readonly IGemstoneRepository _gemstoneRepository;
-
         private readonly IItemImageRepository _itemImageRepository;
         public UnitOfWork(
             JewelleryDBContext dbContext,
@@ -40,7 +39,6 @@ namespace JewelleryShop.DataAccess
             ICollectionRepository collectionRepository,
             IGemstoneRepository gemstoneRepository,
             IItemInvoiceRepository itemInvoiceRepository
-
             IItemImageRepository itemImageRepository
         )
         {

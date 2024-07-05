@@ -1,4 +1,4 @@
-﻿using JewelleryShop.Business.Service;
+using JewelleryShop.Business.Service;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Repository.Interface;
@@ -30,7 +30,6 @@ namespace JewelleryShop.API
             services.AddScoped<IGemstoneRepository, GemstoneRepository>();
             services.AddScoped<IItemInvoiceRepository, ItemInvoiceRepository>();
             services.AddScoped<IItemImageRepository, ItemImageRepository>();
-
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
