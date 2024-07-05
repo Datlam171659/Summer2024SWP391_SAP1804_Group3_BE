@@ -19,7 +19,7 @@ namespace JewelleryShop.DataAccess
         private readonly IItemRepository _itemRepository;
         private readonly IDiscountRepository _discountRepository;
         private readonly ICustomerPromotionRepository _customerPromotionRepository;
-
+        private readonly IItemInvoiceRepository _itemInvoiceRepository;
         private readonly IStaffStationRepository _staffStationRepository; 
         private readonly IRewardsProgramRepository _rewardsProgramRepository;
         private readonly ICollectionRepository _collectionRepository;
@@ -38,6 +38,7 @@ namespace JewelleryShop.DataAccess
             IRewardsProgramRepository rewardsProgramRepository,
             ICollectionRepository collectionRepository,
             IGemstoneRepository gemstoneRepository,
+            IItemInvoiceRepository itemInvoiceRepository
             IItemImageRepository itemImageRepository
         )
         {
@@ -53,6 +54,7 @@ namespace JewelleryShop.DataAccess
             _rewardsProgramRepository = rewardsProgramRepository;
             _collectionRepository = collectionRepository;
             _gemstoneRepository = gemstoneRepository;   
+            _itemInvoiceRepository = itemInvoiceRepository;
             _itemImageRepository = itemImageRepository;
         }
 
@@ -67,6 +69,7 @@ namespace JewelleryShop.DataAccess
         public IRewardsProgramRepository RewardsProgramRepository => _rewardsProgramRepository;
         public ICollectionRepository CollectionRepository => _collectionRepository;
         public IGemstoneRepository GemstoneRepository => _gemstoneRepository;
+        public IItemInvoiceRepository ItemInvoiceRepository => _itemInvoiceRepository;
         public IItemImageRepository ItemImageRepository => _itemImageRepository;
 
         public async Task<int> SaveChangeAsync()
