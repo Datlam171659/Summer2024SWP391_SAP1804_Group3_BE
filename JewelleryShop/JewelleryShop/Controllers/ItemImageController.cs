@@ -48,7 +48,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -73,7 +73,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -139,7 +139,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -158,7 +158,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
