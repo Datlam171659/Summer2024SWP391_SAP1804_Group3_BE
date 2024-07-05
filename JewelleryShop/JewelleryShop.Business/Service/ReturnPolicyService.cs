@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JewelleryShop.DataAccess.Models.ViewModel.ReturnPolicyViewModel;
 using System.Net;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JewelleryShop.Business.Service
 {
@@ -24,22 +25,36 @@ namespace JewelleryShop.Business.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ReturnPolicy>> GetAllReturnPolicy()
+        public async Task<ReturnPolicyCommonDTO> CreateReturnPolicy(ReturnPolicyCreateDTO returnPolicy)
         {
-            return await _unitOfWork.ReturnPolicyRepository.GetAllAsync();
+            returnPolicy.Id = returnPolicy.Id.IsNullOrEmpty() ? Guid.NewGuid().ToString() : returnPolicy.Id;
+            var res = new ReturnPolicy();
+            _mapper.Map(returnPolicy, res);
+
+            await _unitOfWork.ReturnPolicyRepository.AddAsync(res);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<ReturnPolicyCommonDTO>(res);
         }
-        public async Task<ReturnPolicy> GetReturnPolicyByID(string id)
+        public async Task<List<ReturnPolicyCommonDTO>> GetAllReturnPolicy()
         {
-            return await _unitOfWork.ReturnPolicyRepository.GetByIdAsync(id);
+            var RPs = await _unitOfWork.ReturnPolicyRepository.GetAllAsync();
+
+            return _mapper.Map<List<ReturnPolicyCommonDTO>>(RPs);
         }
-        public async Task<ReturnPolicyUpdateDTO> UpdateReturnPolicy(string returnPolicyID, ReturnPolicyUpdateDTO returnPolicy)
+        public async Task<ReturnPolicyCommonDTO> GetReturnPolicyByID(string id)
+        {
+            var RP = await _unitOfWork.ReturnPolicyRepository.GetByIdAsync(id);
+            return _mapper.Map<ReturnPolicyCommonDTO>(RP);
+        }
+        public async Task<ReturnPolicyCommonDTO> UpdateReturnPolicy(string returnPolicyID, ReturnPolicyUpdateDTO returnPolicy)
         {
             var Dest_ReturnPolicy = await _unitOfWork.ReturnPolicyRepository.GetByIdAsync(returnPolicyID);
             _mapper.Map(returnPolicy, Dest_ReturnPolicy);
             _unitOfWork.ReturnPolicyRepository.Update(Dest_ReturnPolicy);
             await _unitOfWork.SaveChangeAsync();
 
-            return returnPolicy;
+            return _mapper.Map<ReturnPolicyCommonDTO>(Dest_ReturnPolicy);
         }
         public async Task DeleteReturnPolicy(string returnPolicyID)
         {
