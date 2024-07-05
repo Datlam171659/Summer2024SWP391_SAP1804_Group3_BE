@@ -4,6 +4,7 @@ using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -69,14 +70,14 @@ namespace JewelleryShop.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateItem(ItemDto item) {
+        public async Task<IActionResult> CreateItem(ItemCreateDTO item) {
             await _itemService.AddAsync(item);
             return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
         }
 
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateItem(string id, ItemDto item)
+        public async Task<IActionResult> UpdateItem(string id, ItemDTO item)
         {
             await _itemService.UpdateItemAsync(id, item);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
@@ -121,6 +122,13 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
-
+        [HttpGet("GetAllBuyBack")]
+        public async Task<IActionResult> ListAllBuyBack()
+        {
+            var list = await _itemService.GetAllBuyBackAsync();
+            return Ok(
+                APIResponse<List<ItemDTO>>.SuccessResponse(data: list, "Fetched Buyback items successfully.")
+            );
+        }
     }
 }

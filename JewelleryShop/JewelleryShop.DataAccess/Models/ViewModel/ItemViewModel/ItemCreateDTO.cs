@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel
 {
-    public class ItemDTO
+    public class ItemCreateDTO
     {   
         public string? ItemImagesId { get; set; }
         public string? GemStoneId { get; set; }
         public string? Brand { get; set; }
         public string? AccessoryType { get; set; }
-        public string? SerialNumber { get; set; }
         public string? ItemName { get; set; }
         public string? Description { get; set; }
         public int? Price { get; set; }

@@ -15,7 +15,7 @@ namespace JewelleryShop.DataAccess.Repository
             _dbSet = context.Set<T>();
         }
 
-        public Task<List<T>> GetAllAsync() => _dbSet.ToListAsync();
+        public async Task<List<T>> GetAllAsync() => await _dbSet.ToListAsync();
 
         public async Task<T?> GetByIdAsync(int id)
         {

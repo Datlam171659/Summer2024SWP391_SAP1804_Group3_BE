@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
 {
-    public class InvoiceWithItemsDTO
+    public class InvoiceInputItemDTO
     {
-        public InvoiceCommonDTO InvoiceDetails { get; set; }
-        public List<string> itemIds { get; set; }
-        public string returnPolicyId { get; set; }
+        public string itemID { get; set; }
+        public int itemQuantity { get; set; }
+        public DateTime warrantyExpiryDate { get; set; }
     }
 }

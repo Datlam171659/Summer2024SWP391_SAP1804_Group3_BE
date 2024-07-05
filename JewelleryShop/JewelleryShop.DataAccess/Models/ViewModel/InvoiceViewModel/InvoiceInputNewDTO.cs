@@ -9,7 +9,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
     public class InvoiceInputNewDTO
     {
         public string? StaffId { get; set; }
-        public string? ReturnPolicyId { get; set; }
         public string? CustomerId { get; set; }
         public string? CompanyName { get; set; }
         public string? BuyerAddress { get; set; }
@@ -17,5 +16,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
         public string? PaymentType { get; set; }
         public int? Quantity { get; set; }
         public decimal? SubTotal { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

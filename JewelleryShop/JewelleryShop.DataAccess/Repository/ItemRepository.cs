@@ -3,7 +3,7 @@ using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,9 +48,10 @@ namespace JewelleryShop.DataAccess.Repository
             return result.ToList();
         }
 
-        
-        
-
-
+        public async Task<List<Item>> GetAllBuyBackAsync()
+        {
+            var items = await _context.Items.Where(Item => Item.IsBuyBack == true).ToListAsync();
+            return items;
+        }
     }
 }

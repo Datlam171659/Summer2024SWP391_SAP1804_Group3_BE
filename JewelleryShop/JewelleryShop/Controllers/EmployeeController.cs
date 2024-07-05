@@ -5,9 +5,11 @@ using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
+using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace JewelleryShop.API.Controllers
 {
@@ -53,6 +55,22 @@ namespace JewelleryShop.API.Controllers
                     APIResponse<string>
                     .SuccessResponse(token, "Login successully.")
                 );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
+            }
+        } 
+        [HttpPost("HashPassword")]
+        public async Task<IActionResult> HashPassword(string password)
+        {
+            try
+            {
+                string hash = StringUtils.HashPassword(password);
+                return Ok(
+                        APIResponse<string>
+                        .SuccessResponse(hash, "Login successully.")
+                    );
             }
             catch (Exception ex)
             {

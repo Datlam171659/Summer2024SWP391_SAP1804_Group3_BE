@@ -9,6 +9,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
 {
     public interface IWarrantyRepository : IGenericRepository<Warranty>
     {
-
+        public Task<Warranty> AddWarranty(Warranty warranty);
     }
 }
