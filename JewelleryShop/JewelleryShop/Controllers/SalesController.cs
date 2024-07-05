@@ -49,7 +49,9 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while creating invoice."));
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
             }
 
         }
