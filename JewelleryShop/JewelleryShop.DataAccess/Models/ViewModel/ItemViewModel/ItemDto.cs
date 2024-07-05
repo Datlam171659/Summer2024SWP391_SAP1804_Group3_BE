@@ -9,6 +9,7 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel
     public class ItemDTO
     {   
         public string? ItemImagesId { get; set; }
+        public string? GemStoneId { get; set; }
         public string? Brand { get; set; }
         public string? AccessoryType { get; set; }
         public string? SerialNumber { get; set; }
@@ -20,7 +21,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? Status { get; set; }
-        public string? GemStoneId { get; set; }
         public int? Quantity { get; set; }
         public bool? IsBuyBack { get; set; }
     }

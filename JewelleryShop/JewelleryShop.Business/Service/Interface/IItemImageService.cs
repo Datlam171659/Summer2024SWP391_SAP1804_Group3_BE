@@ -1,4 +1,5 @@
-﻿using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
+﻿using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace JewelleryShop.Business.Service.Interface
 {
     public interface IItemImageService
     {
-       public Task<List<ItemImageCommonDTO>> GetAllItemImage();
+        public Task<List<ItemImageCommonDTO>> GetAllItemImage();
+        public Task<List<ItemImageCommonDTO>> GetItemImagesByItemID(string itemID);
         public Task<ItemImageCommonDTO> GetItemImageById(string id);
         public Task<ItemImageCommonDTO> AddItemImage(ItemImageInputDTO img);
         public Task<ItemImageCommonDTO> UpdateItemImageAsync(string id, ItemImageInputDTO imgDTO);

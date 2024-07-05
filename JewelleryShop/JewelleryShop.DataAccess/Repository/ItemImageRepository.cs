@@ -2,6 +2,7 @@
 using JewelleryShop.DataAccess.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,14 @@ namespace JewelleryShop.DataAccess.Repository
                 Remove(itemImg);
                 await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<ItemImage>> GetItemImagesByItemID(string itemID)
+        {
+            var itemImgs = await _dbContext.ItemImages
+                .Where(img => img.ItemId == itemID)
+                .ToListAsync();
+            return itemImgs;
         }
     }
 }

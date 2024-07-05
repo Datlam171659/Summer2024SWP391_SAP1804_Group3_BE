@@ -34,6 +34,13 @@ namespace JewelleryShop.Business.Service
             return _mapper.Map<ItemImageCommonDTO>(images);
         }
 
+        public async Task<List<ItemImageCommonDTO>> GetItemImagesByItemID(string itemID)
+        {
+            var itemImgs = await _unitOfWork.ItemImageRepository.GetItemImagesByItemID(itemID);
+            
+            return _mapper.Map<List<ItemImageCommonDTO>>(itemImgs);
+        }
+
         public async Task<ItemImageCommonDTO> AddItemImage(ItemImageInputDTO img)
         {
             var img_items = _mapper.Map<ItemImage>(img);
@@ -71,5 +78,7 @@ namespace JewelleryShop.Business.Service
                 throw new ArgumentException("No Items found with the provided ID.");
             }
         }
+
+
     }
 }
