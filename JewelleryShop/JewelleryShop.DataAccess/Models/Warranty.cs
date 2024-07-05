@@ -13,6 +13,7 @@ namespace JewelleryShop.DataAccess.Models
         public string WarrantyId { get; set; } = null!;
         public string CustomerId { get; set; } = null!;
         public DateTime? ExpiryDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         public virtual Customer Customer { get; set; } = null!;
         public virtual ICollection<ItemInvoice> ItemInvoices { get; set; }

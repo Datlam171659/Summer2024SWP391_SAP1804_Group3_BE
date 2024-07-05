@@ -42,6 +42,10 @@ namespace JewelleryShop.API
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<IGemstoneService, GemstoneService>();
             services.AddScoped<IItemImageService, ItemImageService>();
+            services.AddScoped<IImgBBService, ImgBBService>();
+
+            services.AddHttpClient();
+            services.AddHttpClient<IImgBBService, ImgBBService>();
             return services;
         }
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,23 +18,34 @@ namespace JewelleryShop.DataAccess.Repository
         private readonly JewelleryDBContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IItemRepository _itemRepository;
-        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, IItemRepository itemRepository) : base(dbcontext)
+        private readonly IWarrantyRepository _warrantyRepository;
+        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, IItemRepository itemRepository, IWarrantyRepository warrantyRepository) : base(dbcontext)
         {
             _dbContext = dbcontext;
             _mapper = mapper;
             _itemRepository = itemRepository;
+            _warrantyRepository = warrantyRepository;
         }
 
-        public async Task<InvoiceWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items, string returnPolicyId, string warrantyId)
+        public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items, string returnPolicyId)
         {
-            var itemIDAdded = new List<string>();
+            var itemAdded = new List<InvoiceInputItemDTO>();
+            int invoiceQuantity = 0;
             foreach (var _item in items)
             {
+                Warranty _warranty = new()
+                {
+                    CustomerId = invoice.CustomerId,
+                    CreatedDate = DateTime.Now,
+                    ExpiryDate = _item.warrantyExpiryDate
+                };
+                await _warrantyRepository.AddWarranty(_warranty);
+                
                 var itemInvoice = new ItemInvoice
                 {
                     InvoiceId = invoice.Id,
                     ItemId = _item.itemID,
-                    WarrantyId = warrantyId,
+                    WarrantyId = _warranty.WarrantyId,
                     ReturnPolicyId = returnPolicyId
                 };
                 var item = await _itemRepository.GetByIdAsync(_item.itemID);
@@ -45,16 +58,17 @@ namespace JewelleryShop.DataAccess.Repository
                 }
                 else throw new Exception($"Item: {item.ItemName}({item.ItemId}) is out of stock");
                 await _dbContext.ItemInvoices.AddAsync(itemInvoice);
-                itemIDAdded.Add(_item.itemID);
+                itemAdded.Add(_item);
+                Interlocked.Add(ref invoiceQuantity, 1); // 4 safety
             }
 
+            invoice.Quantity = invoiceQuantity;
             await _dbContext.Invoices.AddAsync(invoice);
-            InvoiceWithItemsDTO invoiceWithItems = new InvoiceWithItemsDTO
+            InvoiceCreateWithItemsDTO invoiceWithItems = new InvoiceCreateWithItemsDTO
             {
-                InvoiceDetails = _mapper.Map<InvoiceCommonDTO>(invoice),
-                itemIds = itemIDAdded,
-                returnPolicyId = returnPolicyId,
-                warrantyId = warrantyId
+                invoiceDTO = _mapper.Map<InvoiceInputNewDTO>(invoice),
+                items = itemAdded,
+                returnPolicyId = returnPolicyId
             };
             return invoiceWithItems;
         }

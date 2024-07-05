@@ -21,8 +21,11 @@ namespace JewelleryShop.DataAccess
         public IRewardsProgramRepository RewardsProgramRepository { get; }
         public ICollectionRepository CollectionRepository { get; }
         public IGemstoneRepository GemstoneRepository { get; }
+
         public IItemInvoiceRepository ItemInvoiceRepository { get; }
+
         public IItemImageRepository ItemImageRepository { get; }
+
         public Task<int> SaveChangeAsync();
     }
 }

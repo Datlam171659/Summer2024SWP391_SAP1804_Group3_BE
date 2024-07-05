@@ -11,6 +11,5 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
         public InvoiceCommonDTO InvoiceDetails { get; set; }
         public List<string> itemIds { get; set; }
         public string returnPolicyId { get; set; }
-        public string warrantyId { get; set; }
     }
 }
