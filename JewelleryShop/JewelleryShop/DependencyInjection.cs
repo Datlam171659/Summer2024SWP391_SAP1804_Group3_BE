@@ -28,6 +28,7 @@ namespace JewelleryShop.API
             services.AddScoped<IRewardsProgramRepository, RewardsProgramRepository>();
             services.AddScoped<ICollectionRepository, CollectionRepository>();
             services.AddScoped<IGemstoneRepository, GemstoneRepository>();
+            services.AddScoped<IItemInvoiceRepository, ItemInvoiceRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();

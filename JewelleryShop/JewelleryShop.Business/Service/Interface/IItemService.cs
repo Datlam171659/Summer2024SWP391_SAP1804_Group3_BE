@@ -13,7 +13,7 @@ namespace JewelleryShop.Business.Service.Interface
     {
         public Task<List<Item>> GetAllAsync();
         public Task<Item> GetByIdAsync(string id);
-        public List<Item> SearchByName(string itemName);
+        public Task<List<Item>> SearchByName(string itemName);
         public Task AddAsync(ItemDto item);
         Task UpdateItemAsync(string id, ItemDto item);
 

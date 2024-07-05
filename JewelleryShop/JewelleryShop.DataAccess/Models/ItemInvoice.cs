@@ -9,6 +9,7 @@ namespace JewelleryShop.DataAccess.Models
         public string InvoiceId { get; set; } = null!;
         public string ReturnPolicyId { get; set; } = null!;
         public string WarrantyId { get; set; } = null!;
+        public int? Price { get; set; }
 
         public virtual Invoice Invoice { get; set; } = null!;
         public virtual Item Item { get; set; } = null!;

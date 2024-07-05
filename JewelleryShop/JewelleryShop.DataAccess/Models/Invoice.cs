@@ -20,6 +20,7 @@ namespace JewelleryShop.DataAccess.Models
         public string? PaymentType { get; set; }
         public int? Quantity { get; set; }
         public decimal? SubTotal { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         public virtual Customer? Customer { get; set; }
         public virtual staff? Staff { get; set; }

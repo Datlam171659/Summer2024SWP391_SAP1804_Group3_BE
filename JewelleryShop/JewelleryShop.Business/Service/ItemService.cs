@@ -7,6 +7,7 @@ using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Repository.Interface;
 using JewelleryShop.DataAccess.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -54,7 +55,12 @@ namespace JewelleryShop.Business.Service
 
         public async Task<List<Item>> GetAllAsync()
         {
-            return await _unitOfWork.ItemRepository.GetAllAsync();
+            var items = await _unitOfWork.ItemRepository.GetAllAsync();
+            if (items == null)
+            {
+                throw new Exception("Data is null");
+            }
+            return items.Where(item => item.IsBuyBack != true).ToList();
         }
 
         public async Task<Item> GetByIdAsync(string id)
@@ -67,12 +73,17 @@ namespace JewelleryShop.Business.Service
             var item = await GetByIdAsync(id);
             if (item != null)
             {
+                var invoicesContainingItem = await _unitOfWork.ItemInvoiceRepository.GetByItemIdAsync(id);
+                if (invoicesContainingItem.Any())
+                {
+                    throw new Exception("Cannot delete Item because there are invoices containing this item.");
+                }
                 _unitOfWork.ItemRepository.Remove(item);
-                _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.SaveChangeAsync();
             }
             else
             {
-                throw new Exception("Can not delete Item");
+                throw new Exception("Cannot delete Item");
             }
         }
 
@@ -112,9 +123,25 @@ namespace JewelleryShop.Business.Service
             return await _unitOfWork.ItemRepository.ToPagination(pageIndex, pageSize);
         }
 
-        public List<Item> SearchByName(string itemName)
+        public async Task<List<Item>> SearchByName(string itemName)
         {
-            return _unitOfWork.ItemRepository.GetByName(itemName);
+            List<Item> items;
+
+            if (string.IsNullOrEmpty(itemName))
+            {
+                items = (await _unitOfWork.ItemRepository.GetAllAsync()).Where(item => item.IsBuyBack != true).ToList();
+            }
+            else
+            {
+                items = _unitOfWork.ItemRepository.GetByName(itemName).Where(item => item.IsBuyBack != true).ToList();
+            }
+
+            if (items == null || !items.Any())
+            {
+                throw new Exception("No items found");
+            }
+
+            return items;
         }
 
         public async Task UpdateQuantityAsync(string id, int quantity)
