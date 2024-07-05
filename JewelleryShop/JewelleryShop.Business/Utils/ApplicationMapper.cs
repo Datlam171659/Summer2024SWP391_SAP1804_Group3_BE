@@ -64,6 +64,7 @@ namespace JewelleryShop.DataAccess.Utils
 
             CreateMap<ReturnPolicy, ReturnPolicyCommonDTO>().ReverseMap();
             CreateMap<ReturnPolicy, ReturnPolicyUpdateDTO>().ReverseMap();
+            CreateMap<ReturnPolicy, ReturnPolicyCreateDTO>().ReverseMap();
         }
     }
 }

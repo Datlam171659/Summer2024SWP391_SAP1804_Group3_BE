@@ -2,6 +2,8 @@
 using JewelleryShop.Business.Service;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ReturnPolicyViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,42 +20,100 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllRewardsProgram()
+        public async Task<IActionResult> GetAllReturnPolicy()
         {
-            var result = await _returnPolicyService.GetAllRewardsProgram();
-            return Ok(result);
+            try
+            {
+                var result = await _returnPolicyService.GetAllReturnPolicy();
+                return Ok(
+                    APIResponse<List<ReturnPolicyCommonDTO>>
+                        .SuccessResponse(data: result, "Successfully Fetched Return Policies.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
         }
 
-        [HttpGet("{customerId}")]
-        public async Task<ActionResult<RewardsProgramCommonDTO>> GetRewardProgram(string customerId)
+        [HttpGet("{returnPolicyID}")]
+        public async Task<ActionResult<RewardsProgramCommonDTO>> GetReturnPolicy(string returnPolicyID)
         {
-            //var rewardProgram = await _rewardsProgramService.GetRewardsProgramByCustomerIdAsync(customerId);
-            //if (rewardProgram == null) return NotFound();
-
-            //return Ok(rewardProgram);
-        }
-
-        [HttpPut("{customerId}")]
-        public async Task<IActionResult> UpdateRewardProgram(string customerId, int points)
-        {
-            //await _rewardsProgramService.UpdateRewardsProgramAsync(customerId, points);
-            //return Ok(APIResponse<string>.SuccessResponse(string.Empty, "Data updated successfully."));
-        }
-
-        [HttpDelete("{customerId}")]
-        public async Task<IActionResult> DeleteRewardProgram(string customerId)
-        {
-            //await _rewardsProgramService.DeleteRewardsProgramAsync(customerId);
-            //return Ok(APIResponse<string>.SuccessResponse(string.Empty, "Data deleted successfully."));
+            try
+            {
+                var result = await _returnPolicyService.GetReturnPolicyByID(returnPolicyID);
+                return Ok(
+                    APIResponse<ReturnPolicyCommonDTO>
+                        .SuccessResponse(data: result, "Successfully Fetched Return Policy.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<RewardsProgramCommonDTO>> CreateRewardProgram(RewardsProgramInputDTO rewardsProgramInputDTO)
+        public async Task<IActionResult> CreateReturnPolicy(ReturnPolicyCreateDTO rewardsProgramInputDTO)
         {
-            //var createdRewardProgram = await _rewardsProgramService.AddRewardsProgram(rewardsProgramInputDTO);
-
-            //return CreatedAtAction(nameof(GetRewardProgram), new { customerId = createdRewardProgram.CustomerId }, createdRewardProgram);
+            try
+            {
+                var result = await _returnPolicyService.CreateReturnPolicy(rewardsProgramInputDTO);
+                return Ok(
+                    APIResponse<ReturnPolicyCommonDTO>
+                        .SuccessResponse(data: result, "Successfully fetched Return Policies.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
         }
+
+        [HttpPut("{returnPolicyID}")]
+        public async Task<IActionResult> UpdateReturnPolicy(string returnPolicyID, ReturnPolicyUpdateDTO returnPolicyUpdateDTO)
+        {
+            try
+            {
+                var result = await _returnPolicyService.UpdateReturnPolicy(returnPolicyID, returnPolicyUpdateDTO);
+                return Ok(
+                    APIResponse<ReturnPolicyCommonDTO>
+                        .SuccessResponse(data: result, "Successfully Updated Return Policy.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete("{returnPolicyID}")]
+        public async Task<IActionResult> DeleteReturnPolicy(string returnPolicyID)
+        {
+            try
+            {
+                await _returnPolicyService.DeleteReturnPolicy(returnPolicyID);
+                return Ok(
+                    APIResponse<string>
+                        .SuccessResponse(returnPolicyID, "Successfully Deleted Return Policy.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+        }
+
     }
 }
 

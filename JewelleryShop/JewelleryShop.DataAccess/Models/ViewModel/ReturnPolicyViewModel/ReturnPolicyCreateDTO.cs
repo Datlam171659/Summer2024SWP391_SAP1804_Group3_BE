@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace JewelleryShop.DataAccess.Models.ViewModel.ReturnPolicyViewModel
 {
-    public class ReturnPolicyCommonDTO
+    public class ReturnPolicyCreateDTO
     {
-        public string Id { get; set; } = null!;
+        public string? Id { get; set; } = null!;
         public string? ReturnPolicyType { get; set; }
         public string? ReturnWindow { get; set; }
         public string? Description { get; set; }
