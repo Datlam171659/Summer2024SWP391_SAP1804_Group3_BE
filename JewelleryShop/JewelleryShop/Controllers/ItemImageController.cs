@@ -132,7 +132,10 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 var newImgItems = await _itemImageService.AddItemImage(img_items);
-                return CreatedAtAction(nameof(GetItemImagesById), new { id = newImgItems.Id }, newImgItems);
+                return Ok(
+                    APIResponse<ItemImageCommonDTO>
+                        .SuccessResponse(data: newImgItems, "Successfully added item image.")
+                    );
             }
             catch (Exception ex)
             {
@@ -148,7 +151,10 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 var updatedImages = await _itemImageService.UpdateItemImageAsync(id, imgDTO);
-                return Ok(updatedImages);
+                return Ok(
+                    APIResponse<ItemImageCommonDTO>
+                        .SuccessResponse(data: updatedImages, "Successfully updated item image.")
+                    );
             }
             catch (Exception ex)
             {
