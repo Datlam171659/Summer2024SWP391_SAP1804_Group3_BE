@@ -39,7 +39,8 @@ namespace JewelleryShop.DataAccess.Repository
 
         public async Task<List<ItemImage>> GetItemImagesByItemID(string itemID, int? count = null)
         {
-            var query = _dbContext.ItemImages.Where(img => img.ItemId == itemID);
+            var query = _dbContext.ItemImages
+                .Where(img => img.ItemId.Equals(itemID));
 
             if (count.HasValue && count.Value > 0)
             {
