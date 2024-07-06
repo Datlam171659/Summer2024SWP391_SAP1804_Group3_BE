@@ -20,9 +20,9 @@ namespace JewelleryShop.DataAccess.Repository
         public async Task<Warranty> AddWarranty(Warranty warranty)
         {
             warranty.WarrantyId = Guid.NewGuid().ToString();
-            if (warranty.ExpiryDate < warranty.CreatedDate)
+            if (warranty.ExpiryDate <= warranty.CreatedDate)
             {
-                throw new ArgumentException("Warranty expiry date cannot be less than created date.");
+                throw new ArgumentException("Warranty expiry date cannot be equal or less than created date.");
             }
             warranty.ExpiryDate = warranty.ExpiryDate;
             warranty.CreatedDate = DateTime.Now;

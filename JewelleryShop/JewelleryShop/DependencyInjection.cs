@@ -29,6 +29,7 @@ namespace JewelleryShop.API
             services.AddScoped<ICollectionRepository, CollectionRepository>();
             services.AddScoped<IGemstoneRepository, GemstoneRepository>();
             services.AddScoped<IItemImageRepository, ItemImageRepository>();
+            services.AddScoped<IReturnPolicyRepository, ReturnPolicyRepository>();
 
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IStaffService, StaffService>();
@@ -43,6 +44,7 @@ namespace JewelleryShop.API
             services.AddScoped<IGemstoneService, GemstoneService>();
             services.AddScoped<IItemImageService, ItemImageService>();
             services.AddScoped<IImgBBService, ImgBBService>();
+            services.AddScoped<IReturnPolicyService, ReturnPolicyService>();
 
             services.AddHttpClient();
             services.AddHttpClient<IImgBBService, ImgBBService>();

@@ -48,7 +48,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -73,7 +73,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -132,11 +132,14 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 var newImgItems = await _itemImageService.AddItemImage(img_items);
-                return CreatedAtAction(nameof(GetItemImagesById), new { id = newImgItems.Id }, newImgItems);
+                return Ok(
+                    APIResponse<ItemImageCommonDTO>
+                        .SuccessResponse(data: newImgItems, "Successfully added item image.")
+                    );
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -148,11 +151,14 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 var updatedImages = await _itemImageService.UpdateItemImageAsync(id, imgDTO);
-                return Ok(updatedImages);
+                return Ok(
+                    APIResponse<ItemImageCommonDTO>
+                        .SuccessResponse(data: updatedImages, "Successfully updated item image.")
+                    );
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
