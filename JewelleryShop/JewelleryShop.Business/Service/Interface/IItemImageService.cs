@@ -11,7 +11,7 @@ namespace JewelleryShop.Business.Service.Interface
     public interface IItemImageService
     {
         public Task<List<ItemImageCommonDTO>> GetAllItemImage();
-        public Task<List<ItemImageCommonDTO>> GetItemImagesByItemID(string itemID);
+        public Task<List<ItemImageCommonDTO>> GetItemImagesByItemID(string itemID, int? count = null);
         public Task<ItemImageCommonDTO> GetItemImageById(string id);
         public Task<ItemImageCommonDTO> AddItemImage(ItemImageInputDTO img);
         public Task<ItemImageCommonDTO> UpdateItemImageAsync(string id, ItemImageInputDTO imgDTO);

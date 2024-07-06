@@ -37,11 +37,16 @@ namespace JewelleryShop.DataAccess.Repository
             }
         }
 
-        public async Task<List<ItemImage>> GetItemImagesByItemID(string itemID)
+        public async Task<List<ItemImage>> GetItemImagesByItemID(string itemID, int? count = null)
         {
-            var itemImgs = await _dbContext.ItemImages
-                .Where(img => img.ItemId == itemID)
-                .ToListAsync();
+            var query = _dbContext.ItemImages.Where(img => img.ItemId == itemID);
+
+            if (count.HasValue && count.Value > 0)
+            {
+                query = query.Take(count.Value);
+            }
+
+            var itemImgs = await query.ToListAsync();
             return itemImgs;
         }
     }

@@ -34,9 +34,9 @@ namespace JewelleryShop.Business.Service
             return _mapper.Map<ItemImageCommonDTO>(images);
         }
 
-        public async Task<List<ItemImageCommonDTO>> GetItemImagesByItemID(string itemID)
+        public async Task<List<ItemImageCommonDTO>> GetItemImagesByItemID(string itemID, int? count = null)
         {
-            var itemImgs = await _unitOfWork.ItemImageRepository.GetItemImagesByItemID(itemID);
+            var itemImgs = await _unitOfWork.ItemImageRepository.GetItemImagesByItemID(itemID, count);
             
             return _mapper.Map<List<ItemImageCommonDTO>>(itemImgs);
         }
