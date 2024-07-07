@@ -11,6 +11,6 @@ namespace JewelleryShop.DataAccess.Repository.Interface
     {
         public Task<ItemImage> UpdateAsync(string id, ItemImage itemImg);
         public Task DeleteAsync(string id);
-        public Task<List<ItemImage>> GetItemImagesByItemID(string itemID);
+        public Task<List<ItemImage>> GetItemImagesByItemID(string itemID, int? count = null);
     }
 }

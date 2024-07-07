@@ -55,11 +55,11 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpGet("ItemImages/{itemID}")]
-        public async Task<IActionResult> GetItemImagesByItemID(string itemID)
+        public async Task<IActionResult> GetItemImagesByItemID(string itemID, int? count = null)
         {
             try
             {
-                var imgs = await _itemImageService.GetItemImagesByItemID(itemID);
+                var imgs = await _itemImageService.GetItemImagesByItemID(itemID, count);
                 if (imgs.IsNullOrEmpty())
                 {
                     var response = APIResponse<string>
