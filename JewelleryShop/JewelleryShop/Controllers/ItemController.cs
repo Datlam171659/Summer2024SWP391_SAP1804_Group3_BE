@@ -71,16 +71,30 @@ namespace JewelleryShop.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateItem(ItemCreateDTO item) {
-            await _itemService.AddAsync(item);
-            return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
+            try
+            {
+                await _itemService.AddAsync(item);
+                return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateItem(string id, ItemDTO item)
         {
-            await _itemService.UpdateItemAsync(id, item);
-            return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
+            try
+            {
+                await _itemService.UpdateItemAsync(id, item);
+                return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -102,33 +116,61 @@ namespace JewelleryShop.API.Controllers
         [HttpPut("softdelete/{id}")]
         public async Task<IActionResult> SoftDeleteItem(string id)
         {
-            await _itemService.SoftDelete(id);
-            return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+            try
+            {
+                await _itemService.SoftDelete(id);
+                return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpGet("paginated")]
         public async Task<IActionResult> GetPaginatedItems([FromQuery] int pageIndex, [FromQuery] int pageSize)
         {
-            var paginatedItems = await _itemService.GetPaginatedItemsAsync(pageIndex, pageSize);
-            return Ok(paginatedItems);
+            try
+            {
+                var paginatedItems = await _itemService.GetPaginatedItemsAsync(pageIndex, pageSize);
+                return Ok(paginatedItems);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpPut("updateQuantity/{id}")]
         public async Task<IActionResult> UpdateQuantity(string id, int quantity)
         {
+            try { 
             await _itemService.UpdateQuantityAsync(id, quantity);
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet("GetAllBuyBack")]
         public async Task<IActionResult> ListAllBuyBack()
         {
+            try
+            { 
             var list = await _itemService.GetAllBuyBackAsync();
             return Ok(
                 APIResponse<List<ItemDTO>>.SuccessResponse(data: list, "Fetched Buyback items successfully.")
             );
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
