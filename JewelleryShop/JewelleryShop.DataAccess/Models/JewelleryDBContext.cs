@@ -154,6 +154,9 @@ namespace JewelleryShop.DataAccess.Models
             {
                 entity.ToTable("Invoice");
 
+                entity.HasIndex(e => e.InvoiceNumber, "IX_Invoice")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasMaxLength(50);
 
                 entity.Property(e => e.BuyerAddress).HasMaxLength(500);

@@ -46,10 +46,16 @@ public class InvoiceService : IInvoiceService
     {
         var invoice = _mapper.Map<Invoice>(invoiceDTO);
         var appNameShort = _configuration.GetValue<string>("Settings:AppNameShort");
-        var customerInvoiceNo = await _unitOfWork.InvoiceRepository.GetAllCustomerInvoice(invoice.CustomerId);
+
+        var invoiceNoExist = await _unitOfWork.InvoiceRepository.GetInvoiceByInvoiceNumber(invoice.InvoiceNumber);
+        if (invoiceNoExist != null) throw new Exception("Duplicate Invoice Number.");
+
+        List<Invoice> _customerInvoiceNo = await _unitOfWork.InvoiceRepository.GetAllCustomerInvoice(invoice.CustomerId);
+        int customerInvoiceNo = _customerInvoiceNo.Count;
+        Interlocked.Add(ref customerInvoiceNo, 1); // 4 safety
 
         invoice.Id = Guid.NewGuid().ToString();
-        invoice.InvoiceNumber = $"{appNameShort}-{invoice.CustomerId}-{DateTime.Now.ToString("ddMMyyHHmmssFFF")}";
+        invoice.InvoiceNumber = invoice.InvoiceNumber.IsNullOrEmpty() ? $"{appNameShort}-{invoice.CustomerId}-{DateTime.Now.ToString("ddMMyyHH")}-{customerInvoiceNo}" : invoice.InvoiceNumber;
         var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, items);
         await _unitOfWork.SaveChangeAsync();
 

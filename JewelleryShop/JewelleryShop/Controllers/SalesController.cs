@@ -82,7 +82,7 @@ namespace JewelleryShop.API.Controllers
                 return BadRequest(response);
             }
         }
-
+        
         [HttpGet("CustomerInvoice/{customerID}")]
         public async Task<IActionResult> GetAllCustomerInvoice(string customerID)
         {
@@ -98,6 +98,31 @@ namespace JewelleryShop.API.Controllers
                 return Ok(
                     APIResponse<List<InvoiceCommonDTO>>
                         .SuccessResponse(data: invoices, "Successfully fetched customer Invoices.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("Invoice/ByNumber/{invoiceNumber}")]
+        public async Task<IActionResult> GetInvoiceByInvoiceNumber(string invoiceNumber)
+        {
+            try
+            {
+                var invoice = await _invoiceService.GetInvoiceByInvoiceNumber(invoiceNumber);
+                if (invoice == null)
+                {
+                    var response = APIResponse<string>
+                        .ErrorResponse(new List<string> { "No records found with the provided ID." });
+                    return NotFound(response);
+                }
+                return Ok(
+                    APIResponse<InvoiceCommonDTO>
+                        .SuccessResponse(data: invoice, "Successfully fetched Invoice.")
                     );
             }
             catch (Exception ex)
