@@ -16,6 +16,7 @@ using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.PromotionViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ReturnPolicyViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffShiftViewsModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
@@ -60,6 +61,10 @@ namespace JewelleryShop.DataAccess.Utils
             CreateMap<CustomerPromotion, CustomerPromotionDto>().ReverseMap();
 
             CreateMap<Discount, DiscountDto>().ReverseMap();
+
+            CreateMap<ReturnPolicy, ReturnPolicyCommonDTO>().ReverseMap();
+            CreateMap<ReturnPolicy, ReturnPolicyUpdateDTO>().ReverseMap();
+            CreateMap<ReturnPolicy, ReturnPolicyCreateDTO>().ReverseMap();
         }
     }
 }

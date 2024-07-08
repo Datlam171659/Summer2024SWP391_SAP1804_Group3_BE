@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace JewelleryShop.DataAccess.Models
+namespace JewelleryShop.DataAccess.Models.ViewModel.ReturnPolicyViewModel
 {
-    public partial class ReturnPolicy
+    public class ReturnPolicyCommonDTO
     {
-        public ReturnPolicy()
-        {
-            ItemInvoices = new HashSet<ItemInvoice>();
-        }
-
         public string Id { get; set; } = null!;
         public string? ReturnPolicyType { get; set; }
         public string? ReturnWindow { get; set; }
@@ -17,7 +15,5 @@ namespace JewelleryShop.DataAccess.Models
         public bool? IsActive { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-
-        public virtual ICollection<ItemInvoice> ItemInvoices { get; set; }
     }
 }

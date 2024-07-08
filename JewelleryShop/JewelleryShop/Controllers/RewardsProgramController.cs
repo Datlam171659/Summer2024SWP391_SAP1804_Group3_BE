@@ -48,7 +48,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<RewardsProgramCommonDTO>> CreateRewardProgram(RewardsProgramInputDTO rewardsProgramInputDTO)
+        public async Task<ActionResult<RewardsProgramCommonDTO>> AddPoints(RewardsProgramInputDTO rewardsProgramInputDTO)
         {
             var createdRewardProgram = await _rewardsProgramService.AddRewardsProgram(rewardsProgramInputDTO);
 

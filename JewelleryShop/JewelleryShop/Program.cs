@@ -7,6 +7,7 @@ using JewelleryShop.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using JewelleryShop.API.Middlewares;
 
 namespace JewelleryShop
 {
@@ -38,6 +39,7 @@ namespace JewelleryShop
 
             app.UseAuthorization();
 
+            //app.UseMiddleware<AuthorizationMiddleware>();
 
             app.MapControllers();
 
