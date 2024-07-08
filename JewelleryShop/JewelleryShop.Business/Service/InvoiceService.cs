@@ -6,6 +6,7 @@ using JewelleryShop.DataAccess;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
 
 public class InvoiceService : IInvoiceService
 {
@@ -62,10 +63,10 @@ public class InvoiceService : IInvoiceService
         return res;
     }
 
-    public async Task<List<Item>> GetInvoiceItems(string invoiceID)
+    public async Task<List<ItemInvoiceCommonDTO>> GetInvoiceItems(string invoiceID)
     {
         var res = await _unitOfWork.InvoiceRepository.GetInvoiceItems(invoiceID);
-        return res;
+        return _mapper.Map<List<ItemInvoiceCommonDTO>>(res);
     }
 
     public async Task<List<InvoiceCommonDTO>> GetAllCustomerInvoice(string customerID)

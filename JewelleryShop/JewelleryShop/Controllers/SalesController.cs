@@ -13,6 +13,7 @@ using JewelleryShop.Business.Service;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using Microsoft.IdentityModel.Tokens;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
@@ -71,7 +72,7 @@ namespace JewelleryShop.API.Controllers
                     return NotFound(response);
                 }
                 return Ok(
-                    APIResponse<List<Item>>
+                    APIResponse<List<ItemInvoiceCommonDTO>>
                         .SuccessResponse(data: invoices, "Successfully fetched invoice Items.")
                     );
             }

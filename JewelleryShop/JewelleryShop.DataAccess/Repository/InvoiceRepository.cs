@@ -55,7 +55,8 @@ namespace JewelleryShop.DataAccess.Repository
                     InvoiceId = invoice.Id,
                     ItemId = _item.itemID,
                     WarrantyId = _warranty.WarrantyId,
-                    ReturnPolicyId = isValidRP.Id
+                    ReturnPolicyId = isValidRP.Id,
+                    Price = _item.Price
                 };
                 var item = await _itemRepository.GetByIdAsync(_item.itemID);
                 if (item != null && item.Quantity > 0)
@@ -91,7 +92,7 @@ namespace JewelleryShop.DataAccess.Repository
             return itemsForInvoice;
         }
 
-        public async Task<List<Item>> GetInvoiceItems(string invoiceID)
+        public async Task<List<ItemInvoice>> GetInvoiceItems(string invoiceID)
         {
             var itemsForInvoice = await _dbContext.ItemInvoices
                 .Include(i => i.Item)
@@ -99,7 +100,6 @@ namespace JewelleryShop.DataAccess.Repository
                 .Include(i => i.Warranty)
                 .Include(i => i.ReturnPolicy)
                 .Where(ii => ii.InvoiceId == invoiceID)
-                .Select(ii => ii.Item)
                 .ToListAsync();
             return itemsForInvoice;
         }

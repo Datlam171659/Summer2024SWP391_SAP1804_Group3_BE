@@ -12,6 +12,7 @@ using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.GemstoneViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
@@ -65,6 +66,8 @@ namespace JewelleryShop.DataAccess.Utils
             CreateMap<ReturnPolicy, ReturnPolicyCommonDTO>().ReverseMap();
             CreateMap<ReturnPolicy, ReturnPolicyUpdateDTO>().ReverseMap();
             CreateMap<ReturnPolicy, ReturnPolicyCreateDTO>().ReverseMap();
+
+            CreateMap<ItemInvoice, ItemInvoiceCommonDTO>().ReverseMap();
         }
     }
 }
