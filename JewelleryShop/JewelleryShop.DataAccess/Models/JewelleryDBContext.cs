@@ -156,19 +156,17 @@ namespace JewelleryShop.DataAccess.Models
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
-                entity.Property(e => e.BuyerAddress).HasMaxLength(50);
+                entity.Property(e => e.BuyerAddress).HasMaxLength(500);
 
-                entity.Property(e => e.CompanyName).HasMaxLength(50);
+                entity.Property(e => e.CompanyName).HasMaxLength(255);
 
                 entity.Property(e => e.CustomerId)
                     .HasMaxLength(50)
                     .HasColumnName("CustomerID");
 
-                entity.Property(e => e.ItemId)
-                    .HasMaxLength(50)
-                    .HasColumnName("ItemID");
+                entity.Property(e => e.InvoiceNumber).HasMaxLength(100);
 
-                entity.Property(e => e.PaymentType).HasMaxLength(50);
+                entity.Property(e => e.PaymentType).HasMaxLength(100);
 
                 entity.Property(e => e.StaffId).HasMaxLength(50);
 

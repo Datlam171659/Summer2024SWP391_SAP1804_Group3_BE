@@ -12,5 +12,7 @@ namespace JewelleryShop.DataAccess.Repository.Interface
     {
         public Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items);
         public Task<List<Item>> GetInvoiceItems(string invoiceID);
+        public Task<List<Invoice>> GetAllCustomerInvoice(string customerID);
+        public Task<Invoice> GetInvoiceByInvoiceNumber(string invoiceNumber);
     }
 }

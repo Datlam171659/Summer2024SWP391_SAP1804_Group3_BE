@@ -16,5 +16,7 @@ namespace JewelleryShop.Business.Service.Interface
         Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items);
         Task<List<Item>> GetInvoiceItems(string invoiceID);
         Task<List<KeyValuePair<string, decimal>>> GetMonthlyRevenue();
+        Task<List<InvoiceCommonDTO>> GetAllCustomerInvoice(string customerID);
+        Task<InvoiceCommonDTO> GetInvoiceByInvoiceNumber(string invoiceNumber);
     }
 }

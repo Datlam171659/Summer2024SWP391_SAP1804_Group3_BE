@@ -20,13 +20,16 @@ namespace JewelleryShop.DataAccess.Repository
         private readonly IItemRepository _itemRepository;
         private readonly IWarrantyRepository _warrantyRepository;
         private readonly IReturnPolicyRepository _returnPolicyRepository;
-        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, IItemRepository itemRepository, IWarrantyRepository warrantyRepository, IReturnPolicyRepository returnPolicyRepository) : base(dbcontext)
+        private readonly ICustomerRepository _customerRepository;
+        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, 
+            IItemRepository itemRepository, IWarrantyRepository warrantyRepository, IReturnPolicyRepository returnPolicyRepository, ICustomerRepository customerRepository) : base(dbcontext)
         {
             _dbContext = dbcontext;
             _mapper = mapper;
             _itemRepository = itemRepository;
             _warrantyRepository = warrantyRepository;
             _returnPolicyRepository = returnPolicyRepository;
+            _customerRepository = customerRepository;
         }
 
         public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items)
@@ -78,17 +81,34 @@ namespace JewelleryShop.DataAccess.Repository
             return invoiceWithItems;
         }
 
+        public async Task<List<Invoice>> GetAllCustomerInvoice(string customerID)
+        {
+            var customer = await _customerRepository.GetByIdAsync(customerID);
+            if (customer == null) throw new Exception("Couldn't find Customer ID");
+            var itemsForInvoice = await _dbContext.Invoices
+                .Where(i => i.CustomerId == customer.Id)
+                .ToListAsync();
+            return itemsForInvoice;
+        }
+
         public async Task<List<Item>> GetInvoiceItems(string invoiceID)
         {
-            var itemsForInvoice = _dbContext.ItemInvoices
+            var itemsForInvoice = await _dbContext.ItemInvoices
                 .Include(i => i.Item)
                 .Include(i => i.Invoice)
                 .Include(i => i.Warranty)
                 .Include(i => i.ReturnPolicy)
                 .Where(ii => ii.InvoiceId == invoiceID)
                 .Select(ii => ii.Item)
-                .ToList();
+                .ToListAsync();
             return itemsForInvoice;
+        }
+        public async Task<Invoice> GetInvoiceByInvoiceNumber(string invoiceNumber)
+        {
+            var invoice = await _dbContext.Invoices
+                .Where(i => i.InvoiceNumber == invoiceNumber)
+                .FirstOrDefaultAsync();
+            return invoice;
         }
     }
 }

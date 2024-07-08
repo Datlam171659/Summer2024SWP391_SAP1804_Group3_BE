@@ -3,16 +3,21 @@ using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 public class InvoiceService : IInvoiceService
 {
+    private readonly IConfiguration _configuration;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public InvoiceService(IUnitOfWork unitOfWork, IMapper mapper)
+    public InvoiceService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _configuration = configuration;
     }
 
     public async Task<List<InvoiceCommonDTO>> GetAllInvoices()
@@ -40,7 +45,11 @@ public class InvoiceService : IInvoiceService
     public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items)
     {
         var invoice = _mapper.Map<Invoice>(invoiceDTO);
+        var appNameShort = _configuration.GetValue<string>("Settings:AppNameShort");
+        var customerInvoiceNo = await _unitOfWork.InvoiceRepository.GetAllCustomerInvoice(invoice.CustomerId);
+
         invoice.Id = Guid.NewGuid().ToString();
+        invoice.InvoiceNumber = $"{appNameShort}-{invoice.CustomerId}-{DateTime.Now.ToString("ddMMyyHHmmssFFF")}";
         var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, items);
         await _unitOfWork.SaveChangeAsync();
 
@@ -51,6 +60,12 @@ public class InvoiceService : IInvoiceService
     {
         var res = await _unitOfWork.InvoiceRepository.GetInvoiceItems(invoiceID);
         return res;
+    }
+
+    public async Task<List<InvoiceCommonDTO>> GetAllCustomerInvoice(string customerID)
+    {
+        var res = await _unitOfWork.InvoiceRepository.GetAllCustomerInvoice(customerID);
+        return _mapper.Map<List<InvoiceCommonDTO>>(res);
     }
 
     public async Task<List<KeyValuePair<string, decimal>>> GetMonthlyRevenue()
@@ -68,4 +83,9 @@ public class InvoiceService : IInvoiceService
         return monthlyRevenue;
     }
 
+    public async Task<InvoiceCommonDTO> GetInvoiceByInvoiceNumber(string invoiceNumber)
+    {
+        var res = await _unitOfWork.InvoiceRepository.GetInvoiceByInvoiceNumber(invoiceNumber);
+        return _mapper.Map<InvoiceCommonDTO>(res);
+    }
 }

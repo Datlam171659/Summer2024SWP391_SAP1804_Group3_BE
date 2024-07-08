@@ -10,6 +10,7 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
     {
         public string? StaffId { get; set; }
         public string? CustomerId { get; set; }
+        public string? InvoiceNumber { get; set; }
         public string? CompanyName { get; set; }
         public string? BuyerAddress { get; set; }
         public string? Status { get; set; }
