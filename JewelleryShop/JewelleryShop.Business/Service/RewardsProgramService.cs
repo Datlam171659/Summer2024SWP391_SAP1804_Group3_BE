@@ -59,7 +59,7 @@ namespace JewelleryShop.Business.Service
 
             var existReward = await _unitOfWork.RewardsProgramRepository.GetByCustomerIdAsync(rewards.CustomerId);
 
-            if (existReward != null)
+            if (existReward != null && existReward.PointsTotal.HasValue)
             {
                 existReward.PointsTotal = rewards.AddPoints + existReward.PointsTotal;
                 _unitOfWork.RewardsProgramRepository.Update(existReward);

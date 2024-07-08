@@ -48,18 +48,18 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
         }
 
         [HttpGet("ItemImages/{itemID}")]
-        public async Task<IActionResult> GetItemImagesByItemID(string itemID)
+        public async Task<IActionResult> GetItemImagesByItemID(string itemID, int? count = null)
         {
             try
             {
-                var imgs = await _itemImageService.GetItemImagesByItemID(itemID);
+                var imgs = await _itemImageService.GetItemImagesByItemID(itemID, count);
                 if (imgs.IsNullOrEmpty())
                 {
                     var response = APIResponse<string>
@@ -73,7 +73,7 @@ namespace JewelleryShop.API.Controllers
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -132,11 +132,14 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 var newImgItems = await _itemImageService.AddItemImage(img_items);
-                return CreatedAtAction(nameof(GetItemImagesById), new { id = newImgItems.Id }, newImgItems);
+                return Ok(
+                    APIResponse<ItemImageCommonDTO>
+                        .SuccessResponse(data: newImgItems, "Successfully added item image.")
+                    );
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }
@@ -148,11 +151,14 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 var updatedImages = await _itemImageService.UpdateItemImageAsync(id, imgDTO);
-                return Ok(updatedImages);
+                return Ok(
+                    APIResponse<ItemImageCommonDTO>
+                        .SuccessResponse(data: updatedImages, "Successfully updated item image.")
+                    );
             }
             catch (Exception ex)
             {
-                var response = APIResponse<ItemImageInputDTO>
+                var response = APIResponse<string>
                     .ErrorResponse(new List<string> { ex.Message });
                 return BadRequest(response);
             }

@@ -19,18 +19,21 @@ namespace JewelleryShop.DataAccess.Repository
         private readonly IMapper _mapper;
         private readonly IItemRepository _itemRepository;
         private readonly IWarrantyRepository _warrantyRepository;
-        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, IItemRepository itemRepository, IWarrantyRepository warrantyRepository) : base(dbcontext)
+        private readonly IReturnPolicyRepository _returnPolicyRepository;
+        public InvoiceRepository(JewelleryDBContext dbcontext, IMapper mapper, IItemRepository itemRepository, IWarrantyRepository warrantyRepository, IReturnPolicyRepository returnPolicyRepository) : base(dbcontext)
         {
             _dbContext = dbcontext;
             _mapper = mapper;
             _itemRepository = itemRepository;
             _warrantyRepository = warrantyRepository;
+            _returnPolicyRepository = returnPolicyRepository;
         }
 
-        public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items, string returnPolicyId)
+        public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items)
         {
             var itemAdded = new List<InvoiceInputItemDTO>();
             int invoiceQuantity = 0;
+
             foreach (var _item in items)
             {
                 Warranty _warranty = new()
@@ -40,13 +43,16 @@ namespace JewelleryShop.DataAccess.Repository
                     ExpiryDate = _item.warrantyExpiryDate
                 };
                 await _warrantyRepository.AddWarranty(_warranty);
-                
+
+                var isValidRP = await _returnPolicyRepository.GetByIdAsync(_item.ReturnPolicyID);
+                if (isValidRP == null) throw new Exception($"[{_item.ReturnPolicyID}] is not a valid Return Policy");
+
                 var itemInvoice = new ItemInvoice
                 {
                     InvoiceId = invoice.Id,
                     ItemId = _item.itemID,
                     WarrantyId = _warranty.WarrantyId,
-                    ReturnPolicyId = returnPolicyId
+                    ReturnPolicyId = isValidRP.Id
                 };
                 var item = await _itemRepository.GetByIdAsync(_item.itemID);
                 if (item != null && item.Quantity > 0)
@@ -68,7 +74,6 @@ namespace JewelleryShop.DataAccess.Repository
             {
                 invoiceDTO = _mapper.Map<InvoiceInputNewDTO>(invoice),
                 items = itemAdded,
-                returnPolicyId = returnPolicyId
             };
             return invoiceWithItems;
         }

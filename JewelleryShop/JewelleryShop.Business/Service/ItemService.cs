@@ -45,6 +45,18 @@ namespace JewelleryShop.Business.Service
 
         public async Task AddAsync(ItemCreateDTO item)
         {
+            // Check description length
+            var invalidData = new List<string>();
+            if (string.IsNullOrWhiteSpace(item.Description) || item.Description.Length > 50)
+            {
+                invalidData.Add("Description is invalid");
+            }
+            if (invalidData.Count > 0)
+            {
+                var invalidDataMessage = string.Join(", ", invalidData);
+                throw new ArgumentException(invalidDataMessage);
+            }
+
             var itemID = GenerateItemId(item.ItemName, DateTime.Now);
             var itemToAdd = _mapper.Map<Item>(item);
             itemToAdd.ItemId = itemID;

@@ -25,6 +25,8 @@ namespace JewelleryShop.DataAccess
         private readonly ICollectionRepository _collectionRepository;
         private readonly IGemstoneRepository _gemstoneRepository;
         private readonly IItemImageRepository _itemImageRepository;
+        private readonly IReturnPolicyRepository _returnPolicyRepository;
+
         public UnitOfWork(
             JewelleryDBContext dbContext,
             IStaffRepository staffRepository,
@@ -40,6 +42,8 @@ namespace JewelleryShop.DataAccess
             IGemstoneRepository gemstoneRepository,
             IItemInvoiceRepository itemInvoiceRepository,
             IItemImageRepository itemImageRepository
+            IItemImageRepository itemImageRepository,
+            IReturnPolicyRepository returnPolicyRepository
         )
         {
             _dbContext = dbContext;
@@ -56,6 +60,7 @@ namespace JewelleryShop.DataAccess
             _gemstoneRepository = gemstoneRepository;   
             _itemInvoiceRepository = itemInvoiceRepository;
             _itemImageRepository = itemImageRepository;
+            _returnPolicyRepository = returnPolicyRepository;
         }
 
         public IStaffRepository StaffRepository => _staffRepository;
@@ -71,6 +76,8 @@ namespace JewelleryShop.DataAccess
         public IGemstoneRepository GemstoneRepository => _gemstoneRepository;
         public IItemInvoiceRepository ItemInvoiceRepository => _itemInvoiceRepository;
         public IItemImageRepository ItemImageRepository => _itemImageRepository;
+
+        public IReturnPolicyRepository ReturnPolicyRepository => _returnPolicyRepository;
 
         public async Task<int> SaveChangeAsync()
         {

@@ -26,6 +26,7 @@ namespace JewelleryShop.DataAccess
 
         public IItemImageRepository ItemImageRepository { get; }
 
+        public IReturnPolicyRepository ReturnPolicyRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }
