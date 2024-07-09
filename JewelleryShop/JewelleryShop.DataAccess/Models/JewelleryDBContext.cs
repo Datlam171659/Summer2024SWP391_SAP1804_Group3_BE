@@ -278,9 +278,13 @@ namespace JewelleryShop.DataAccess.Models
                     .HasMaxLength(50)
                     .HasColumnName("InvoiceID");
 
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.ReturnPolicyId)
                     .HasMaxLength(50)
                     .HasColumnName("ReturnPolicyID");
+
+                entity.Property(e => e.Total).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.WarrantyId)
                     .HasMaxLength(50)

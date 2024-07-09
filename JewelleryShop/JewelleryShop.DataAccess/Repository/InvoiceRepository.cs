@@ -32,7 +32,7 @@ namespace JewelleryShop.DataAccess.Repository
             _customerRepository = customerRepository;
         }
 
-        public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items)
+        public async Task<InvoiceCWIReturnDTO> CreateInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceInputItemDTO> items)
         {
             var itemAdded = new List<InvoiceInputItemDTO>();
             int invoiceQuantity = 0;
@@ -56,8 +56,11 @@ namespace JewelleryShop.DataAccess.Repository
                     ItemId = _item.itemID,
                     WarrantyId = _warranty.WarrantyId,
                     ReturnPolicyId = isValidRP.Id,
-                    Price = _item.Price
+                    Price = _item.Price,
+                    Quantity = _item.itemQuantity,
+                    Total = _item.Total <= 0 ? _item.Price * _item.itemQuantity : _item.Total,
                 };
+                _item.Total = (decimal)itemInvoice.Total;
                 var item = await _itemRepository.GetByIdAsync(_item.itemID);
                 if (item != null && item.Quantity > 0)
                 {
@@ -74,9 +77,9 @@ namespace JewelleryShop.DataAccess.Repository
 
             invoice.Quantity = invoiceQuantity;
             await _dbContext.Invoices.AddAsync(invoice);
-            InvoiceCreateWithItemsDTO invoiceWithItems = new InvoiceCreateWithItemsDTO
+            InvoiceCWIReturnDTO invoiceWithItems = new InvoiceCWIReturnDTO
             {
-                invoiceDTO = _mapper.Map<InvoiceInputNewDTO>(invoice),
+                invoice = _mapper.Map<InvoiceCommonDTO>(invoice),
                 items = itemAdded,
             };
             return invoiceWithItems;

@@ -43,7 +43,7 @@ public class InvoiceService : IInvoiceService
         return _mapper.Map<InvoiceCommonDTO>(invoice);
     }
 
-    public async Task<InvoiceCreateWithItemsDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items)
+    public async Task<InvoiceCWIReturnDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items)
     {
         var invoice = _mapper.Map<Invoice>(invoiceDTO);
         var appNameShort = _configuration.GetValue<string>("Settings:AppNameShort");

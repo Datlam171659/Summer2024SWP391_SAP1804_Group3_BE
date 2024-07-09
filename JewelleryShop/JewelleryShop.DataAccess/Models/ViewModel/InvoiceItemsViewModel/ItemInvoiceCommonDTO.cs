@@ -1,4 +1,5 @@
-﻿using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
+﻿using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,11 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel
         public string InvoiceId { get; set; } = null!;
         public string ReturnPolicyId { get; set; } = null!;
         public string WarrantyId { get; set; } = null!;
-        public int? Price { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public decimal Total { get; set; }
 
-        public ItemDTO Item { get; set; } = null!;
+        public virtual ItemDTO Item { get; set; } = null!;
+        public virtual InvoiceCommonDTO Invoice { get; set; } = null!;
     }
 }
