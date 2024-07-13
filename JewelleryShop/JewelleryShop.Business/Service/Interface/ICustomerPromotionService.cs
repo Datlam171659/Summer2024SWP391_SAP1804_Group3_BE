@@ -16,6 +16,7 @@ namespace JewelleryShop.Business.Service.Interface
         public Task Update(string id, CustomerPromotionDto obj);
         public Task Delete(string id);
         public Task Approve(string id);
+        public Task Reject(string id);
 
     }
 }

@@ -82,6 +82,19 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [HttpPost("buyback")]
+        public async Task<IActionResult> CreateBuyBackItem(ItemCreateDTO item)
+        {
+            try
+            {
+                await _itemService.AddBuyBackAsync(item);
+                return Ok(APIResponse<string>.SuccessResponse(data: null, "Create successfully."));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateItem(string id, ItemDTO item)
@@ -119,7 +132,7 @@ namespace JewelleryShop.API.Controllers
             try
             {
                 await _itemService.SoftDelete(id);
-                return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+                return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
             }
             catch (Exception ex)
             {

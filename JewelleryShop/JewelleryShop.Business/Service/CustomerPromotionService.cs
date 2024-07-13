@@ -64,5 +64,13 @@ namespace JewelleryShop.Business.Service
                 await _unitOfWork.SaveChangeAsync();
             }
         }
+
+        public async Task Reject(string id)
+        {
+            var obj = await _unitOfWork.CustomerPromotionRepository.GetByIdAsync(id);
+            obj.Status = "Từ chối";
+            _unitOfWork.CustomerPromotionRepository.Update(obj);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

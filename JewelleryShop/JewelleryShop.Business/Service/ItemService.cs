@@ -61,6 +61,11 @@ namespace JewelleryShop.Business.Service
             var itemToAdd = _mapper.Map<Item>(item);
             itemToAdd.ItemId = itemID;
             itemToAdd.SerialNumber = itemID;
+            if (itemToAdd.GemStoneId == null)
+            {
+                string noGemstone = "000";
+                itemToAdd.GemStoneId = noGemstone;
+            }
             await _unitOfWork.ItemRepository.AddAsync(itemToAdd);
             await _unitOfWork.SaveChangeAsync();
         }
@@ -185,6 +190,29 @@ namespace JewelleryShop.Business.Service
         public async Task<List<ItemDTO>> GetAllBuyBackAsync()
         {
             return _mapper.Map<List<ItemDTO>>(await _unitOfWork.ItemRepository.GetAllBuyBackAsync());
+        }
+
+        public async Task AddBuyBackAsync(ItemCreateDTO item)
+        {
+            // Check description length
+            var invalidData = new List<string>();
+            if (string.IsNullOrWhiteSpace(item.Description) || item.Description.Length > 50)
+            {
+                invalidData.Add("Description is invalid");
+            }
+            if (invalidData.Count > 0)
+            {
+                var invalidDataMessage = string.Join(", ", invalidData);
+                throw new ArgumentException(invalidDataMessage);
+            }
+
+            var itemID = GenerateItemId(item.ItemName, DateTime.Now);
+            var itemToAdd = _mapper.Map<Item>(item);
+            itemToAdd.ItemId = itemID;
+            itemToAdd.Status = "Hàng mua lại";
+            itemToAdd.IsBuyBack = true;
+            await _unitOfWork.ItemRepository.AddAsync(itemToAdd);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

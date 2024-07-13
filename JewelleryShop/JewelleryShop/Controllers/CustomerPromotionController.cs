@@ -55,5 +55,11 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Approve successfully."));
         }
 
+        [HttpPut("reject/{id}")]
+        public async Task<IActionResult> RejectPromotion(string id)
+        {
+            await _customerPromotionService.Reject(id);
+            return Ok(APIResponse<string>.SuccessResponse(data: null, "Reject successfully."));
+        }
     }
 }

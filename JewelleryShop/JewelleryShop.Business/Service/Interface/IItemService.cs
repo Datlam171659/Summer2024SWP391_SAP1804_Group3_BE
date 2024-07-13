@@ -21,7 +21,7 @@ namespace JewelleryShop.Business.Service.Interface
         public Task SoftDelete(string id);
         public Task RemoveAsync(string id);
         public Task<Pagination<Item>> GetPaginatedItemsAsync(int pageIndex, int pageSize);
-
+        public Task AddBuyBackAsync(ItemCreateDTO item);
         public Task<List<ItemDTO>> GetAllBuyBackAsync();
     }
 } 

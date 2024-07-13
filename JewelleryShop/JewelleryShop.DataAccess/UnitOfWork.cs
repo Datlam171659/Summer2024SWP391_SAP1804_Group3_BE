@@ -41,7 +41,6 @@ namespace JewelleryShop.DataAccess
             ICollectionRepository collectionRepository,
             IGemstoneRepository gemstoneRepository,
             IItemInvoiceRepository itemInvoiceRepository,
-            IItemImageRepository itemImageRepository
             IItemImageRepository itemImageRepository,
             IReturnPolicyRepository returnPolicyRepository
         )
