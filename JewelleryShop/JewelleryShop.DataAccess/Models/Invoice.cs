@@ -21,6 +21,7 @@ namespace JewelleryShop.DataAccess.Models
         public int? Quantity { get; set; }
         public decimal? SubTotal { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public bool? IsBuyBack { get; set; }
 
         public virtual Customer? Customer { get; set; }
         public virtual staff? Staff { get; set; }
