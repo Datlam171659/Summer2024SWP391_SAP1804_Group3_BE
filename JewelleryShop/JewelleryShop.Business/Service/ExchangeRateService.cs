@@ -21,14 +21,16 @@ namespace JewelleryShop.Business.Service
         public Dictionary<string, decimal> Rates { get; set; }
     }
 
-    public class ExchangeRateService
+    public class ExchangeRateService : IExchangeRateService
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
         private const string BaseUrl = "https://api.exchangerate-api.com/v4/latest/USD";
 
-        public ExchangeRateService(HttpClient httpClient)
+        public ExchangeRateService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
         }
 
         public async Task<ExchangeRateResponse> GetLatestRatesAsync()
