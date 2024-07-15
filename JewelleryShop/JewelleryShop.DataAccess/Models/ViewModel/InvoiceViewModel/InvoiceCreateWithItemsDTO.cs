@@ -8,7 +8,7 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel
 {
     public class InvoiceCreateWithItemsDTO
     {
-        public InvoiceInputNewDTO invoiceDTO { get; set; } = null!;
-        public IEnumerable<InvoiceInputItemDTO> items { get; set; }
+        public InvoiceInputNewDTO invoice { get; set; } = null!;
+        public IEnumerable<InvoiceInputItemDTO>? items { get; set; }
     }
 }
