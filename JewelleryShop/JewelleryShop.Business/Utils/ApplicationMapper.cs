@@ -40,6 +40,8 @@ namespace JewelleryShop.DataAccess.Utils
 
             CreateMap<Item, ItemDTO>().ReverseMap();
             CreateMap<Item, ItemCreateDTO>().ReverseMap();
+            CreateMap<Item, ItemBuyBackDto>().ReverseMap();
+
             CreateMap<staff, StaffCommonDTO>().ReverseMap();
             CreateMap<staff, StaffRegisterDTO>().ReverseMap();
 

@@ -47,9 +47,17 @@ namespace JewelleryShop.Business.Service
         {
             // Check description length
             var invalidData = new List<string>();
-            if (string.IsNullOrWhiteSpace(item.Description) || item.Description.Length > 50)
+            if (item.Description.Length > 50)
             {
                 invalidData.Add("Description is invalid");
+            }
+            if (string.IsNullOrEmpty(item.GemStoneId))
+            {
+                invalidData.Add("GemStroneId not alow null");
+            }
+            if (item.Quantity < 1)
+            {
+                invalidData.Add("Quantity must be more than 0");
             }
             if (invalidData.Count > 0)
             {
@@ -61,11 +69,6 @@ namespace JewelleryShop.Business.Service
             var itemToAdd = _mapper.Map<Item>(item);
             itemToAdd.ItemId = itemID;
             itemToAdd.SerialNumber = itemID;
-            if (itemToAdd.GemStoneId == null)
-            {
-                string noGemstone = "000";
-                itemToAdd.GemStoneId = noGemstone;
-            }
             await _unitOfWork.ItemRepository.AddAsync(itemToAdd);
             await _unitOfWork.SaveChangeAsync();
         }
@@ -192,13 +195,21 @@ namespace JewelleryShop.Business.Service
             return _mapper.Map<List<ItemDTO>>(await _unitOfWork.ItemRepository.GetAllBuyBackAsync());
         }
 
-        public async Task AddBuyBackAsync(ItemCreateDTO item)
+        public async Task AddBuyBackAsync(ItemBuyBackDto item)
         {
             // Check description length
             var invalidData = new List<string>();
-            if (string.IsNullOrWhiteSpace(item.Description) || item.Description.Length > 50)
+            if (item.Description.Length > 50)
             {
                 invalidData.Add("Description is invalid");
+            }
+            if (string.IsNullOrEmpty(item.GemStoneId))
+            {
+                invalidData.Add("GemStroneId not alow null");
+            }
+            if (item.Quantity < 1)
+            {
+                invalidData.Add("Quantity must be more than 0");
             }
             if (invalidData.Count > 0)
             {

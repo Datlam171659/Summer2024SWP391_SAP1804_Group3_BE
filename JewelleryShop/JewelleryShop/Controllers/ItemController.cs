@@ -83,7 +83,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPost("buyback")]
-        public async Task<IActionResult> CreateBuyBackItem(ItemCreateDTO item)
+        public async Task<IActionResult> CreateBuyBackItem(ItemBuyBackDto item)
         {
             try
             {
