@@ -44,11 +44,12 @@ namespace JewelleryShop.API
             services.AddScoped<ICollectionService, CollectionService>();
             services.AddScoped<IGemstoneService, GemstoneService>();
             services.AddScoped<IItemImageService, ItemImageService>();
-            services.AddScoped<IImgBBService, ImgBBService>();
             services.AddScoped<IReturnPolicyService, ReturnPolicyService>();
 
             services.AddHttpClient();
             services.AddHttpClient<IImgBBService, ImgBBService>();
+            services.AddHttpClient<IExchangeRateService, ExchangeRateService>();
+            services.AddHttpClient<IGoldPriceService, GoldPriceService>();
             return services;
         }
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)

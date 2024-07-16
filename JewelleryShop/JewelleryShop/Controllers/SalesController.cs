@@ -11,6 +11,9 @@ using JewelleryShop.DataAccess.Models.ViewModel.WarrantyViewModel;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.Business.Service;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
+using Microsoft.IdentityModel.Tokens;
+using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
 namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
@@ -35,13 +38,13 @@ namespace JewelleryShop.API.Controllers
         }
         
         [HttpPost("CreateInvoiceWithItems")]
-        public async Task<ActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
+        public async Task<IActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
         {
             try
             {
-                var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoiceDTO, data.items);
+                var res = await _invoiceService.CreateInvoiceWithItemsAsync(data.invoice, data.items);
                 return Ok(
-                    APIResponse<InvoiceCreateWithItemsDTO>.SuccessResponse(
+                    APIResponse<InvoiceCWIReturnDTO>.SuccessResponse(
                         data: res,
                         message: "Successfully created invoice."
                     )
@@ -56,11 +59,79 @@ namespace JewelleryShop.API.Controllers
 
         }
 
-        [HttpGet("InvoiceItems")]
-        public async Task<ActionResult<IEnumerable<InvoiceCommonDTO>>> GetInvoiceItems(string invoiceID)
+        [HttpGet("InvoiceItems/{invoiceID}")]
+        public async Task<IActionResult> GetInvoiceItems(string invoiceID)
         {
-            var invoices = await _invoiceService.GetInvoiceItems(invoiceID);
-            return Ok(invoices);
+            try
+            {
+                var invoices = await _invoiceService.GetInvoiceItems(invoiceID);
+                if (invoices.IsNullOrEmpty())
+                {
+                    var response = APIResponse<string>
+                        .ErrorResponse(new List<string> { "No records found with the provided ID." });
+                    return NotFound(response);
+                }
+                return Ok(
+                    APIResponse<List<ItemInvoiceCommonDTO>>
+                        .SuccessResponse(data: invoices, "Successfully fetched invoice Items.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+        }
+        
+        [HttpGet("CustomerInvoice/{customerID}")]
+        public async Task<IActionResult> GetAllCustomerInvoice(string customerID)
+        {
+            try
+            {
+                var invoices = await _invoiceService.GetAllCustomerInvoice(customerID);
+                if (invoices.IsNullOrEmpty())
+                {
+                    var response = APIResponse<string>
+                        .ErrorResponse(new List<string> { "No records found with the provided ID." });
+                    return NotFound(response);
+                }
+                return Ok(
+                    APIResponse<List<InvoiceCommonDTO>>
+                        .SuccessResponse(data: invoices, "Successfully fetched customer Invoices.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+        }
+
+        [HttpGet("Invoice/ByNumber/{invoiceNumber}")]
+        public async Task<IActionResult> GetInvoiceByInvoiceNumber(string invoiceNumber)
+        {
+            try
+            {
+                var invoice = await _invoiceService.GetInvoiceByInvoiceNumber(invoiceNumber);
+                if (invoice == null)
+                {
+                    var response = APIResponse<string>
+                        .ErrorResponse(new List<string> { "No records found with the provided ID." });
+                    return NotFound(response);
+                }
+                return Ok(
+                    APIResponse<InvoiceCommonDTO>
+                        .SuccessResponse(data: invoice, "Successfully fetched Invoice.")
+                    );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
         }
 
         [HttpGet("Invoice/{id}")]
@@ -93,12 +164,12 @@ namespace JewelleryShop.API.Controllers
             return Ok(warranty);
         }
 
-        [HttpPost("Invoices")]
-        public async Task<ActionResult<InvoiceCommonDTO>> PostInvoice([FromBody] InvoiceInputDTO invoiceDTO)
-        {
-            var createdInvoiceDTO = await _invoiceService.AddInvoice(invoiceDTO);
-            return CreatedAtAction(nameof(GetInvoice), new { id = createdInvoiceDTO.Id }, createdInvoiceDTO);
-        }
+        //[HttpPost("Invoices")]
+        //public async Task<ActionResult<InvoiceCommonDTO>> PostInvoice([FromBody] InvoiceInputDTO invoiceDTO)
+        //{
+        //    var createdInvoiceDTO = await _invoiceService.AddInvoice(invoiceDTO);
+        //    return CreatedAtAction(nameof(GetInvoice), new { id = createdInvoiceDTO.Id }, createdInvoiceDTO);
+        //}
 
         [HttpPost("Warranties")]
         public async Task<ActionResult<WarrantyCommonDTO>> PostWarranty([FromBody] WarrantyInputDTO warrantyDTO)

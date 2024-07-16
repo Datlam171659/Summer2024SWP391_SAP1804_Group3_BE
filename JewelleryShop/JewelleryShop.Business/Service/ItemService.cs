@@ -112,13 +112,12 @@ namespace JewelleryShop.Business.Service
             var item = await GetByIdAsync(id);
             if (item != null)
             {
-                item.Status = "Hết hàng";
-                _unitOfWork.ItemRepository.Update(item);
+                _unitOfWork.ItemRepository.SoftDelete(item);
                 await _unitOfWork.SaveChangeAsync();
             }
             else 
             {
-                throw new Exception("Can not update Item status");
+                throw new Exception("Could not delete item");
             }
         }
 

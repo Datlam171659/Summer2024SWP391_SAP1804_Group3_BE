@@ -4,6 +4,7 @@ using JewelleryShop.DataAccess;
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -116,29 +117,24 @@ namespace JewelleryShop.API.Controllers
         {
             try
             {
-                await _itemService.RemoveAsync(id);
-                return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
-        [HttpPut("softdelete/{id}")]
-        public async Task<IActionResult> SoftDeleteItem(string id)
-        {
-            try
-            {
                 await _itemService.SoftDelete(id);
                 return Ok(APIResponse<string>.SuccessResponse(data: null, "Delete Successfully."));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
             }
         }
+
+
+        //[HttpPut("softdelete/{id}")]
+        //public async Task<IActionResult> SoftDeleteItem(string id)
+        //{
+        //    await _itemService.SoftDelete(id);
+        //    return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
+        //}
 
 
         [HttpGet("paginated")]

@@ -22,6 +22,7 @@ namespace JewelleryShop.DataAccess.Repository
         {
             try
             {
+                item.Status = "Deleted";
                 _context.Items.Update(item);
             }
             catch (Exception ex)
