@@ -76,6 +76,7 @@ namespace JewelleryShop.Business.Service
             if (isDuplicate != null) { throw new Exception("Duplicate Customer ID!"); }
             var customerEntity = _mapper.Map<Customer>(customerData);
             customerEntity.Id = customerID;
+            customerEntity.CreatedDate = DateTime.Now;
             await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
             await _unitOfWork.SaveChangeAsync();
 

@@ -63,6 +63,26 @@ public class InvoiceService : IInvoiceService
         return res;
     }
 
+    public async Task<InvoiceCWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items)
+    {
+        var invoice = _mapper.Map<Invoice>(invoiceDTO);
+        var appNameShort = _configuration.GetValue<string>("Settings:AppNameShort");
+
+        var invoiceNoExist = await _unitOfWork.InvoiceRepository.GetInvoiceByInvoiceNumber(invoice.InvoiceNumber);
+        if (invoiceNoExist != null) throw new Exception("Duplicate Invoice Number.");
+
+        List<Invoice> _customerInvoiceNo = await _unitOfWork.InvoiceRepository.GetAllCustomerInvoice(invoice.CustomerId);
+        int customerInvoiceNo = _customerInvoiceNo.Count;
+        Interlocked.Add(ref customerInvoiceNo, 1); // 4 safety
+
+        invoice.Id = Guid.NewGuid().ToString();
+        invoice.InvoiceNumber = invoice.InvoiceNumber.IsNullOrEmpty() ? $"{appNameShort}-{invoice.CustomerId}-{DateTime.Now.ToString("ddMMyyHH")}-{customerInvoiceNo}" : invoice.InvoiceNumber;
+        var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, items);
+        await _unitOfWork.SaveChangeAsync();
+
+        return res;
+    }
+
     public async Task<List<ItemInvoiceCommonDTO>> GetInvoiceItems(string invoiceID)
     {
         var res = await _unitOfWork.InvoiceRepository.GetInvoiceItems(invoiceID);

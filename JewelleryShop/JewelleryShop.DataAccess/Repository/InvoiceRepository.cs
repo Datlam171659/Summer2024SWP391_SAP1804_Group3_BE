@@ -2,6 +2,7 @@
 using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using JewelleryShop.DataAccess.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -84,6 +85,41 @@ namespace JewelleryShop.DataAccess.Repository
             };
             return invoiceWithItems;
         }
+        //public async Task<InvoiceCWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(Invoice invoice, IEnumerable<ItemCreateDTO> items)
+        //{
+        //    var itemAdded = new List<InvoiceInputItemDTO>();
+        //    int invoiceQuantity = 0;
+
+        //    foreach (var _item in items)
+        //    {
+        //        Item addItem = new Item();
+        //        _mapper.Map(_item, addItem);
+        //        await _itemRepository.AddAsync(addItem);
+        //        var itemInvoice = new ItemInvoice
+        //        {
+        //            InvoiceId = invoice.Id,
+        //            ItemId = addItem.ItemId,
+        //            //WarrantyId = null,
+        //            //ReturnPolicyId = null,
+        //            Price = addItem.Price,
+        //            Quantity = addItem.Quantity,
+        //            Total = addItem.Price * addItem.Quantity,
+        //        };
+
+        //        await _dbContext.ItemInvoices.AddAsync(itemInvoice);
+        //        itemAdded.Add(addItem);
+        //        Interlocked.Add(ref invoiceQuantity, 1); // 4 safety
+        //    }
+
+        //    invoice.Quantity = invoiceQuantity;
+        //    await _dbContext.Invoices.AddAsync(invoice);
+        //    InvoiceCWIReturnDTO invoiceWithItems = new InvoiceCWIReturnDTO
+        //    {
+        //        invoice = _mapper.Map<InvoiceCommonDTO>(invoice),
+        //        items = itemAdded,
+        //    };
+        //    return invoiceWithItems;
+        //}
 
         public async Task<List<Invoice>> GetAllCustomerInvoice(string customerID)
         {

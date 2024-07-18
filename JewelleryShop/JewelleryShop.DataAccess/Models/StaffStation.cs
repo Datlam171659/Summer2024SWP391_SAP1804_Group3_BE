@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JewelleryShop.DataAccess.Models
 {
@@ -10,6 +11,7 @@ namespace JewelleryShop.DataAccess.Models
             staff = new HashSet<staff>();
         }
 
+        [Required]
         public string StationId { get; set; } = null!;
         public string StaffId { get; set; } = null!;
         public string? StaionName { get; set; }
