@@ -21,6 +21,7 @@ namespace JewelleryShop.DataAccess.Models
         public string? Email { get; set; }
         public string? Status { get; set; }
         public string? PromotionId { get; set; }
+        public DateTime? createdDate { get; set; }
 
         public virtual CustomerPromotion? Promotion { get; set; }
         public virtual ICollection<CustomerPromotion> CustomerPromotions { get; set; }
