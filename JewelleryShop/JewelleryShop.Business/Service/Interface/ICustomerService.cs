@@ -16,5 +16,6 @@ namespace JewelleryShop.Business.Service.Interface
         public Task<CustomerCommonDTO> GetByPhoneNumberAsync(string phoneNumber);
         public Task<CustomerCommonDTO> CreateCustomerAsync(CustomerInputDTO customerData);
         public Task<CustomerInputDTO> UpdateCustomerAsync(string id, CustomerInputDTO newCustomerData);
+        public Task<List<KeyValuePair<string, int>>> GetMonthlyCustomer();
     }
 }

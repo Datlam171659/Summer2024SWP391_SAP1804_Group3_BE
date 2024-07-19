@@ -111,6 +111,21 @@ namespace JewelleryShop.Business.Service
 
             return _mapper.Map<CustomerInputDTO>(existingCustomer);
         }
+
+        public async Task<List<KeyValuePair<string, int>>> GetMonthlyCustomer()
+        {
+            var customers = await _unitOfWork.CustomerRepository.GetAllAsync();
+            var validCustomers = customers.Where(i => i.CreatedDate.HasValue);
+            var monthlyCustomer = validCustomers
+                .GroupBy(i => i.CreatedDate.Value.ToString("yyyy-MM"))
+                .OrderBy(g => g.Key)
+                .Select(g => new KeyValuePair<string, int>(
+                    g.Key,
+                    g.Count()))
+                .ToList();
+
+            return monthlyCustomer;
+        }
     }
 }
 
