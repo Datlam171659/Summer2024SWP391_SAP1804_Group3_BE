@@ -7,18 +7,21 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 
 public class InvoiceService : IInvoiceService
 {
     private readonly IConfiguration _configuration;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IItemService _itemService;
 
-    public InvoiceService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+    public InvoiceService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IItemService itemService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _configuration = configuration;
+        _itemService = itemService;
     }
 
     public async Task<List<InvoiceCommonDTO>> GetAllInvoices()
@@ -63,7 +66,7 @@ public class InvoiceService : IInvoiceService
         return res;
     }
 
-    public async Task<InvoiceCWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items)
+    public async Task<InvoiceBBWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceBuyBackInputItemDTO> items)
     {
         var invoice = _mapper.Map<Invoice>(invoiceDTO);
         var appNameShort = _configuration.GetValue<string>("Settings:AppNameShort");
@@ -77,7 +80,8 @@ public class InvoiceService : IInvoiceService
 
         invoice.Id = Guid.NewGuid().ToString();
         invoice.InvoiceNumber = invoice.InvoiceNumber.IsNullOrEmpty() ? $"{appNameShort}-{invoice.CustomerId}-{DateTime.Now.ToString("ddMMyyHH")}-{customerInvoiceNo}" : invoice.InvoiceNumber;
-        var res = await _unitOfWork.InvoiceRepository.CreateInvoiceWithItemsAsync(invoice, items);
+        
+        var res = await _unitOfWork.InvoiceRepository.CreateBuyBackInvoiceWithItemsAsync(invoice, items);
         await _unitOfWork.SaveChangeAsync();
 
         return res;

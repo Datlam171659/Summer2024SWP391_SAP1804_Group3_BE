@@ -1,6 +1,7 @@
 ﻿using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace JewelleryShop.Business.Service.Interface
         Task<InvoiceCommonDTO> GetInvoiceById(string id);
         Task<InvoiceCommonDTO> AddInvoice(InvoiceInputDTO invoiceDTO);
         Task<InvoiceCWIReturnDTO> CreateInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceInputItemDTO> items);
+        Task<InvoiceBBWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(InvoiceInputNewDTO invoiceDTO, IEnumerable<InvoiceBuyBackInputItemDTO> items);
         Task<List<ItemInvoiceCommonDTO>> GetInvoiceItems(string invoiceID);
         Task<List<KeyValuePair<string, decimal>>> GetMonthlyRevenue();
         Task<List<InvoiceCommonDTO>> GetAllCustomerInvoice(string customerID);

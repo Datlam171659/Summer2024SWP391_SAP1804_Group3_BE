@@ -80,8 +80,8 @@ namespace JewelleryShop.API.Controllers
             }
         } 
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register(StaffRegisterDTO employee)
+        [HttpPost("AddEmployee")]
+        public async Task<IActionResult> AddEmployee(StaffRegisterDTO employee)
         {
             try
             {
@@ -89,14 +89,14 @@ namespace JewelleryShop.API.Controllers
 
                 return Ok(
                     APIResponse<StaffCommonDTO>
-                    .SuccessResponse(emp, "Employee registered successully.")
+                    .SuccessResponse(emp, "Employee Added successully.")
                 );
             }
             catch (Exception ex)
             {
                 return StatusCode(500, 
                     APIResponse<object>.ErrorResponse(
-                        new List<string> { ex.Message }, "An error occurred while registering employee.")
+                        new List<string> { ex.Message }, "An error occurred while adding employee employee.")
                     );
             }
         }

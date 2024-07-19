@@ -59,6 +59,28 @@ namespace JewelleryShop.API.Controllers
 
         }
 
+        [HttpPost("CreateBuyBackInvoiceWithItems")]
+        public async Task<IActionResult> CreateBuyBackInvoiceWithItemsAsync(InvoiceBuyBackWithItemsDTO data)
+        {
+            try
+            {
+                var res = await _invoiceService.CreateBuyBackInvoiceWithItemsAsync(data.invoice, data.items);
+                return Ok(
+                    APIResponse<InvoiceBBWIReturnDTO>.SuccessResponse(
+                        data: res,
+                        message: "Successfully created buyback invoice."
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+
+        }
+
         [HttpGet("InvoiceItems/{invoiceID}")]
         public async Task<IActionResult> GetInvoiceItems(string invoiceID)
         {
