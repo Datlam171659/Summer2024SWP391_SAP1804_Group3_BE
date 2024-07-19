@@ -8,6 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using JewelleryShop.API.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using System;
 
 namespace JewelleryShop
 {
@@ -25,6 +31,39 @@ namespace JewelleryShop
                 //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
+            var secretKey = builder.Configuration["Jwt:SecretKey"];
+            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+                        ClockSkew = TimeSpan.Zero
+                    };
+
+                    opt.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = context =>
+                        {
+                            context.HandleResponse();
+
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            context.Response.ContentType = "application/json";
+                            var response = new APIResponse<string>
+                            {
+                                Message = "Unauthorized",
+                                Errors = { "Authentication token is missing or invalid." }
+                            };
+                            var jsonResponse = JsonSerializer.Serialize(response);
+                            return context.Response.WriteAsync(jsonResponse);
+                        }
+                    };
+                });
+
             var app = builder.Build();
             app.AddWebApplicationMiddleware();
             // Configure the HTTP request pipeline.
@@ -37,9 +76,10 @@ namespace JewelleryShop
             app.UseCors();
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseMiddleware<AuthorizationMiddleware>();
+            app.UseMiddleware<AuthorizationMiddleware>();
 
             app.MapControllers();
 
