@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JewelleryShop.DataAccess.Models
 {
@@ -10,7 +11,10 @@ namespace JewelleryShop.DataAccess.Models
             ItemInvoices = new HashSet<ItemInvoice>();
         }
 
+        [Key]
         public string WarrantyId { get; set; } = null!;
+
+        [Required]
         public string CustomerId { get; set; } = null!;
         public DateTime? ExpiryDate { get; set; }
         public DateTime? CreatedDate { get; set; }

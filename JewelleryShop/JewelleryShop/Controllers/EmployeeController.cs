@@ -15,6 +15,7 @@ namespace JewelleryShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(Roles = AccountRolesData.Admin)]
     public class EmployeeController : ControllerBase
     {
         private readonly IStaffService _staffService;
@@ -45,6 +46,7 @@ namespace JewelleryShop.API.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(StaffLoginDTO employee)
         {
             try

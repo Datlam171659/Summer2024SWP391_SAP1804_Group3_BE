@@ -16,5 +16,6 @@ namespace JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? Status { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

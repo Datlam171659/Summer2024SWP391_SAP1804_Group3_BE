@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JewelleryShop.DataAccess.Models
 {
@@ -10,6 +11,7 @@ namespace JewelleryShop.DataAccess.Models
             Customers = new HashSet<Customer>();
         }
 
+        [Required]
         public string Id { get; set; } = null!;
         public string? Code { get; set; }
         public decimal? DiscountPct { get; set; }

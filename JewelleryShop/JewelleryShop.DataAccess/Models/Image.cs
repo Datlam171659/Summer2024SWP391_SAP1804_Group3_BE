@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JewelleryShop.DataAccess.Models
 {
@@ -10,6 +11,7 @@ namespace JewelleryShop.DataAccess.Models
             Items = new HashSet<Item>();
         }
 
+        [Key]
         public string ItemImagesId { get; set; } = null!;
         public string ImageSource { get; set; } = null!;
 

@@ -76,6 +76,7 @@ namespace JewelleryShop.Business.Service
             if (isDuplicate != null) { throw new Exception("Duplicate Customer ID!"); }
             var customerEntity = _mapper.Map<Customer>(customerData);
             customerEntity.Id = customerID;
+            customerEntity.CreatedDate = DateTime.Now;
             await _unitOfWork.CustomerRepository.AddAsync(customerEntity);
             await _unitOfWork.SaveChangeAsync();
 
@@ -114,9 +115,9 @@ namespace JewelleryShop.Business.Service
         public async Task<List<KeyValuePair<string, int>>> GetMonthlyCustomer()
         {
             var customers = await _unitOfWork.CustomerRepository.GetAllAsync();
-            var validCustomers = customers.Where(i => i.createdDate.HasValue);
+            var validCustomers = customers.Where(i => i.CreatedDate.HasValue);
             var monthlyCustomer = validCustomers
-                .GroupBy(i => i.createdDate.Value.ToString("yyyy-MM"))
+                .GroupBy(i => i.CreatedDate.Value.ToString("yyyy-MM"))
                 .OrderBy(g => g.Key)
                 .Select(g => new KeyValuePair<string, int>(
                     g.Key,
