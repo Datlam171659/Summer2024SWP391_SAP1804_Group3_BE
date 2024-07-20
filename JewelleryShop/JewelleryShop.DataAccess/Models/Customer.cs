@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JewelleryShop.DataAccess.Models
 {
@@ -13,6 +14,7 @@ namespace JewelleryShop.DataAccess.Models
             Warranties = new HashSet<Warranty>();
         }
 
+        [Key]
         public string Id { get; set; } = null!;
         public string? CustomerName { get; set; }
         public string? Address { get; set; }
@@ -21,6 +23,7 @@ namespace JewelleryShop.DataAccess.Models
         public string? Email { get; set; }
         public string? Status { get; set; }
         public string? PromotionId { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         public virtual CustomerPromotion? Promotion { get; set; }
         public virtual ICollection<CustomerPromotion> CustomerPromotions { get; set; }

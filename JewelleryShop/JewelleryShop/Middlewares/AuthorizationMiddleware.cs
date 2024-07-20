@@ -1,11 +1,15 @@
 ﻿using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models;
+using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JewelleryShop.API.Middlewares
@@ -14,36 +18,44 @@ namespace JewelleryShop.API.Middlewares
     public class AuthorizationMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IStaffService _staffService;
 
-        public AuthorizationMiddleware(RequestDelegate next, IStaffService staffService)
+        public AuthorizationMiddleware(RequestDelegate next)
         {
             _next = next;
-            _staffService = staffService;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
         {
-            if (!IsAuthorized(context))
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Unauthorized");
-                return;
-            }
-
             try
             {
-                var user = await GetUser(context);
-                if (user == null) throw new Exception("User does not exist.");
-                if (IsUserActive(user)) throw new Exception("User Account Is Disabled.");
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var staffService = scope.ServiceProvider.GetRequiredService<IStaffService>();
 
+                    var isAuthenticated = IsAuthorized(context);
+
+                    if (isAuthenticated)
+                    {
+                        var user = await GetUser(context, staffService);
+                        if (user == null) throw new Exception("User does not exist.");
+                        if (!IsUserActive(user)) throw new Exception("User account is disabled. Please contact the administrator for further support.");
+                    }
+
+                }
                 await _next(context);
             }
             catch (Exception ex)
             {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync("Unauthorized: " + ex.Message);
+                await HandleExceptionAsync(context, ex);
             }
+        }
+
+        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            var result = JsonSerializer.Serialize(new APIResponse<string>{ Message = "Unauthorized", Errors = new List<string> { exception.Message } });
+            await context.Response.WriteAsync(result);
         }
 
         private bool IsAuthorized(HttpContext context)
@@ -57,7 +69,7 @@ namespace JewelleryShop.API.Middlewares
             return context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         }
 
-        private async Task<StaffCommonDTO?> GetUser(HttpContext context)
+        private async Task<StaffCommonDTO?> GetUser(HttpContext context, IStaffService staffService)
         {
             if (IsAuthorized(context))
             {
@@ -65,11 +77,15 @@ namespace JewelleryShop.API.Middlewares
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+                if (jwtToken == null)
+                {
+                    throw new ArgumentException("Invalid JWT token");
+                }
 
-                var ID = jwtToken?.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value;
-                if (ID != null) return null;
+                var ID = jwtToken?.Claims.FirstOrDefault(c => c.Type == "nameid")?.Value;
+                if (ID == null) return null;
 
-                var user = await _staffService.GetStaffById(ID);
+                var user = await staffService.GetStaffById(ID);
                 return user;
             }
 
@@ -83,7 +99,7 @@ namespace JewelleryShop.API.Middlewares
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class AuthorizationMiddlewareExtensions
     {
-        public static IApplicationBuilder UseMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseAuthorizationMiddleware(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<AuthorizationMiddleware>();
         }

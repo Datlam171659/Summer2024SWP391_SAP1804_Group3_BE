@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JewelleryShop.DataAccess.Models
 {
     public partial class ItemInvoice
     {
+        [Required]
         public string ItemId { get; set; } = null!;
+
+        [Required]
         public string InvoiceId { get; set; } = null!;
         public string ReturnPolicyId { get; set; } = null!;
         public string WarrantyId { get; set; } = null!;

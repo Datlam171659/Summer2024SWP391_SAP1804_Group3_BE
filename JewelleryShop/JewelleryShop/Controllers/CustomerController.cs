@@ -146,5 +146,12 @@ namespace JewelleryShop.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpGet("MonthlyCustomer")]
+        public async Task<ActionResult<List<KeyValuePair<string, int>>>> GetMonthlyCustomer()
+        {
+            var monthlyCustomer = await _customerService.GetMonthlyCustomer();
+            return Ok(monthlyCustomer);
+        }
     }
 }

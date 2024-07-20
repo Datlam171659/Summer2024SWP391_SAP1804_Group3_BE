@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,10 +18,11 @@ namespace JewelleryShop.DataAccess.Utils
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 
+            var roleName = RoleMapper.GetRoleName(employee.RoleId);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, employee.StaffId),
-                new Claim(ClaimTypes.Role, employee.RoleId.ToString() ?? string.Empty),
+                new Claim(ClaimTypes.Role, roleName ?? string.Empty),
                 new Claim(ClaimTypes.Name, employee.FullName ?? string.Empty),
                 new Claim(ClaimTypes.Email, employee.Email ?? string.Empty),
                 new Claim("UserName", employee.UserName ?? string.Empty),

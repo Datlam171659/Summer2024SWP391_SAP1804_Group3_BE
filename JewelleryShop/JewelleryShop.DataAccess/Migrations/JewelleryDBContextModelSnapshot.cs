@@ -229,34 +229,38 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("BuyerAddress")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("CompanyName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("CustomerID");
 
-                    b.Property<string>("ItemId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("ItemID");
+                    b.Property<string>("InvoiceNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool?>("IsBuyBack")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PaymentType")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("StaffId")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -272,6 +276,10 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("StaffId");
+
+                    b.HasIndex(new[] { "InvoiceNumber" }, "IX_Invoice")
+                        .IsUnique()
+                        .HasFilter("[InvoiceNumber] IS NOT NULL");
 
                     b.ToTable("Invoice", (string)null);
                 });
@@ -386,7 +394,10 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("InvoiceID");
 
-                    b.Property<int?>("Price")
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("ReturnPolicyId")
@@ -394,6 +405,9 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ReturnPolicyID");
+
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("WarrantyId")
                         .IsRequired()
@@ -484,15 +498,18 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("ReturnDuration")
-                        .HasColumnType("int");
 
                     b.Property<string>("ReturnPolicyType")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ReturnWindow")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -649,6 +666,9 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("WarrantyID");
 
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("CustomerId")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -656,7 +676,7 @@ namespace JewelleryShop.DataAccess.Migrations
                         .HasColumnName("CustomerID");
 
                     b.Property<DateTime?>("ExpiryDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("WarrantyId");
 
@@ -718,11 +738,15 @@ namespace JewelleryShop.DataAccess.Migrations
                     b.HasOne("JewelleryShop.DataAccess.Models.Customer", "Customer")
                         .WithMany("Invoices")
                         .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK__Invoice__Custome__66603565");
 
                     b.HasOne("JewelleryShop.DataAccess.Models.staff", "Staff")
                         .WithMany("Invoices")
                         .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("FK__Invoice__StaffId__656C112C");
 
                     b.Navigation("Customer");
