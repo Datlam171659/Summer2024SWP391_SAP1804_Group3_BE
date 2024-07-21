@@ -3,10 +3,12 @@ using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.GemstoneViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GemstoneController : ControllerBase
@@ -17,6 +19,7 @@ namespace JewelleryShop.API.Controllers
             _gemstoneService = gemstoneService;
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllGemstone()
         {
@@ -24,6 +27,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(gemstones);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGemstoneById(string id)
         {
@@ -37,6 +41,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(gemstones);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPost]
         public async Task<IActionResult> AddGemstone(GemstoneInputDTO gemstones)
         {
@@ -44,6 +49,7 @@ namespace JewelleryShop.API.Controllers
             return CreatedAtAction(nameof(GetGemstoneById), new { id = newGem.Id }, newGem);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPut("Gemstone/{id}")]
         public async Task<IActionResult> UpdateGemstoneAsync(string id, GemstoneInputDTO gemstones)
         {
@@ -60,6 +66,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpDelete("Gemstone/{id}")]
         public async Task<IActionResult> DeleteGemstoneAsync(string id)
         {

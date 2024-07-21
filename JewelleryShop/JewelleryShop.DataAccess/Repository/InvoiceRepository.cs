@@ -93,13 +93,22 @@ namespace JewelleryShop.DataAccess.Repository
 
             foreach (var _item in items)
             {
-                Item addItem = new Item();
                 var buybackItem = await _itemRepository.GetByIdAsync(_item.itemID);
+
+                var itemID = $"BB-{buybackItem.ItemId}";
+                var itemName = $"BB-{buybackItem.ItemName}";
+                buybackItem.ItemName = itemName;
+                buybackItem.ItemId = itemID;
+                buybackItem.SerialNumber = itemID;
+                buybackItem.Price = (int)_item.Price;
+                buybackItem.Quantity = _item.itemQuantity;
+                buybackItem.Status = "Buy Back";
+                buybackItem.IsBuyBack = true;
                 await _itemRepository.AddAsync(buybackItem);
                 var itemInvoice = new ItemInvoice
                 {
                     InvoiceId = invoice.Id,
-                    ItemId = addItem.ItemId,
+                    ItemId = buybackItem.ItemId,
                     //WarrantyId = null,
                     //ReturnPolicyId = null,
                     Price = _item.Price,
@@ -108,7 +117,7 @@ namespace JewelleryShop.DataAccess.Repository
                 };
 
                 await _dbContext.ItemInvoices.AddAsync(itemInvoice);
-                var _itemAdded = _mapper.Map<ItemCreateDTO>(addItem);
+                var _itemAdded = _mapper.Map<ItemCreateDTO>(buybackItem);
                 itemAdded.Add(_itemAdded);
                 Interlocked.Add(ref invoiceQuantity, 1); // 4 safety
             }

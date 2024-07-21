@@ -60,6 +60,18 @@ namespace JewelleryShop
                             };
                             var jsonResponse = JsonSerializer.Serialize(response);
                             return context.Response.WriteAsync(jsonResponse);
+                        },
+                        OnForbidden = context =>
+                        {
+                            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                            context.Response.ContentType = "application/json";
+                            var response = new APIResponse<string>
+                            {
+                                Message = "Forbidden",
+                                Errors = { "You do not have permission to access this resource." }
+                            };
+                            var jsonResponse = JsonSerializer.Serialize(response);
+                            return context.Response.WriteAsync(jsonResponse);
                         }
                     };
                 });

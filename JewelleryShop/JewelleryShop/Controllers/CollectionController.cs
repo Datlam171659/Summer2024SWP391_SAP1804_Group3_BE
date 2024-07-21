@@ -1,10 +1,12 @@
 ﻿using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CollectionController : ControllerBase
@@ -17,6 +19,7 @@ namespace JewelleryShop.API.Controllers
             _collectionService = collectionService;
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllCollection()
         {
@@ -24,6 +27,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(collections);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCollectionById(string id)
         {
@@ -37,6 +41,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(collection);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost]
         public async Task<IActionResult> AddCollection(CollectionInputDTO collection)
         {
@@ -44,6 +49,7 @@ namespace JewelleryShop.API.Controllers
             return CreatedAtAction(nameof(GetCollectionById), new { id = newCollection.Id }, newCollection);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPut("Collection/{id}")]
         public async Task<IActionResult> UpdateCollectionAsync(string id, CollectionInputDTO collectionDTO)
         {
@@ -60,6 +66,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpDelete("Collection/{id}")]
         public async Task<IActionResult> DeleteCollectionAsync(string id)
         {

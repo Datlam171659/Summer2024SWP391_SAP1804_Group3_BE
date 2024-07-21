@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StaffStationController : ControllerBase
@@ -26,6 +26,7 @@ namespace JewelleryShop.API.Controllers
             _staffShiftService = staffShiftService;
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet]
         public async Task<IActionResult> GetStaffShifts()
         {
@@ -33,6 +34,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStaffShiftById(string id)
         {
@@ -44,6 +46,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost]
         public async Task<IActionResult> AddStaffShift(StaffShiftInputDTO staffshift)
         {
@@ -51,6 +54,7 @@ namespace JewelleryShop.API.Controllers
             return CreatedAtAction("GetStaffShiftById", new { id = result.StationId }, result);
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPut("Shift/{id}")]
         public async Task<IActionResult> UpdateShift(string id, StaffShiftInputDTO shift)
         {
@@ -67,6 +71,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpDelete("Shift/{id}")]
         public async Task<IActionResult> DeleteShift(string id)
         {

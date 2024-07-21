@@ -3,10 +3,12 @@ using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize(Roles = "Admin, Manager, Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class ExternalAPIController : ControllerBase
