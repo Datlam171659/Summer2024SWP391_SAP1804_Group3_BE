@@ -90,13 +90,13 @@ namespace JewelleryShop.DataAccess.Repository
         {
             var itemAdded = new List<ItemCreateDTO>();
             int invoiceQuantity = 0;
-
+            string UID = $"BB{Guid.NewGuid().ToString("n").Substring(0, 8)}";
             foreach (var _item in items)
             {
                 var buybackItem = await _itemRepository.GetByIdAsync(_item.itemID);
 
-                var itemID = $"BB-{buybackItem.ItemId}";
-                var itemName = $"BB-{buybackItem.ItemName}";
+                var itemID = $"{UID}-{buybackItem.ItemId}";
+                var itemName = $"{UID}-{buybackItem.ItemName}";
                 buybackItem.ItemName = itemName;
                 buybackItem.ItemId = itemID;
                 buybackItem.SerialNumber = itemID;
@@ -110,7 +110,7 @@ namespace JewelleryShop.DataAccess.Repository
                     InvoiceId = invoice.Id,
                     ItemId = buybackItem.ItemId,
                     //WarrantyId = null,
-                    //ReturnPolicyId = null,
+                    ReturnPolicyId = "RPBuyBack", // I'm getting flamed for this
                     Price = _item.Price,
                     Quantity = _item.itemQuantity,
                     Total = _item.Price * _item.itemQuantity,

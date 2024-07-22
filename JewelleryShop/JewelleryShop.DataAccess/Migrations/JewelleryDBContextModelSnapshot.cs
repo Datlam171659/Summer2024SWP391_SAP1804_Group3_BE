@@ -353,7 +353,7 @@ namespace JewelleryShop.DataAccess.Migrations
 
                     b.HasIndex("GemStoneId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ItemImage", b =>
@@ -485,7 +485,7 @@ namespace JewelleryShop.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MaterialPrices");
+                    b.ToTable("MaterialPrices", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.ReturnPolicy", b =>
@@ -557,7 +557,7 @@ namespace JewelleryShop.DataAccess.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("JewelleryShop.DataAccess.Models.staff", b =>
