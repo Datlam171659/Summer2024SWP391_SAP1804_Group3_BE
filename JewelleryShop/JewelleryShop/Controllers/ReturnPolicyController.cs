@@ -5,10 +5,12 @@ using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ReturnPolicyViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReturnPolicyController : ControllerBase
@@ -19,6 +21,7 @@ namespace JewelleryShop.API.Controllers
             _returnPolicyService = returnPolicyService;
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllReturnPolicy()
         {
@@ -38,6 +41,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("{returnPolicyID}")]
         public async Task<ActionResult<RewardsProgramCommonDTO>> GetReturnPolicy(string returnPolicyID)
         {
@@ -57,6 +61,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateReturnPolicy(ReturnPolicyCreateDTO rewardsProgramInputDTO)
         {
@@ -76,6 +81,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{returnPolicyID}")]
         public async Task<IActionResult> UpdateReturnPolicy(string returnPolicyID, ReturnPolicyUpdateDTO returnPolicyUpdateDTO)
         {
@@ -95,6 +101,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{returnPolicyID}")]
         public async Task<IActionResult> DeleteReturnPolicy(string returnPolicyID)
         {

@@ -9,15 +9,15 @@ using AutoMapper;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using Newtonsoft.Json.Linq;
 
-using AutoMapper;
 using JewelleryShop.DataAccess.Models.ViewModel.CustomerViewModel;
-using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess;
 using JewelleryShop.Business.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize(Roles = "Admin, Manager, Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase

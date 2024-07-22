@@ -5,11 +5,13 @@ using JewelleryShop.DataAccess.Models;
 using JewelleryShop.DataAccess.Models.ViewModel.CollectionViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ItemImageController: ControllerBase 
@@ -25,6 +27,7 @@ namespace JewelleryShop.API.Controllers
             _configuration = configuration;
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllItemImages()
         {
@@ -32,6 +35,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(imgs);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItemImagesById(string id)
         {
@@ -54,6 +58,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("ItemImages/{itemID}")]
         public async Task<IActionResult> GetItemImagesByItemID(string itemID, int? count = null)
         {
@@ -79,6 +84,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPost("upload")]
         public async Task<ActionResult> UploadImage(IFormFile file, [FromForm] string? itemId)
         {
@@ -126,6 +132,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPost]
         public async Task<IActionResult> AddItemImage(ItemImageInputDTO img_items)
         {
@@ -145,6 +152,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPut("ItemImages/{id}")]
         public async Task<IActionResult> UpdateItemImagesAsync(string id, ItemImageInputDTO imgDTO)
         {
@@ -164,6 +172,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpDelete("ItemImages/{id}")]
         public async Task<IActionResult> DeleteItemImagesAsync(string id)
         {

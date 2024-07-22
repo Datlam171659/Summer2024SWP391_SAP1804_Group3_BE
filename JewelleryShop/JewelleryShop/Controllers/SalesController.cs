@@ -14,8 +14,11 @@ using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using Microsoft.IdentityModel.Tokens;
 using JewelleryShop.DataAccess.Models.ViewModel.InvoiceItemsViewModel;
+using Microsoft.AspNetCore.Authorization;
 namespace JewelleryShop.API.Controllers
 {
+
+    [Authorize(Roles = "Admin, Manager, Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class SalesController : ControllerBase 
@@ -36,6 +39,7 @@ namespace JewelleryShop.API.Controllers
             var invoices = await _invoiceService.GetAllInvoices();
             return Ok(invoices);
         }
+
         
         [HttpPost("CreateInvoiceWithItems")]
         public async Task<IActionResult> CreateInvoiceWithItemsAsync(InvoiceCreateWithItemsDTO data)
@@ -59,6 +63,30 @@ namespace JewelleryShop.API.Controllers
 
         }
 
+        
+        [HttpPost("CreateBuyBackInvoiceWithItems")]
+        public async Task<IActionResult> CreateBuyBackInvoiceWithItemsAsync(InvoiceBuyBackWithItemsDTO data)
+        {
+            try
+            {
+                var res = await _invoiceService.CreateBuyBackInvoiceWithItemsAsync(data.invoice, data.items);
+                return Ok(
+                    APIResponse<InvoiceBBWIReturnDTO>.SuccessResponse(
+                        data: res,
+                        message: "Successfully created buyback invoice."
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                var response = APIResponse<string>
+                    .ErrorResponse(new List<string> { ex.Message });
+                return BadRequest(response);
+            }
+
+        }
+
+        
         [HttpGet("InvoiceItems/{invoiceID}")]
         public async Task<IActionResult> GetInvoiceItems(string invoiceID)
         {
@@ -83,6 +111,7 @@ namespace JewelleryShop.API.Controllers
                 return BadRequest(response);
             }
         }
+
         
         [HttpGet("CustomerInvoice/{customerID}")]
         public async Task<IActionResult> GetAllCustomerInvoice(string customerID)
@@ -109,6 +138,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        
         [HttpGet("Invoice/ByNumber/{invoiceNumber}")]
         public async Task<IActionResult> GetInvoiceByInvoiceNumber(string invoiceNumber)
         {
@@ -134,6 +164,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        
         [HttpGet("Invoice/{id}")]
         public async Task<IActionResult> GetInvoiceById(string id)
         {
@@ -145,7 +176,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(invoiceDTO);
         }
 
-
+        
         [HttpGet("Warranty")]
         public async Task<ActionResult<IEnumerable<WarrantyCommonDTO>>> GetWarranty()
         {
@@ -153,6 +184,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(warranties);
         }
 
+        
         [HttpGet("Warranty/{id}")]
         public async Task<ActionResult<IEnumerable<WarrantyCommonDTO>>> GetWarrantyById(string id)
         {
@@ -171,13 +203,15 @@ namespace JewelleryShop.API.Controllers
         //    return CreatedAtAction(nameof(GetInvoice), new { id = createdInvoiceDTO.Id }, createdInvoiceDTO);
         //}
 
+        
         [HttpPost("Warranties")]
-        public async Task<ActionResult<WarrantyCommonDTO>> PostWarranty([FromBody] WarrantyInputDTO warrantyDTO)
+        public async Task<ActionResult<WarrantyCommonDTO>> AddWarranty([FromBody] WarrantyInputDTO warrantyDTO)
         {
             var createdWarrantyDTO = await _warrantyService.AddWarranty(warrantyDTO);
             return CreatedAtAction(nameof(GetWarrantyById), new { id = createdWarrantyDTO.WarrantyId }, createdWarrantyDTO);
         }
 
+        
         [HttpGet("MonthlyRevenue")]
         public async Task<ActionResult<List<KeyValuePair<string, decimal>>>> GetMonthlyRevenue()
         {

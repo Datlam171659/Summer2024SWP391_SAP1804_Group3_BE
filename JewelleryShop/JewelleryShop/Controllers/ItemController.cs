@@ -6,6 +6,7 @@ using JewelleryShop.DataAccess.Models.dto;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemImageViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -13,6 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ItemController : ControllerBase
@@ -25,6 +27,7 @@ namespace JewelleryShop.API.Controllers
             _itemService = itemService; 
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet]
         public async Task<IActionResult> ListItems()
         {
@@ -32,6 +35,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(list);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("{id}")]
         public async Task<IActionResult> SearchItemByID(string id)
         {
@@ -45,6 +49,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(item);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("search")]
         public IActionResult SearchItemByName(string itemName)
         {
@@ -60,13 +65,14 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPost]
         public async Task<IActionResult> CreateItem(ItemCreateDTO item) {
             await _itemService.AddAsync(item);
             return Ok(APIResponse<string>.SuccessResponse(data:null, "Create successfully."));
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateItem(string id, ItemDTO item)
         {
@@ -74,6 +80,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(string id)
         {
@@ -89,7 +96,7 @@ namespace JewelleryShop.API.Controllers
                 return BadRequest(response);
             }
         }
-    
+
 
         //[HttpPut("softdelete/{id}")]
         //public async Task<IActionResult> SoftDeleteItem(string id)
@@ -98,6 +105,7 @@ namespace JewelleryShop.API.Controllers
         //    return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         //}
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("paginated")]
         public async Task<IActionResult> GetPaginatedItems([FromQuery] int pageIndex, [FromQuery] int pageSize)
         {
@@ -105,6 +113,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(paginatedItems);
         }
 
+        [Authorize("Admin, Manager, Staff")]
         [HttpPut("updateQuantity/{id}")]
         public async Task<IActionResult> UpdateQuantity(string id, int quantity)
         {
@@ -112,6 +121,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Update successfully."));
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("GetAllBuyBack")]
         public async Task<IActionResult> ListAllBuyBack()
         {

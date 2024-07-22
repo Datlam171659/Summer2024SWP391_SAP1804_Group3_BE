@@ -7,6 +7,7 @@ using JewelleryShop.DataAccess.Models.ViewModel.InvoiceViewModel;
 using JewelleryShop.DataAccess.Models.ViewModel.StaffViewModel;
 using JewelleryShop.DataAccess.Utils;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JewelleryShop.Business.Service
 {
@@ -90,6 +91,9 @@ namespace JewelleryShop.Business.Service
             {
                 throw new Exception("Employee not found.");
             }
+            employeeDTO.PasswordHash = employeeDTO.PasswordHash.IsNullOrEmpty() ? 
+                employee.PasswordHash :
+                StringUtils.HashPassword(employeeDTO.PasswordHash);
             employee = _mapper.Map<StaffRegisterDTO, staff>(employeeDTO, employee);
 
             await _unitOfWork.StaffRepository.UpdateAsync(id, employee);

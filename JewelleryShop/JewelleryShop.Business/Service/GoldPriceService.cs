@@ -22,15 +22,25 @@ namespace JewelleryShop.Business.Service
         public DateTime UpdatedAt { get; set; }
         public string UpdatedAtReadable { get; set; }
     }
+    public class GoldPrices
+    {
+        public string GoldPurity { get; set; }
+        public decimal BuyPrice { get; set; }
+        public decimal SellPrice { get; set; }
+    }
 
     public class GoldPriceService : IGoldPriceService
     {
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "https://api.gold-api.com/price/XAU";
+        private readonly IConfiguration _configuration;
+        private readonly IExchangeRateService _exchangeRateService;
 
-        public GoldPriceService(HttpClient httpClient)
+        public GoldPriceService(HttpClient httpClient, IConfiguration configuration, IExchangeRateService exchangeRateService)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
+            _exchangeRateService = exchangeRateService;
         }
 
         public async Task<decimal?> GetGoldPriceAsync()
@@ -40,6 +50,13 @@ namespace JewelleryShop.Business.Service
             var content = await response.Content.ReadAsStringAsync();
             var goldPriceResponse = JsonConvert.DeserializeObject<GoldPriceResponse>(content);
             return goldPriceResponse.Price;
+        }
+        public async Task<List<GoldPrices>> GetGoldPricesTodayAsync()
+        {
+            List<GoldPrices> res = new();
+            
+
+            return res;
         }
     }
 }

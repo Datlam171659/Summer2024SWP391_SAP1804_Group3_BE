@@ -38,7 +38,7 @@ namespace JewelleryShop.API.Middlewares
                     {
                         var user = await GetUser(context, staffService);
                         if (user == null) throw new Exception("User does not exist.");
-                        if (!IsUserActive(user)) throw new Exception("User account is disabled. Please contact the administrator for further support.");
+                        if (!IsUserActive(user)) throw new Exception("Account is disabled. Please contact the administrator for further support.");
                     }
 
                 }

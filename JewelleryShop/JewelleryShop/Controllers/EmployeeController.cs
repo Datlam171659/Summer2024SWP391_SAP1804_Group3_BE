@@ -13,9 +13,9 @@ using Newtonsoft.Json.Linq;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = AccountRolesData.Admin)]
     public class EmployeeController : ControllerBase
     {
         private readonly IStaffService _staffService;
@@ -27,13 +27,15 @@ namespace JewelleryShop.API.Controllers
             _unitOfWork = unitOfWork; 
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         [HttpGet("Staff")]
-        public async Task<ActionResult<IEnumerable<StaffCommonDTO>>>GetStaff()
+        public async Task<ActionResult<IEnumerable<StaffCommonDTO>>> GetStaff()
         {
             var staff = await _staffService.GetAllStaff();
             return Ok(staff);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("Staff/{id}")]
         public async Task<IActionResult> GetStaffByID(string id)
         {
@@ -45,8 +47,8 @@ namespace JewelleryShop.API.Controllers
             return Ok(staff);
         }
 
-        [HttpPost("Login")]
         [AllowAnonymous]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(StaffLoginDTO employee)
         {
             try
@@ -62,26 +64,27 @@ namespace JewelleryShop.API.Controllers
             {
                 return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
             }
-        } 
-        [HttpPost("HashPassword")]
-        public async Task<IActionResult> HashPassword(string password)
-        {
-            try
-            {
-                string hash = StringUtils.HashPassword(password);
-                return Ok(
-                        APIResponse<string>
-                        .SuccessResponse(hash, "Login successully.")
-                    );
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
-            }
-        } 
+        }
+        //[HttpPost("HashPassword")]
+        //public async Task<IActionResult> HashPassword(string password)
+        //{
+        //    try
+        //    {
+        //        string hash = StringUtils.HashPassword(password);
+        //        return Ok(
+        //                APIResponse<string>
+        //                .SuccessResponse(hash, "Login successully.")
+        //            );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, APIResponse<object>.ErrorResponse(new List<string> { ex.Message }, "An error occurred while logging in."));
+        //    }
+        //} 
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register(StaffRegisterDTO employee)
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPost("AddEmployee")]
+        public async Task<IActionResult> AddEmployee(StaffRegisterDTO employee)
         {
             try
             {
@@ -89,17 +92,19 @@ namespace JewelleryShop.API.Controllers
 
                 return Ok(
                     APIResponse<StaffCommonDTO>
-                    .SuccessResponse(emp, "Employee registered successully.")
+                    .SuccessResponse(emp, "Employee Added successully.")
                 );
             }
             catch (Exception ex)
             {
                 return StatusCode(500, 
                     APIResponse<object>.ErrorResponse(
-                        new List<string> { ex.Message }, "An error occurred while registering employee.")
+                        new List<string> { ex.Message }, "An error occurred while adding employee.")
                     );
             }
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("DisableAccount/{id}")]
         public async Task<IActionResult> DisableAccount(string id)
         {
@@ -108,6 +113,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(data: null, "Disable Successfully."));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("Staff/{id}")]        
         public async Task<IActionResult> UpdateStaff(string id, StaffRegisterDTO staff)
         {
@@ -122,6 +128,7 @@ namespace JewelleryShop.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("Staff/{id}")]
         public async Task<IActionResult> DeleteStaff(string id)
         {

@@ -3,10 +3,12 @@ using JewelleryShop.Business.Service;
 using JewelleryShop.Business.Service.Interface;
 using JewelleryShop.DataAccess.Models.ViewModel.Commons;
 using JewelleryShop.DataAccess.Models.ViewModel.RewardsProgramViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JewelleryShop.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RewardsProgramController : ControllerBase
@@ -17,6 +19,7 @@ namespace JewelleryShop.API.Controllers
             _rewardsProgramService = rewardsProgramService;
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet]
         public async Task<IActionResult> GetAllRewardsProgram()
         {
@@ -24,6 +27,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpGet("{customerId}")]
         public async Task<ActionResult<RewardsProgramCommonDTO>> GetRewardProgram(string customerId)
         {
@@ -33,6 +37,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(rewardProgram);
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPut("{customerId}")]
         public async Task<IActionResult> UpdateRewardProgram(string customerId, int points)
         {
@@ -40,6 +45,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(string.Empty, "Data updated successfully."));
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpDelete("{customerId}")]
         public async Task<IActionResult> DeleteRewardProgram(string customerId)
         {
@@ -47,6 +53,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(APIResponse<string>.SuccessResponse(string.Empty, "Data deleted successfully."));
         }
 
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPost]
         public async Task<ActionResult<RewardsProgramCommonDTO>> AddPoints(RewardsProgramInputDTO rewardsProgramInputDTO)
         {

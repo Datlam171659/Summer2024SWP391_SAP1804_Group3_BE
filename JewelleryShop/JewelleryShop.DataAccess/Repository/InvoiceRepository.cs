@@ -85,41 +85,53 @@ namespace JewelleryShop.DataAccess.Repository
             };
             return invoiceWithItems;
         }
-        //public async Task<InvoiceCWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(Invoice invoice, IEnumerable<ItemCreateDTO> items)
-        //{
-        //    var itemAdded = new List<InvoiceInputItemDTO>();
-        //    int invoiceQuantity = 0;
 
-        //    foreach (var _item in items)
-        //    {
-        //        Item addItem = new Item();
-        //        _mapper.Map(_item, addItem);
-        //        await _itemRepository.AddAsync(addItem);
-        //        var itemInvoice = new ItemInvoice
-        //        {
-        //            InvoiceId = invoice.Id,
-        //            ItemId = addItem.ItemId,
-        //            //WarrantyId = null,
-        //            //ReturnPolicyId = null,
-        //            Price = addItem.Price,
-        //            Quantity = addItem.Quantity,
-        //            Total = addItem.Price * addItem.Quantity,
-        //        };
+        public async Task<InvoiceBBWIReturnDTO> CreateBuyBackInvoiceWithItemsAsync(Invoice invoice, IEnumerable<InvoiceBuyBackInputItemDTO> items)
+        {
+            var itemAdded = new List<ItemCreateDTO>();
+            int invoiceQuantity = 0;
+            string UID = $"BB{Guid.NewGuid().ToString("n").Substring(0, 8)}";
+            foreach (var _item in items)
+            {
+                var buybackItem = await _itemRepository.GetByIdAsync(_item.itemID);
 
-        //        await _dbContext.ItemInvoices.AddAsync(itemInvoice);
-        //        itemAdded.Add(addItem);
-        //        Interlocked.Add(ref invoiceQuantity, 1); // 4 safety
-        //    }
+                var itemID = $"{UID}-{buybackItem.ItemId}";
+                var itemName = $"{UID}-{buybackItem.ItemName}";
+                buybackItem.ItemName = itemName;
+                buybackItem.ItemId = itemID;
+                buybackItem.SerialNumber = itemID;
+                buybackItem.Price = (int)_item.Price;
+                buybackItem.Quantity = _item.itemQuantity;
+                buybackItem.Status = "Buy Back";
+                buybackItem.IsBuyBack = true;
+                await _itemRepository.AddAsync(buybackItem);
+                var itemInvoice = new ItemInvoice
+                {
+                    InvoiceId = invoice.Id,
+                    ItemId = buybackItem.ItemId,
+                    //WarrantyId = null,
+                    ReturnPolicyId = "RPBuyBack", // I'm getting flamed for this
+                    Price = _item.Price,
+                    Quantity = _item.itemQuantity,
+                    Total = _item.Price * _item.itemQuantity,
+                };
 
-        //    invoice.Quantity = invoiceQuantity;
-        //    await _dbContext.Invoices.AddAsync(invoice);
-        //    InvoiceCWIReturnDTO invoiceWithItems = new InvoiceCWIReturnDTO
-        //    {
-        //        invoice = _mapper.Map<InvoiceCommonDTO>(invoice),
-        //        items = itemAdded,
-        //    };
-        //    return invoiceWithItems;
-        //}
+                await _dbContext.ItemInvoices.AddAsync(itemInvoice);
+                var _itemAdded = _mapper.Map<ItemCreateDTO>(buybackItem);
+                itemAdded.Add(_itemAdded);
+                Interlocked.Add(ref invoiceQuantity, 1); // 4 safety
+            }
+
+            invoice.Quantity = invoiceQuantity;
+            invoice.IsBuyBack = true;
+            await _dbContext.Invoices.AddAsync(invoice);
+            InvoiceBBWIReturnDTO invoiceWithItems = new InvoiceBBWIReturnDTO
+            {
+                invoice = _mapper.Map<InvoiceCommonDTO>(invoice),
+                items = itemAdded,
+            };
+            return invoiceWithItems;
+        }
 
         public async Task<List<Invoice>> GetAllCustomerInvoice(string customerID)
         {
