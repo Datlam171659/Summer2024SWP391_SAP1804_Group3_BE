@@ -54,12 +54,12 @@ namespace JewelleryShop.Business.Service
 
         public async Task<List<Item>> GetAllAsync()
         {
-            return await _unitOfWork.ItemRepository.GetAllAsync();
+            return await _unitOfWork.ItemRepository.GetAll();
         }
 
         public async Task<Item> GetByIdAsync(string id)
         {
-            return await _unitOfWork.ItemRepository.GetByIdAsync(id);
+            return await _unitOfWork.ItemRepository.GetById(id);
         }
 
         public async Task RemoveAsync(string id)

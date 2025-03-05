@@ -113,7 +113,7 @@ namespace JewelleryShop.API.Controllers
             return Ok(paginatedItems);
         }
 
-        [Authorize("Admin, Manager, Staff")]
+        [Authorize(Roles = "Admin, Manager, Staff")]
         [HttpPut("updateQuantity/{id}")]
         public async Task<IActionResult> UpdateQuantity(string id, int quantity)
         {

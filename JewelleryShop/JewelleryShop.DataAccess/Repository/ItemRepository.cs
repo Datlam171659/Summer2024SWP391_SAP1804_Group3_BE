@@ -33,7 +33,7 @@ namespace JewelleryShop.DataAccess.Repository
 
         public List<Item> GetByName(string itemName) 
         {
-            var items = _context.Items.AsQueryable();
+            var items = _context.Items.Include(i => i.ItemImages).AsQueryable();
             if (!string.IsNullOrEmpty(itemName))
             {
                 items = items.Where(Item => Item.ItemName.Contains(itemName));
@@ -51,8 +51,21 @@ namespace JewelleryShop.DataAccess.Repository
 
         public async Task<List<Item>> GetAllBuyBackAsync()
         {
-            var items = await _context.Items.Where(Item => Item.IsBuyBack == true).ToListAsync();
+            var items = await _context.Items.Include(i => i.ItemImages)
+                .Where(Item => Item.IsBuyBack == true).ToListAsync();
             return items;
+        }
+
+        public async Task<List<Item>> GetAll()
+        {
+            var items = await _context.Items.Include(i => i.ItemImages).ToListAsync();
+            return items;
+        }
+
+        public async Task<Item?> GetById(string id)
+        {
+            var item = await _context.Items.Include(i => i.ItemImages).FirstOrDefaultAsync(Item => Item.ItemId.Equals(id));
+            return item;
         }
     }
 }

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace JewelleryShop.DataAccess.Models.ViewModel.ItemViewModel
 {
     public class ItemDTO
-    {   
+    {
+        public string ItemId { get; set; } = null!;
         public string? ItemImagesId { get; set; }
         public string? GemStoneId { get; set; }
         public string? Brand { get; set; }

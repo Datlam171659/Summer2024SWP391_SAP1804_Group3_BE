@@ -9,6 +9,7 @@ using System.Diagnostics;
 using JewelleryShop.API.Middlewares;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text.Json.Serialization;
 
 namespace JewelleryShop.API
 {
@@ -53,7 +54,11 @@ namespace JewelleryShop.API
         }
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+            });
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(
                 options =>

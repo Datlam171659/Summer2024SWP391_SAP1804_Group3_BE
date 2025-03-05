@@ -13,7 +13,8 @@ namespace JewelleryShop.DataAccess.Repository.Interface
         
         void SoftDelete(Item item);
         List<Item?> GetByName(string name);
-
-        public Task<List<Item>> GetAllBuyBackAsync();
+        Task<List<Item>> GetAll();
+        Task<Item> GetById(string id);
+        Task<List<Item>> GetAllBuyBackAsync();
     }
 }
