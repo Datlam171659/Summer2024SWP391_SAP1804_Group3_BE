@@ -16,6 +16,7 @@ namespace JewelleryShop.DataAccess.Models
         {
         }
 
+        public virtual DbSet<PriceMultiplier> PriceMultipliers { get; set; }
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<Collection> Collections { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;

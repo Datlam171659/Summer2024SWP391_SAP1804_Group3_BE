@@ -102,7 +102,7 @@ namespace JewelleryShop.Business.Service
             }
             else
             {
-                throw new Exception("Can not update Item");
+                throw new Exception("Exception when updating Item");
             }
         }
 
@@ -121,7 +121,7 @@ namespace JewelleryShop.Business.Service
             var itemToUpdate = await GetByIdAsync(id);
             if (quantity == 0) 
             {
-                throw new Exception("The quantity entered is invalid...!!!");
+                throw new Exception("Param: 'quantity' must be > 0");
             }
             if (quantity >= 1 && itemToUpdate.Quantity >= quantity)
             {
@@ -138,6 +138,7 @@ namespace JewelleryShop.Business.Service
             else
             {
                 throw new Exception("The quantity entered is greater than the amount of stock in the store...!!!");
+                //throw new Exception("Unhandled exception when Updating item quantity");
             }
 
         }
